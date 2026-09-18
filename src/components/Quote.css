@@ -1,0 +1,55 @@
+/* Quote — mobile-first */
+.quote {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--gutter);
+  background: var(--rc-black);
+}
+
+.quote__content {
+  max-width: 1200px;
+  text-align: center;
+}
+
+.quote__text {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--rc-white);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.quote__word {
+  display: inline-block;
+  margin-right: 0.2em;
+  will-change: transform, opacity;
+}
+
+.quote__word--orange {
+  color: var(--rc-orange);
+}
+
+.quote__accent {
+  width: 40px;
+  height: 2px;
+  background: var(--rc-orange);
+  margin: var(--space-lg) auto 0;
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .quote {
+    padding: var(--space-2xl) var(--gutter);
+  }
+  .quote__accent {
+    width: 60px;
+  }
+}

@@ -1,0 +1,215 @@
+/* =============================================
+   DOORS — Architectural Portal Interaction
+   Mobile-first (390×844 base)
+   ============================================= */
+
+/* Scroll container — provides the exact scroll distance for the animation */
+.doors-wrap {
+  position: relative;
+  height: 300vh;
+  background: var(--rc-black-rich);
+}
+
+/* The pinned scene — GSAP pins this to the viewport */
+.doors {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--rc-black-rich);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 1. INTERIOR — Exists BEHIND the doors ── */
+.doors__interior {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  background: var(--rc-black);
+  will-change: transform, opacity;
+}
+
+.doors__interior-content {
+  width: 100%;
+  max-width: 600px;
+  padding: var(--gutter);
+  text-align: center;
+}
+
+.doors__interior-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rc-orange);
+  margin-bottom: var(--space-sm);
+}
+
+.doors__interior-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--rc-white);
+  line-height: 0.9;
+  margin-bottom: var(--space-lg);
+}
+
+.doors__interior-preview {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.doors__interior-preview .placeholder {
+  min-height: 160px;
+}
+
+/* ── 2. GLOW — Orange light leaking through the gap & open doorway ── */
+.doors__glow {
+  position: absolute;
+  width: 12px;
+  height: 70%;
+  left: 50%;
+  top: 15%;
+  transform: translateX(-50%);
+  z-index: 2;
+  opacity: 0;
+  background: var(--rc-orange);
+  filter: blur(40px);
+  will-change: opacity, width;
+  pointer-events: none;
+}
+
+/* ── 3. REALISTIC 3D WEBGL CANVAS LAYER ── */
+.doors__canvas-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.doors__canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: none;
+}
+
+/* ── 4. VIGNETTE — Edge darkening for depth ── */
+.doors__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  box-shadow:
+    inset 0 0 120px 50px rgba(5,5,5,0.85),
+    inset 0 0 300px 100px rgba(5,5,5,0.4);
+}
+
+/* ── 5. REVEAL TEXT — Appears mid-animation ── */
+.doors__reveal {
+  position: absolute;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.doors__reveal-line {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--rc-white);
+  line-height: 1;
+}
+
+.doors__reveal-accent {
+  color: var(--rc-orange);
+  font-size: var(--text-3xl);
+}
+
+/* ── 6. LABEL — Top ── */
+.doors__label {
+  position: absolute;
+  top: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rc-gray-light);
+  opacity: 0.5;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+/* =============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================= */
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .doors__glow {
+    filter: blur(60px);
+    width: 16px;
+  }
+  .doors__reveal-line {
+    font-size: var(--text-3xl);
+  }
+  .doors__reveal-accent {
+    font-size: var(--text-4xl);
+  }
+  .doors__interior-title {
+    font-size: var(--text-4xl);
+  }
+  .doors__interior-preview {
+    max-width: 500px;
+  }
+  .doors__label {
+    top: calc(var(--space-xl) * 1.5);
+  }
+}
+
+/* Desktop (1200px+) */
+@media (min-width: 1200px) {
+  .doors__glow {
+    filter: blur(80px);
+    width: 24px;
+  }
+  .doors__reveal-line {
+    font-size: var(--text-4xl);
+  }
+  .doors__reveal-accent {
+    font-size: var(--text-5xl);
+  }
+  .doors__interior-title {
+    font-size: var(--text-5xl);
+  }
+  .doors__interior-preview {
+    max-width: 600px;
+  }
+}
