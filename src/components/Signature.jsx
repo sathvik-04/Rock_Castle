@@ -46,13 +46,13 @@ export default function Signature() {
       // ─────────────────────────────────────────────────────────────
       // PHASE INDICATOR TRACKING (0.00 → 1.00)
       // ─────────────────────────────────────────────────────────────
-      tl.to('.sig__ind--space', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.02)
+      tl.to('.sig__ind--space', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.02)
         .to('.sig__ind--space', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.24)
-        .to('.sig__ind--structure', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.24)
+        .to('.sig__ind--structure', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.24)
         .to('.sig__ind--structure', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.44)
-        .to('.sig__ind--experience', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.44)
+        .to('.sig__ind--experience', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.44)
         .to('.sig__ind--experience', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.64)
-        .to('.sig__ind--memory', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.64)
+        .to('.sig__ind--memory', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.64)
         .to('.sig__ind--memory', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.84)
         .to('.sig__indicator', { opacity: 0, duration: 0.04 }, 0.86)
 

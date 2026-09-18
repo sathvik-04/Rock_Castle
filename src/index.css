@@ -15,13 +15,14 @@
   --rc-white: #f5f0eb;
   --rc-white-pure: #ffffff;
   --rc-cream: #e8e0d6;
-  --rc-orange: #e87a2e;
-  --rc-orange-bright: #ff8c3a;
-  --rc-orange-deep: #c96520;
-  --rc-orange-glow: rgba(232, 122, 46, 0.3);
+  --rc-orange: #f1571b;
+  --rc-orange-bright: #ff6a35;
+  --rc-orange-deep: #c93f0f;
+  --rc-orange-glow: rgba(241, 87, 27, 0.3);
 
-  --font-display: 'Outfit', sans-serif;
+  --font-display: 'Bodoni Moda', Georgia, serif;
   --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Inter', monospace;
 
   /* Typography — mobile-first, scales up */
   --text-xs: 0.6875rem;     /* 11px */
@@ -165,7 +166,7 @@ p { overflow-wrap: break-word; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(135deg, transparent 40%, rgba(232,122,46,0.03) 50%, transparent 60%),
+    linear-gradient(135deg, transparent 40%, rgba(241, 87, 27,0.03) 50%, transparent 60%),
     linear-gradient(to bottom, rgba(255,255,255,0.01) 0%, transparent 100%);
   pointer-events: none;
 }
@@ -193,6 +194,16 @@ p { overflow-wrap: break-word; }
 .placeholder--1x1 { aspect-ratio: 1 / 1; }
 .placeholder--tall { aspect-ratio: 3 / 4; }
 .placeholder--hero { aspect-ratio: 16 / 9; min-height: 300px; }
+
+/* ---- Section transition veil (App.jsx) ---- */
+.section-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--rc-orange);
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* ---- Grain overlay ---- */
 body::after {
