@@ -11,9 +11,12 @@
 }
 
 .work__project {
+  display: block;
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  color: inherit;
+  text-decoration: none;
   border-top: 1px solid rgba(255,255,255,0.05);
 }
 .work__project:last-child {

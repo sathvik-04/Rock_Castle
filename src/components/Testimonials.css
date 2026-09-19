@@ -244,11 +244,32 @@
   .testimonials__title { font-size: var(--text-4xl); }
 
   .testimonials__carousel {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.1fr;
     align-items: center;
+    gap: clamp(50px, 6vw, 90px);
+    max-width: 1320px;
   }
 
-  .testimonials__stage { margin-inline: 0; }
+  /* The card stayed pinned at its mobile 340×300 size here before — tiny
+     and lost inside a much wider desktop column. Scale it (and the copy
+     beside it) up to actually fill the space. */
+  .testimonials__stage {
+    margin-inline: 0;
+    max-width: 100%;
+    height: clamp(340px, 30vw, 460px);
+  }
+
+  .testimonials__initials { font-size: clamp(48px, 5vw, 72px); }
+
+  .testimonials__name { font-size: clamp(26px, 2.6vw, 36px); }
+
+  .testimonials__role { font-size: clamp(14px, 1.1vw, 16px); }
+
+  .testimonials__quote { font-size: clamp(19px, 1.7vw, 24px); }
+
+  .testimonials__quote-mark { font-size: clamp(220px, 16vw, 320px); }
+
+  .testimonials__arrow { width: 52px; height: 52px; font-size: 26px; }
 
   .testimonials__nav { padding-top: var(--space-lg); }
 }

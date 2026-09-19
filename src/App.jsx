@@ -1,31 +1,16 @@
 import { useEffect, useRef } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import Navigation from './components/Navigation'
-import Hero from './components/Hero'
-import Quote from './components/Quote'
-import Signature from './components/Signature'
-import Work from './components/Work'
-import Testimonials from './components/Testimonials'
-import Process from './components/Process'
-import About from './components/About'
-import Services from './components/Services'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+import Home from './Home'
+import CaseStudy from './components/CaseStudy'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Sections with no internal GSAP `pin:` / CSS `position:sticky` of their own —
-// safe to zoom-scale as a whole root element on entry. Sections that DO pin
-// internally (About, Signature, Process, Contact) are left alone here:
-// a `transform`/`filter`/`scale` on an ANCESTOR breaks `position:fixed`/`sticky`
-// for descendants (the same bug that broke About's zoom/crew-deck pins
-// earlier), so those keep their own bespoke internal motion instead.
-const ZOOM_SAFE_SELECTORS = ['#quote', '#work', '#testimonials', '.services', '.footer']
-
 export default function App() {
   const lenisRef = useRef(null)
+  const location = useLocation()
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -50,43 +35,19 @@ export default function App() {
     }
   }, [])
 
-  // ── sections with no internal pinning of their own zoom-settle in as
-  // they arrive, so scrolling from Hero into Work (etc.) reads as one
-  // continuous move instead of a hard cut. ──
+  // Reset scroll position on every route change (Lenis intercepts native
+  // scroll restoration, so a plain browser back/forward or Link click would
+  // otherwise leave the viewport wherever it was on the previous page).
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return
-
-    const ctx = gsap.context(() => {
-      ZOOM_SAFE_SELECTORS.forEach((sel) => {
-        const el = document.querySelector(sel)
-        if (!el) return
-        gsap.fromTo(
-          el,
-          { scale: 1.05, opacity: 0.75 },
-          { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'top 60%', scrub: true } }
-        )
-      })
-    })
-
-    return () => ctx.revert()
-  }, [])
+    lenisRef.current?.scrollTo(0, { immediate: true })
+    window.scrollTo(0, 0)
+    ScrollTrigger.refresh()
+  }, [location.pathname])
 
   return (
-    <>
-      <Navigation />
-      <main>
-        <Hero />
-        <Quote />
-        <Signature />
-        <Work />
-        <Testimonials />
-        <Process />
-        <About />
-        <Services />
-        <Contact />
-      </main>
-      <Footer />
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/work/:slug" element={<CaseStudy />} />
+    </Routes>
   )
 }
