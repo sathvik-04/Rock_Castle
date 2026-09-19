@@ -35,13 +35,14 @@ export default function Navigation() {
     { href: '#about', label: 'About' },
     { href: '#services', label: 'Services' },
     { href: '#contact', label: 'Contact' },
+    { href: '#faq', label: 'FAQ' },
   ]
 
   return (
     <>
       <nav className={`nav ${hidden ? 'nav--hidden' : ''} ${scrolled ? 'nav--scrolled' : ''}`}>
         <a href="#hero" className="nav__logo-link" aria-label="Rockcastle home">
-          <img src="/rockcastle-logo.png" alt="Rockcastle" className="nav__logo" />
+          <img src="/rockcastle-logo.jpg" alt="Rockcastle" className="nav__logo" />
         </a>
         <div className="nav__links">
           {links.map(l => (

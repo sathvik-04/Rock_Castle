@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './About.css'
@@ -15,29 +15,6 @@ const crewSteps = [
   { tag: 'CREW 04', text: 'Crew stands in the venue the morning it opens' },
 ]
 
-const faqs = [
-  {
-    q: 'Who is Rock Castle?',
-    a: 'An architecture, experiential and spatial design studio working out of Dubai since 2013. A close-knit crew in-house across strategy, creative, design and production.'
-  },
-  {
-    q: 'What does Rock Castle do?',
-    a: 'Launches, brand festivals, road shows, conferences, retail theatre and the films that carry them afterwards — concept, design, fabrication and on-ground delivery under one roof.'
-  },
-  {
-    q: 'What clients do you work with?',
-    a: 'Category leaders and challengers alike — auto, telecom, hospitality, sport and tech — across 24 markets, from a single city activation to a national tour.'
-  },
-  {
-    q: 'What makes Rock Castle different?',
-    a: 'The studio is in the building. Strategy, design and production argue in the same room, so what gets sold is what gets built — and the leads stay on it until load-out.'
-  },
-  {
-    q: 'How much does an activation cost?',
-    a: 'It is scoped, never listed. A one-city launch, a multi-market tour and a flagship festival sit in very different ranges; every number comes out of a scoping conversation.'
-  },
-]
-
 function MaskWords({ text }) {
   return text.split(' ').flatMap((w, i, arr) => {
     const nodes = [
@@ -49,46 +26,12 @@ function MaskWords({ text }) {
   })
 }
 
-function FaqItem({ item, index, isOpen, onToggle }) {
-  const panelId = `about-faq-panel-${index}`
-  const btnId = `about-faq-btn-${index}`
-  return (
-    <div className={`about__faq-item ${isOpen ? 'is-open' : ''}`}>
-      <h3 className="about__faq-q-row">
-        <button
-          id={btnId}
-          type="button"
-          className="about__faq-q"
-          aria-expanded={isOpen}
-          aria-controls={panelId}
-          onClick={onToggle}
-        >
-          <span className="about__faq-index">{String(index + 1).padStart(2, '0')}</span>
-          <span className="about__faq-question">{item.q}</span>
-          <span className="about__faq-icon" aria-hidden="true" />
-        </button>
-      </h3>
-      <div className="about__faq-answer-wrap" id={panelId} role="region" aria-labelledby={btnId}>
-        <div className="about__faq-answer-inner">
-          <p className="about__faq-answer">{item.a}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function About() {
   const ref = useRef(null)
   const zoomTextRef = useRef(null)
   const zoomZeroRef = useRef(null)
-  const zoomVeilRef = useRef(null)
   const cardsRef = useRef([])
   const deckIndexRef = useRef(null)
-  const [openFaq, setOpenFaq] = useState(0)
-
-  const toggleFaq = useCallback((i) => {
-    setOpenFaq((prev) => (prev === i ? -1 : i))
-  }, [])
 
   useEffect(() => {
     let planeObserver
@@ -112,35 +55,24 @@ export default function About() {
       const introPlane = root.querySelector('.about__video-plate')
       const zoomTxt = zoomTextRef.current
       const zero = zoomZeroRef.current
-      const veil = zoomVeilRef.current
       const fadeEls = root.querySelectorAll('.about__intro-fade')
+      const manifesto = root.querySelector('.about__manifesto')
+      const manifestoRule = manifesto?.querySelector('.about__rule')
+      const manifestoTag = manifesto?.querySelector('.about__manifesto-tag')
+      const manifestoQuote = manifesto?.querySelector('.about__manifesto-quote span')
 
       let zoomDrift = { x: 0, y: 0 }
 
       if (introSection && introPin) {
         const setZoomOrigin = () => {
           if (!zoomTxt || !zero) return
-          gsap.set(zoomTxt, { scale: 1, x: 0, y: 0 })
+          gsap.set(zoomTxt, { scale: 1, x: 0, y: 0, opacity: 1 })
           const t = zoomTxt.getBoundingClientRect()
           const z = zero.getBoundingClientRect()
           if (!t.width || !z.width) return
           const ox = ((z.left + z.width * 0.5) - t.left) / t.width * 100
           const oy = ((z.top + z.height * 0.52) - t.top) / t.height * 100
           gsap.set(zoomTxt, { transformOrigin: `${ox.toFixed(2)}% ${oy.toFixed(2)}%` })
-          // The pivot point (the "0" glyph) sits low/left in the layout at rest.
-          // Scaling 170x around it as-is would blow the number up toward that
-          // corner and off-frame, so we also drift the pivot toward the
-          // viewport center as it scales — same idea as a camera push that
-          // recenters on its subject, so the final huge frame reads centered
-          // instead of cropped.
-          // Y must be measured relative to the pin target's own box, not the
-          // viewport: this runs once on mount (and on refresh), while the
-          // page may still be scrolled above the pinned section, so a raw
-          // getBoundingClientRect().top here would capture the glyph's
-          // pre-scroll document position (thousands of px off) rather than
-          // where it actually sits once `.about__intro-grid` is pinned with
-          // its top locked to the viewport's top edge. X is unaffected since
-          // horizontal position doesn't shift with vertical scroll.
           const pinRect = introPin.getBoundingClientRect()
           const pivotX = z.left + z.width * 0.5
           const pivotYInPin = (z.top - pinRect.top) + z.height * 0.52
@@ -152,7 +84,7 @@ export default function About() {
           scrollTrigger: {
             trigger: introSection,
             start: 'top top',
-            end: '+=1800',
+            end: '+=1500',
             scrub: 0.5,
             pin: introPin,
             anticipatePin: 1,
@@ -166,21 +98,45 @@ export default function About() {
         if (introP2) parTl.to(introP2, { yPercent: -11, ease: 'none', duration: 1 }, 0)
         if (introCard) parTl.to(introCard, { yPercent: -16, ease: 'none', duration: 1 }, 0)
 
-        // phase 2 — the "2013" mark takes over
+        // phase 2 — the "2013" mark takes over, zooms and fades out
         if (zoomTxt) {
-          if (fadeEls.length) parTl.to(fadeEls, { opacity: 0, ease: 'power1.in', duration: 0.4 }, 1.1)
-          // Recentering (fast ease-out) resolves well before the scale
-          // (slow-start power3.in) does most of its growing, so the number
-          // is already centered by the time it gets big — otherwise a
-          // rapidly-enlarging off-center glyph reads as cropped/broken in
-          // the corner for most of the zoom instead of a clean push-in.
-          // Scale is capped well below the old 170x: text scaled that far
-          // is a raster upscale of a tiny glyph, which reads as blurry mush
-          // long before it fills the screen — 40x already overflows the
-          // viewport dramatically while staying legible into the veil.
-          parTl.fromTo(zoomTxt, { x: 0, y: 0 }, { x: () => zoomDrift.x, y: () => zoomDrift.y, ease: 'power2.out', duration: 0.9, force3D: true }, 1.1)
-          parTl.fromTo(zoomTxt, { scale: 1 }, { scale: 40, ease: 'power3.in', duration: 1.8, force3D: true }, 1.1)
-          if (veil) parTl.fromTo(veil, { opacity: 0 }, { opacity: 1, ease: 'power2.inOut', duration: 0.6 }, 2.2)
+          if (fadeEls.length) parTl.to(fadeEls, { opacity: 0, ease: 'power1.in', duration: 0.4 }, 1.0)
+          parTl.fromTo(zoomTxt, { x: 0, y: 0 }, { x: () => zoomDrift.x, y: () => zoomDrift.y, ease: 'power2.out', duration: 0.85, force3D: true }, 1.0)
+          parTl.fromTo(zoomTxt, { scale: 1 }, { scale: 35, ease: 'power3.in', duration: 1.3, force3D: true }, 1.0)
+          // 2013 dissolves out as it expands past the viewport
+          parTl.to(zoomTxt, { opacity: 0, ease: 'power2.out', duration: 0.45 }, 1.8)
+        }
+
+        // phase 3 — as soon as 2013 fades out, the manifesto emerges immediately (no black page)
+        if (manifesto) {
+          parTl.fromTo(manifesto,
+            { opacity: 0, scale: 0.93, y: 25 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'power3.out' },
+            1.95
+          )
+          if (manifestoRule) {
+            parTl.fromTo(manifestoRule,
+              { scaleX: 0 },
+              { scaleX: 1, duration: 0.45, ease: 'power3.out' },
+              2.05
+            )
+          }
+          if (manifestoTag) {
+            parTl.fromTo(manifestoTag,
+              { opacity: 0, y: 10 },
+              { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+              2.1
+            )
+          }
+          if (manifestoQuote) {
+            parTl.fromTo(manifestoQuote,
+              { clipPath: 'inset(0 100% 0 0)', filter: 'blur(8px)', opacity: 0 },
+              { clipPath: 'inset(0 0% 0 0)', filter: 'blur(0px)', opacity: 1, duration: 0.75, ease: 'power4.out' },
+              2.15
+            )
+          }
+          // Hold the manifesto clearly in view before unpinning
+          parTl.to({}, { duration: 0.7 }, 2.9)
         }
 
         const lines = root.querySelectorAll('.about__intro h2 > span, .about__intro p > span')
@@ -274,13 +230,7 @@ export default function About() {
         build(tl, el)
       }
 
-      reveal('.about__manifesto', (tl, el) => {
-        tl.fromTo(el.querySelector('.about__manifesto-tag'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
-          .fromTo(el.querySelector('.about__manifesto-quote span'),
-            { clipPath: 'inset(0 100% 0 0)', filter: 'blur(6px)' },
-            { clipPath: 'inset(0 0% 0 0)', filter: 'blur(0px)', duration: 1.1, ease: 'power4.inOut' },
-            '-=0.15')
-      })
+
 
       reveal('.about__founders', (tl, el) => {
         const words = el.querySelectorAll('.about__founders-title .about__mask-word')
@@ -293,20 +243,6 @@ export default function About() {
           .fromTo(el.querySelectorAll('.about__portrait'),
             { clipPath: 'inset(0 0 100% 0)' },
             { clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'power4.inOut', stagger: 0.18 },
-            '<')
-      })
-
-      reveal('.about__faq', (tl, el) => {
-        tl.fromTo(el.querySelector('.about__faq-title'),
-          { opacity: 0, scale: 0.85, rotate: -4 },
-          { opacity: 1, scale: 1, rotate: 0, duration: 0.8, ease: 'back.out(1.7)' }, '-=0.3')
-          .fromTo(el.querySelectorAll('.about__faq-item'),
-            { clipPath: 'inset(0 0 0 100%)', opacity: 0 },
-            { clipPath: 'inset(0 0 0 0%)', opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.1 },
-            '-=0.4')
-          .fromTo(el.querySelectorAll('.about__faq-index'),
-            { scale: 0.4, rotate: -20, opacity: 0 },
-            { scale: 1, rotate: 0, opacity: 1, duration: 0.5, ease: 'back.out(2.4)', stagger: 0.1 },
             '<')
       })
 
@@ -387,20 +323,18 @@ export default function About() {
               </div>
             </div>
           </div>
-          <div className="about__intro-veil" ref={zoomVeilRef} aria-hidden="true" />
+          {/* ── MANIFESTO — emerges seamlessly as 2013 zooms and fades out ── */}
+          <div className="about__manifesto">
+            <span className="about__rule about__rule--center" aria-hidden="true" />
+            <span className="about__manifesto-tag">[&nbsp;NO SHORTCUTS&nbsp;]</span>
+            <p className="about__manifesto-quote">
+              <span>
+                Nobody claps for a cable run or a rehearsal at 4am — and that is exactly where the
+                night is won or lost.
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
-
-      {/* ── MANIFESTO ── */}
-      <div className="about__manifesto">
-        <span className="about__rule about__rule--center" aria-hidden="true" />
-        <span className="about__manifesto-tag">[&nbsp;NO SHORTCUTS&nbsp;]</span>
-        <p className="about__manifesto-quote">
-          <span>
-            Nobody claps for a cable run or a rehearsal at 4am — and that is exactly where the
-            night is won or lost.
-          </span>
-        </p>
       </div>
 
       {/* ── FOUNDERS ── */}
@@ -447,24 +381,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── FAQ — the mockup renders this as a static always-open 3-column
-          grid with no JS interaction at all; the accordion here is a
-          deliberate, explicitly-requested enhancement, not a port ── */}
-      <div className="about__faq">
-        <span className="about__rule" aria-hidden="true" />
-        <h2 className="about__faq-title">FAQ<span className="about__faq-title-italic">(s)</span></h2>
-        <div className="about__faq-list">
-          {faqs.map((item, i) => (
-            <FaqItem
-              key={item.q}
-              item={item}
-              index={i}
-              isOpen={openFaq === i}
-              onToggle={() => toggleFaq(i)}
-            />
-          ))}
-        </div>
-      </div>
 
       {/* ── CLOSING CTA ── */}
       <div className="about__cta">

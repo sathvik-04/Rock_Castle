@@ -153,7 +153,7 @@ export default function Hero() {
         <p className="hero__float-text" />
       </div>
       <div className="hero__content">
-        <img ref={logoRef} src="/rockcastle-logo.png" alt="Rockcastle — Experiences Un-Ltd." className="hero__logo" />
+        <img ref={logoRef} src="/rockcastle-logo.jpg" alt="Rockcastle — Experiences Un-Ltd." className="hero__logo" />
         <p ref={tagRef} className="hero__tagline">Experiences Un-Ltd.</p>
       </div>
       <div ref={scanRef} className="hero__scanline" />

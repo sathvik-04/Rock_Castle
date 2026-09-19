@@ -4,14 +4,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
-import Quote from './components/Quote'
 import Signature from './components/Signature'
-import Work from './components/Work'
 import Testimonials from './components/Testimonials'
 import Process from './components/Process'
 import About from './components/About'
 import Services from './components/Services'
 import Contact from './components/Contact'
+import Faq from './components/Faq'
 import Footer from './components/Footer'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -22,7 +21,7 @@ gsap.registerPlugin(ScrollTrigger)
 // a `transform`/`filter`/`scale` on an ANCESTOR breaks `position:fixed`/`sticky`
 // for descendants (the same bug that broke About's zoom/crew-deck pins
 // earlier), so those keep their own bespoke internal motion instead.
-const ZOOM_SAFE_SELECTORS = ['#quote', '#work', '#testimonials', '.services', '.footer']
+const ZOOM_SAFE_SELECTORS = ['#testimonials', '.services', '.footer']
 
 export default function App() {
   const lenisRef = useRef(null)
@@ -77,14 +76,13 @@ export default function App() {
       <Navigation />
       <main>
         <Hero />
-        <Quote />
+        <About />
         <Signature />
-        <Work />
         <Testimonials />
         <Process />
-        <About />
         <Services />
         <Contact />
+        <Faq />
       </main>
       <Footer />
     </>
