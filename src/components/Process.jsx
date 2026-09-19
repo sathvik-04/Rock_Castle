@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Process.css'
@@ -48,6 +48,43 @@ const stages = [
 
 const stageNames = ['Brief', 'Strategy', 'Design', 'Production', 'Delivery']
 
+// Collapsed accordion row: number + name + quote only. Reveals the image and
+// full description on tap — same grid-template-rows mechanism as About's FAQ,
+// so 5 full stages don't cost 5 screens of scroll on mobile by default.
+function ProcessStage({ s, index, isOpen, onToggle }) {
+  const panelId = `process-panel-${index}`
+  const btnId = `process-btn-${index}`
+  return (
+    <div className={`process__m-stage process__m-stage--${s.cls} ${isOpen ? 'is-open' : ''}`}>
+      <h3 className="process__m-head-row">
+        <button
+          id={btnId}
+          type="button"
+          className="process__m-head"
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          onClick={onToggle}
+        >
+          <span className="process__m-number">{s.num}</span>
+          <span className="process__m-head-text">
+            <span className="process__m-name">{s.name}</span>
+            <span className="process__m-quote">{s.quote}</span>
+          </span>
+          <span className="process__m-icon" aria-hidden="true" />
+        </button>
+      </h3>
+      <div className="process__m-panel-wrap" id={panelId} role="region" aria-labelledby={btnId}>
+        <div className="process__m-panel-inner">
+          <div className="placeholder placeholder--16x9 process__m-placeholder">
+            <span className="placeholder__label">{s.placeholder}</span>
+          </div>
+          <p className="process__m-desc">{s.desc}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Process() {
   const triggerRef = useRef(null)
   const trackRef = useRef(null)
@@ -55,6 +92,16 @@ export default function Process() {
   const labelRef = useRef(null)
   const indicatorsRef = useRef([])
   const mobileRef = useRef(null)
+  const [openStage, setOpenStage] = useState(0)
+  const toggleStage = useCallback((i) => setOpenStage((prev) => (prev === i ? -1 : i)), [])
+
+  const scrollToStage = useCallback((index) => {
+    const st = ScrollTrigger.getById('process-scroll')
+    if (!st) return
+    const stageP = (index / 4) * 0.82
+    const targetScroll = st.start + stageP * (st.end - st.start)
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' })
+  }, [])
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -62,23 +109,29 @@ export default function Process() {
     // Desktop: horizontal scroll
     mm.add('(min-width: 769px)', () => {
       const track = trackRef.current
-      if (!track) return
+      const trigger = triggerRef.current
+      if (!track || !trigger) return
 
-      const scrollTween = gsap.to(track, {
-        x: () => -(track.scrollWidth - window.innerWidth),
-        ease: 'none',
+      const getScrollAmount = () => track.scrollWidth - window.innerWidth
+      const getHoldDistance = () => window.innerHeight * 0.5
+      const getTotalDistance = () => getScrollAmount() + getHoldDistance()
+
+      const scrollTl = gsap.timeline({
         scrollTrigger: {
-          trigger: triggerRef.current,
+          id: 'process-scroll',
+          trigger: trigger,
           start: 'top top',
-          end: () => '+=' + (track.scrollWidth - window.innerWidth),
+          end: () => '+=' + getTotalDistance(),
+          pin: true,
           scrub: 1,
-          pin: '.process__sticky',
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress
-            if (progressRef.current) progressRef.current.style.width = (p * 100) + '%'
-            const idx = Math.min(4, Math.floor(p * 5))
+            // 0 -> 0.82 animates through all 5 stages; 0.82 -> 1.0 holds on stage 5
+            const animP = Math.min(1, p / 0.82)
+            if (progressRef.current) progressRef.current.style.width = (animP * 100) + '%'
+            const idx = Math.min(4, Math.floor(animP * 4.999))
             if (labelRef.current) labelRef.current.textContent = `0${idx + 1} / 05`
             indicatorsRef.current.forEach((ind, i) => {
               if (ind) ind.classList.toggle('is-active', i === idx)
@@ -87,14 +140,23 @@ export default function Process() {
         }
       })
 
+      // Horizontal track scroll: translates entire track so stage 5 is fully visible
+      scrollTl.to(track, {
+        x: () => -getScrollAmount(),
+        ease: 'none',
+        duration: 0.82
+      })
+      // Hold on Final Delivery so the user can absorb stage 5
+      scrollTl.to({}, { duration: 0.18 })
+
       // Stage animations within horizontal scroll
       track.querySelectorAll('.process__stage').forEach(stage => {
         const textEls = stage.querySelectorAll('.process__stage-number, .process__stage-name, .process__stage-quote, .process__stage-desc')
         gsap.from(textEls, {
           y: 30, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out',
           scrollTrigger: {
-            trigger: stage, start: 'left 80%', end: 'left 20%',
-            containerAnimation: scrollTween, toggleActions: 'play none none reverse'
+            trigger: stage, start: 'left 85%', end: 'left 20%',
+            containerAnimation: scrollTl, toggleActions: 'play none none reverse'
           }
         })
 
@@ -104,7 +166,7 @@ export default function Process() {
             x: '50vw', ease: 'none',
             scrollTrigger: {
               trigger: stage, start: 'left center', end: 'right center',
-              containerAnimation: scrollTween, scrub: true
+              containerAnimation: scrollTl, scrub: true
             }
           })
         }
@@ -116,7 +178,7 @@ export default function Process() {
       if (!mobileRef.current) return
 
       mobileRef.current.querySelectorAll('.process__m-stage').forEach(stage => {
-        const els = stage.querySelectorAll('.process__m-number, .process__m-name, .process__m-quote, .process__m-desc, .process__m-placeholder')
+        const els = stage.querySelectorAll('.process__m-number, .process__m-name, .process__m-quote')
         gsap.from(els, {
           y: 40, opacity: 0, stagger: 0.08, duration: 0.8, ease: 'power3.out',
           scrollTrigger: { trigger: stage, start: 'top 80%', toggleActions: 'play none none reverse' }
@@ -142,7 +204,21 @@ export default function Process() {
             </div>
             <div className="process__indicators">
               {stageNames.map((name, i) => (
-                <div key={i} className={`process__ind ${i === 0 ? 'is-active' : ''}`} ref={el => indicatorsRef.current[i] = el}>
+                <div
+                  key={i}
+                  className={`process__ind ${i === 0 ? 'is-active' : ''}`}
+                  ref={el => indicatorsRef.current[i] = el}
+                  onClick={() => scrollToStage(i)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Jump to stage ${i + 1}: ${name}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      scrollToStage(i)
+                    }
+                  }}
+                >
                   <div className="process__ind-dot" />
                   <span className="process__ind-label">{name}</span>
                 </div>
@@ -181,16 +257,7 @@ export default function Process() {
           <h2 className="process__m-title">The Journey</h2>
         </div>
         {stages.map((s, i) => (
-          <div key={i} className={`process__m-stage process__m-stage--${s.cls}`}>
-            <div className="process__m-number">{s.num}</div>
-            <h3 className="process__m-name">{s.name}</h3>
-            <p className="process__m-quote">{s.quote}</p>
-            <div className="placeholder placeholder--16x9 process__m-placeholder">
-              <span className="placeholder__label">{s.placeholder}</span>
-            </div>
-            <p className="process__m-desc">{s.desc}</p>
-            {i < stages.length - 1 && <div className="process__m-divider" />}
-          </div>
+          <ProcessStage key={i} s={s} index={i} isOpen={openStage === i} onToggle={() => toggleStage(i)} />
         ))}
       </div>
     </section>

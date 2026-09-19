@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-xl) var(--gutter);
-  background: var(--rc-black);
+  background: var(--rc-orange);
 }
 
 .quote__content {
@@ -20,7 +20,7 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
-  color: var(--rc-white);
+  color: var(--rc-black-rich);
   text-transform: uppercase;
   text-align: center;
 }
@@ -32,13 +32,13 @@
 }
 
 .quote__word--orange {
-  color: var(--rc-orange);
+  color: var(--rc-white-pure);
 }
 
 .quote__accent {
   width: 40px;
   height: 2px;
-  background: var(--rc-orange);
+  background: var(--rc-black-rich);
   margin: var(--space-lg) auto 0;
   transform: scaleX(0);
   transform-origin: center;

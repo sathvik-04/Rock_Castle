@@ -1,42 +1,17 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { projects } from '../data/projects'
 import './Work.css'
-
-const projects = [
-  {
-    name: 'The Pavilion',
-    desc: 'An immersive brand pavilion that redefined visitor experience across 2,400 square metres.',
-    category: 'experience',
-    year: '2024',
-    catLabel: 'Experience Design',
-    placeholder: '[ PROJECT IMAGE ]'
-  },
-  {
-    name: 'Meridian Tower',
-    desc: 'Corporate headquarters transformed into a living, breathing spatial narrative.',
-    category: 'spatial',
-    year: '2023',
-    catLabel: 'Spatial Design',
-    placeholder: '[ PROJECT IMAGE ]'
-  },
-  {
-    name: 'Horizon Festival',
-    desc: 'A three-day experiential brand activation fusing architecture, light, and sound.',
-    category: 'brand',
-    year: '2024',
-    catLabel: 'Brand Experience',
-    placeholder: '[ PROJECT VIDEO ]'
-  },
-]
 
 export default function Work() {
   const ref = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const projects = ref.current.querySelectorAll('.work__project')
-      projects.forEach(p => {
+      const items = ref.current.querySelectorAll('.work__project')
+      items.forEach(p => {
         const placeholder = p.querySelector('.work__placeholder')
         if (placeholder) {
           gsap.fromTo(placeholder, { scale: 1.02 }, {
@@ -58,15 +33,9 @@ export default function Work() {
 
   return (
     <section className="work" id="work" ref={ref}>
-      <div className="work__header">
-        <h2 className="work__title">
-          <span className="work__label">Selected Projects</span>
-          Our Work
-        </h2>
-      </div>
       <div className="work__projects">
-        {projects.map((p, i) => (
-          <article key={i} className="work__project" data-category={p.category}>
+        {projects.map((p) => (
+          <Link key={p.slug} to={`/work/${p.slug}`} className="work__project" data-category={p.category}>
             <div className="work__placeholder-wrap">
               <div className="placeholder placeholder--16x9 work__placeholder">
                 <span className="placeholder__label">{p.placeholder}</span>
@@ -76,7 +45,7 @@ export default function Work() {
             <div className="work__info">
               <div>
                 <h3 className="work__name">{p.name}</h3>
-                <p className="work__desc">{p.desc}</p>
+                <p className="work__desc">{p.tagline}</p>
               </div>
               <div className="work__meta">
                 <span className="work__cat">{p.catLabel}</span>
@@ -87,7 +56,7 @@ export default function Work() {
                 </div>
               </div>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>

@@ -46,19 +46,19 @@ export default function Signature() {
       // ─────────────────────────────────────────────────────────────
       // PHASE INDICATOR TRACKING (0.00 → 1.00)
       // ─────────────────────────────────────────────────────────────
-      tl.to('.sig__ind--space', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.02)
+      tl.to('.sig__ind--space', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.02)
         .to('.sig__ind--space', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.24)
-        .to('.sig__ind--structure', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.24)
+        .to('.sig__ind--structure', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.24)
         .to('.sig__ind--structure', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.44)
-        .to('.sig__ind--experience', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.44)
+        .to('.sig__ind--experience', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.44)
         .to('.sig__ind--experience', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.64)
-        .to('.sig__ind--memory', { color: '#e87a2e', opacity: 1, duration: 0.01 }, 0.64)
+        .to('.sig__ind--memory', { color: '#f1571b', opacity: 1, duration: 0.01 }, 0.64)
         .to('.sig__ind--memory', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.84)
         .to('.sig__indicator', { opacity: 0, duration: 0.04 }, 0.86)
 
       // HUD & Atmosphere
       tl.to('.sig__hud', { opacity: 0.7, duration: 0.06 }, 0.02)
-      tl.to('.sig__glow', { opacity: 0.35, duration: 0.2 }, 0.02)
+      tl.to('.sig__glow', { opacity: 0.6, duration: 0.2 }, 0.02)
 
       // ─────────────────────────────────────────────────────────────
       // SEQUENCE 1: SPACE (0.04 → 0.22)
@@ -278,7 +278,7 @@ export default function Signature() {
   }
 
   return (
-    <section className="sig" id="signature" ref={sceneRef} aria-label="Rockcastle Signature Experience">
+    <section className="sig" id="work" ref={sceneRef} aria-label="Rockcastle Signature Experience">
 
       {/* SVG Grain Filter Definition */}
       <svg className="sig__noise-svg" width="0" height="0" aria-hidden="true">

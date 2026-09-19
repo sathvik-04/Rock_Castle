@@ -11,6 +11,14 @@
 .hero__video-wrap {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
 }
 
 .hero__placeholder {
@@ -32,7 +40,7 @@
   height: 30%;
   background: radial-gradient(circle, var(--rc-orange-glow) 0%, transparent 70%);
   filter: blur(80px);
-  opacity: 0.15;
+  opacity: 0.32;
   animation: heroGlow 8s ease-in-out infinite alternate;
 }
 
@@ -46,8 +54,8 @@
 }
 
 @keyframes heroGlow {
-  0% { transform: translate(0,0) scale(1); opacity: 0.1; }
-  100% { transform: translate(5%,-5%) scale(1.2); opacity: 0.2; }
+  0% { transform: translate(0,0) scale(1); opacity: 0.24; }
+  100% { transform: translate(5%,-5%) scale(1.2); opacity: 0.42; }
 }
 
 .hero__overlay {
@@ -55,6 +63,60 @@
   inset: 0;
   z-index: 1;
   background: linear-gradient(180deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.2) 40%, rgba(10,10,10,0.3) 70%, rgba(10,10,10,0.85) 100%);
+}
+
+.hero__float {
+  position: absolute;
+  z-index: 2;
+  left: var(--gutter);
+  bottom: clamp(90px, 14vh, 140px);
+  max-width: min(20ch, 78vw);
+  text-align: left;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hero__float-rule {
+  display: block;
+  width: 34px;
+  height: 1px;
+  margin-bottom: 10px;
+  background: var(--rc-orange);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.hero__float-index {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rc-orange);
+  margin-bottom: 8px;
+  opacity: 0;
+}
+
+.hero__float-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(21px, 6.2vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--rc-cream);
+}
+
+.hero__float-char-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+}
+
+.hero__float-char {
+  display: inline-block;
+  will-change: transform;
 }
 
 .hero__content {
@@ -169,4 +231,5 @@
 /* Desktop */
 @media (min-width: 1200px) {
   .hero__logo { width: 240px; }
+  .hero__float { max-width: min(20ch, 30vw); bottom: clamp(120px, 16vh, 180px); }
 }
