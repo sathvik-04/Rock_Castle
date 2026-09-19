@@ -52,6 +52,7 @@
 .testimonials__portrait {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   border-radius: 20px;
   border: 1px solid var(--rc-gray-dark);
   background: radial-gradient(circle at 30% 20%, var(--rc-gray-dark) 0%, var(--rc-dark-mid) 60%, var(--rc-dark) 100%);
@@ -62,6 +63,20 @@
   transition: transform 0.8s cubic-bezier(0.4, 2, 0.3, 1), opacity 0.8s ease;
 }
 
+.testimonials__portrait[data-active="true"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(241, 87, 27, 0.16) 0%, transparent 70%);
+  animation: testimonialPulse 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes testimonialPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
 .testimonials__initials {
   font-family: var(--font-display);
   font-weight: 900;
@@ -70,10 +85,56 @@
   color: var(--rc-gray-light);
 }
 
+/* camera-flash sweep on testimonial change */
+.testimonials__flash {
+  position: absolute;
+  inset: -20% -60%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.85) 48%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* film-slate index tag on the active portrait */
+.testimonials__slate {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--rc-orange);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(241, 87, 27, 0.4);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
 /* ── content panel ── */
 .testimonials__panel {
+  position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.testimonials__quote-mark {
+  position: absolute;
+  top: -0.5em;
+  left: -0.06em;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-size: clamp(160px, 22vw, 280px);
+  line-height: 1;
+  color: var(--rc-black-rich);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+}
+
+.testimonials__body {
+  position: relative;
+  z-index: 1;
 }
 
 .testimonials__name {

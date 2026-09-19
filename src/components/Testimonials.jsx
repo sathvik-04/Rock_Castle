@@ -140,10 +140,13 @@ export default function Testimonials() {
     return () => ctx.revert()
   }, [])
 
-  // word-by-word blur-in reveal whenever the active testimonial changes
+  // word-by-word blur-in reveal whenever the active testimonial changes,
+  // synchronized with a camera-flash sweep + name/role cut on the portrait —
+  // reads as one theatrical "cut" between clients rather than a plain swap.
   useEffect(() => {
     if (!quoteRef.current) return
     const words = quoteRef.current.querySelectorAll('.testimonials__word')
+    const root = ref.current
     if (reduced) {
       gsap.set(words, { filter: 'blur(0px)', opacity: 1, y: 0 })
       return
@@ -153,6 +156,19 @@ export default function Testimonials() {
       { filter: 'blur(10px)', opacity: 0, y: 6 },
       { filter: 'blur(0px)', opacity: 1, y: 0, duration: 0.28, ease: 'power2.out', stagger: 0.025 }
     )
+    if (!root) return
+    const nameEl = root.querySelector('.testimonials__name')
+    const roleEl = root.querySelector('.testimonials__role')
+    gsap.fromTo([nameEl, roleEl], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.05 })
+
+    const flash = root.querySelector('.testimonials__flash')
+    if (flash) {
+      gsap.fromTo(flash, { opacity: 0.9, xPercent: -120 }, { opacity: 0, xPercent: 120, duration: 0.55, ease: 'power2.in', overwrite: 'auto' })
+    }
+    const active = root.querySelector('.testimonials__portrait[data-active="true"]')
+    if (active) {
+      gsap.fromTo(active, { filter: 'brightness(2.2)' }, { filter: 'brightness(1)', duration: 0.6, ease: 'power2.out', overwrite: 'auto' })
+    }
   }, [activeIndex, reduced])
 
   const stageStyle = (index) => {
@@ -179,13 +195,18 @@ export default function Testimonials() {
       <div className="testimonials__carousel">
         <div className="testimonials__stage" ref={stageRef} aria-hidden="true">
           {visible.map((t, i) => (
-            <div key={t.name} className="testimonials__portrait" style={stageStyle(i)}>
+            <div key={t.name} className="testimonials__portrait" data-active={i === activeIndex} style={stageStyle(i)}>
               <span className="testimonials__initials">{t.name.split(' ').map((w) => w[0]).join('')}</span>
+              {i === activeIndex && <span className="testimonials__flash" />}
+              {i === activeIndex && (
+                <span className="testimonials__slate">{String(activeIndex + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}</span>
+              )}
             </div>
           ))}
         </div>
 
         <div className="testimonials__panel">
+          <span className="testimonials__quote-mark" aria-hidden="true">&ldquo;</span>
           <div key={activeIndex} className="testimonials__body">
             <h3 className="testimonials__name">{active.name}</h3>
             <p className="testimonials__role">{active.role}</p>

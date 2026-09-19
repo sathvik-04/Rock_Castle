@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Process.css'
@@ -48,6 +48,43 @@ const stages = [
 
 const stageNames = ['Brief', 'Strategy', 'Design', 'Production', 'Delivery']
 
+// Collapsed accordion row: number + name + quote only. Reveals the image and
+// full description on tap — same grid-template-rows mechanism as About's FAQ,
+// so 5 full stages don't cost 5 screens of scroll on mobile by default.
+function ProcessStage({ s, index, isOpen, onToggle }) {
+  const panelId = `process-panel-${index}`
+  const btnId = `process-btn-${index}`
+  return (
+    <div className={`process__m-stage process__m-stage--${s.cls} ${isOpen ? 'is-open' : ''}`}>
+      <h3 className="process__m-head-row">
+        <button
+          id={btnId}
+          type="button"
+          className="process__m-head"
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          onClick={onToggle}
+        >
+          <span className="process__m-number">{s.num}</span>
+          <span className="process__m-head-text">
+            <span className="process__m-name">{s.name}</span>
+            <span className="process__m-quote">{s.quote}</span>
+          </span>
+          <span className="process__m-icon" aria-hidden="true" />
+        </button>
+      </h3>
+      <div className="process__m-panel-wrap" id={panelId} role="region" aria-labelledby={btnId}>
+        <div className="process__m-panel-inner">
+          <div className="placeholder placeholder--16x9 process__m-placeholder">
+            <span className="placeholder__label">{s.placeholder}</span>
+          </div>
+          <p className="process__m-desc">{s.desc}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Process() {
   const triggerRef = useRef(null)
   const trackRef = useRef(null)
@@ -55,6 +92,8 @@ export default function Process() {
   const labelRef = useRef(null)
   const indicatorsRef = useRef([])
   const mobileRef = useRef(null)
+  const [openStage, setOpenStage] = useState(0)
+  const toggleStage = useCallback((i) => setOpenStage((prev) => (prev === i ? -1 : i)), [])
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -116,7 +155,7 @@ export default function Process() {
       if (!mobileRef.current) return
 
       mobileRef.current.querySelectorAll('.process__m-stage').forEach(stage => {
-        const els = stage.querySelectorAll('.process__m-number, .process__m-name, .process__m-quote, .process__m-desc, .process__m-placeholder')
+        const els = stage.querySelectorAll('.process__m-number, .process__m-name, .process__m-quote')
         gsap.from(els, {
           y: 40, opacity: 0, stagger: 0.08, duration: 0.8, ease: 'power3.out',
           scrollTrigger: { trigger: stage, start: 'top 80%', toggleActions: 'play none none reverse' }
@@ -181,16 +220,7 @@ export default function Process() {
           <h2 className="process__m-title">The Journey</h2>
         </div>
         {stages.map((s, i) => (
-          <div key={i} className={`process__m-stage process__m-stage--${s.cls}`}>
-            <div className="process__m-number">{s.num}</div>
-            <h3 className="process__m-name">{s.name}</h3>
-            <p className="process__m-quote">{s.quote}</p>
-            <div className="placeholder placeholder--16x9 process__m-placeholder">
-              <span className="placeholder__label">{s.placeholder}</span>
-            </div>
-            <p className="process__m-desc">{s.desc}</p>
-            {i < stages.length - 1 && <div className="process__m-divider" />}
-          </div>
+          <ProcessStage key={i} s={s} index={i} isOpen={openStage === i} onToggle={() => toggleStage(i)} />
         ))}
       </div>
     </section>
