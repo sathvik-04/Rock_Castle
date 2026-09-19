@@ -4,13 +4,14 @@ import gsap from 'gsap'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import Quote from './components/Quote'
+import About from './components/About'
 import Signature from './components/Signature'
 import Work from './components/Work'
 import Testimonials from './components/Testimonials'
 import Process from './components/Process'
-import About from './components/About'
 import Services from './components/Services'
 import Contact from './components/Contact'
+import Faq from './components/Faq'
 import Footer from './components/Footer'
 
 // Sections with no internal GSAP `pin:` / CSS `position:sticky` of their own —
@@ -64,13 +65,14 @@ export default function Home() {
       <main>
         <Hero />
         <Quote />
+        <About />
         <Signature />
         <Work />
         <Testimonials />
         <Process />
-        <About />
         <Services />
         <Contact />
+        <Faq />
       </main>
       <Footer />
     </>

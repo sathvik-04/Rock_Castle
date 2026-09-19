@@ -1,21 +1,29 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Navigation.css'
+
+// How close to the very top of the page the nav reappears.
+const REVEAL_THRESHOLD = 150
 
 export default function Navigation() {
   const [hidden, setHidden] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const lastScroll = useRef(0)
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY
       setScrolled(y > 100)
-      if (y > 300 && y > lastScroll.current && !menuOpen) setHidden(true)
-      else setHidden(false)
-      lastScroll.current = y
+      // Previously this hid only while scrolling DOWN and showed again on
+      // any upward scroll — meaning it could pop back over whatever
+      // section happened to be at the top of the viewport at that moment
+      // (e.g. overlapping the Testimonials heading mid-page). Now it stays
+      // hidden through the whole body of the page and only reappears once
+      // you're back near the very top, regardless of scroll direction.
+      if (menuOpen) { setHidden(false); return }
+      setHidden(y > REVEAL_THRESHOLD)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [menuOpen])
 

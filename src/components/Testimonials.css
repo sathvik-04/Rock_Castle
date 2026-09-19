@@ -241,35 +241,45 @@
 
 /* Tablet+: image stage and content side by side */
 @media (min-width: 768px) {
-  .testimonials__title { font-size: var(--text-4xl); }
+  /* Fit the whole section within one normal-height screen: the previous
+     desktop pass scaled the card/text up but kept mobile-scale section
+     padding and a narrow heading column that wrapped to 3 lines, pushing
+     total height to ~1280px against a ~900px viewport. Tighten padding,
+     widen the heading so it wraps to 2 lines instead of 3, and trim the
+     card's max height. */
+  .testimonials { padding-block: clamp(40px, 6vh, 70px); }
+
+  .testimonials__head { max-width: 820px; padding-bottom: clamp(20px, 3vh, 36px); }
+
+  .testimonials__title { font-size: clamp(30px, 3.6vw, 44px); }
 
   .testimonials__carousel {
     grid-template-columns: 1fr 1.1fr;
     align-items: center;
-    gap: clamp(50px, 6vw, 90px);
+    gap: clamp(40px, 5vw, 70px);
     max-width: 1320px;
   }
 
   /* The card stayed pinned at its mobile 340×300 size here before — tiny
      and lost inside a much wider desktop column. Scale it (and the copy
-     beside it) up to actually fill the space. */
+     beside it) up to fill the space without overshooting the viewport. */
   .testimonials__stage {
     margin-inline: 0;
     max-width: 100%;
-    height: clamp(340px, 30vw, 460px);
+    height: clamp(300px, 22vw, 360px);
   }
 
-  .testimonials__initials { font-size: clamp(48px, 5vw, 72px); }
+  .testimonials__initials { font-size: clamp(40px, 4vw, 56px); }
 
-  .testimonials__name { font-size: clamp(26px, 2.6vw, 36px); }
+  .testimonials__name { font-size: clamp(24px, 2.2vw, 32px); }
 
-  .testimonials__role { font-size: clamp(14px, 1.1vw, 16px); }
+  .testimonials__role { font-size: clamp(13px, 1vw, 15px); }
 
-  .testimonials__quote { font-size: clamp(19px, 1.7vw, 24px); }
+  .testimonials__quote { font-size: clamp(17px, 1.4vw, 21px); }
 
-  .testimonials__quote-mark { font-size: clamp(220px, 16vw, 320px); }
+  .testimonials__quote-mark { font-size: clamp(160px, 12vw, 240px); }
 
-  .testimonials__arrow { width: 52px; height: 52px; font-size: 26px; }
+  .testimonials__arrow { width: 48px; height: 48px; font-size: 24px; }
 
-  .testimonials__nav { padding-top: var(--space-lg); }
+  .testimonials__nav { padding-top: clamp(20px, 3vh, 32px); }
 }
