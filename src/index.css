@@ -195,16 +195,6 @@ p { overflow-wrap: break-word; }
 .placeholder--tall { aspect-ratio: 3 / 4; }
 .placeholder--hero { aspect-ratio: 16 / 9; min-height: 300px; }
 
-/* ---- Section transition veil (App.jsx) ---- */
-.section-veil {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: var(--rc-orange);
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* ---- Grain overlay ---- */
 body::after {
   content: '';

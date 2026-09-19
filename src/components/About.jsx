@@ -115,16 +115,36 @@ export default function About() {
       const veil = zoomVeilRef.current
       const fadeEls = root.querySelectorAll('.about__intro-fade')
 
+      let zoomDrift = { x: 0, y: 0 }
+
       if (introSection && introPin) {
         const setZoomOrigin = () => {
           if (!zoomTxt || !zero) return
-          gsap.set(zoomTxt, { scale: 1 })
+          gsap.set(zoomTxt, { scale: 1, x: 0, y: 0 })
           const t = zoomTxt.getBoundingClientRect()
           const z = zero.getBoundingClientRect()
           if (!t.width || !z.width) return
           const ox = ((z.left + z.width * 0.5) - t.left) / t.width * 100
           const oy = ((z.top + z.height * 0.52) - t.top) / t.height * 100
           gsap.set(zoomTxt, { transformOrigin: `${ox.toFixed(2)}% ${oy.toFixed(2)}%` })
+          // The pivot point (the "0" glyph) sits low/left in the layout at rest.
+          // Scaling 170x around it as-is would blow the number up toward that
+          // corner and off-frame, so we also drift the pivot toward the
+          // viewport center as it scales — same idea as a camera push that
+          // recenters on its subject, so the final huge frame reads centered
+          // instead of cropped.
+          // Y must be measured relative to the pin target's own box, not the
+          // viewport: this runs once on mount (and on refresh), while the
+          // page may still be scrolled above the pinned section, so a raw
+          // getBoundingClientRect().top here would capture the glyph's
+          // pre-scroll document position (thousands of px off) rather than
+          // where it actually sits once `.about__intro-grid` is pinned with
+          // its top locked to the viewport's top edge. X is unaffected since
+          // horizontal position doesn't shift with vertical scroll.
+          const pinRect = introPin.getBoundingClientRect()
+          const pivotX = z.left + z.width * 0.5
+          const pivotYInPin = (z.top - pinRect.top) + z.height * 0.52
+          zoomDrift = { x: window.innerWidth / 2 - pivotX, y: window.innerHeight / 2 - pivotYInPin }
         }
         setZoomOrigin()
 
@@ -132,8 +152,8 @@ export default function About() {
           scrollTrigger: {
             trigger: introSection,
             start: 'top top',
-            end: '+=3200',
-            scrub: 1.2,
+            end: '+=1800',
+            scrub: 0.5,
             pin: introPin,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -149,7 +169,17 @@ export default function About() {
         // phase 2 — the "2013" mark takes over
         if (zoomTxt) {
           if (fadeEls.length) parTl.to(fadeEls, { opacity: 0, ease: 'power1.in', duration: 0.4 }, 1.1)
-          parTl.fromTo(zoomTxt, { scale: 1 }, { scale: 170, ease: 'power3.in', duration: 1.8, force3D: true }, 1.1)
+          // Recentering (fast ease-out) resolves well before the scale
+          // (slow-start power3.in) does most of its growing, so the number
+          // is already centered by the time it gets big — otherwise a
+          // rapidly-enlarging off-center glyph reads as cropped/broken in
+          // the corner for most of the zoom instead of a clean push-in.
+          // Scale is capped well below the old 170x: text scaled that far
+          // is a raster upscale of a tiny glyph, which reads as blurry mush
+          // long before it fills the screen — 40x already overflows the
+          // viewport dramatically while staying legible into the veil.
+          parTl.fromTo(zoomTxt, { x: 0, y: 0 }, { x: () => zoomDrift.x, y: () => zoomDrift.y, ease: 'power2.out', duration: 0.9, force3D: true }, 1.1)
+          parTl.fromTo(zoomTxt, { scale: 1 }, { scale: 40, ease: 'power3.in', duration: 1.8, force3D: true }, 1.1)
           if (veil) parTl.fromTo(veil, { opacity: 0 }, { opacity: 1, ease: 'power2.inOut', duration: 0.6 }, 2.2)
         }
 

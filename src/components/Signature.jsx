@@ -58,7 +58,7 @@ export default function Signature() {
 
       // HUD & Atmosphere
       tl.to('.sig__hud', { opacity: 0.7, duration: 0.06 }, 0.02)
-      tl.to('.sig__glow', { opacity: 0.35, duration: 0.2 }, 0.02)
+      tl.to('.sig__glow', { opacity: 0.6, duration: 0.2 }, 0.02)
 
       // ─────────────────────────────────────────────────────────────
       // SEQUENCE 1: SPACE (0.04 → 0.22)

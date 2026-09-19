@@ -329,6 +329,36 @@ export default function Contact() {
         if (arrow) gsap.to(arrow, { y: -3, duration: 1.3, ease: 'sine.inOut', repeat: -1, yoyo: true })
       }
 
+      // ── form card 3D tilt — subtle perspective follow, tactile depth cue
+      // that wasn't there before (the form otherwise only reacts field by
+      // field on focus) ──
+      const formCol = root.querySelector('.contact__form-col')
+      const formEl2 = root.querySelector('.contact__form')
+      if (formCol && formEl2 && !reduced) {
+        const onMove = (e) => {
+          const r = formCol.getBoundingClientRect()
+          const px = (e.clientX - r.left) / r.width - 0.5
+          const py = (e.clientY - r.top) / r.height - 0.5
+          gsap.to(formEl2, {
+            rotateY: px * 6,
+            rotateX: py * -6,
+            transformPerspective: 1400,
+            duration: 0.6,
+            ease: 'power3.out',
+            overwrite: 'auto'
+          })
+        }
+        const onLeave = () => {
+          gsap.to(formEl2, { rotateX: 0, rotateY: 0, duration: 0.8, ease: 'power3.out', overwrite: 'auto' })
+        }
+        formCol.addEventListener('mousemove', onMove)
+        formCol.addEventListener('mouseleave', onLeave)
+        cleanupFns.push(() => {
+          formCol.removeEventListener('mousemove', onMove)
+          formCol.removeEventListener('mouseleave', onLeave)
+        })
+      }
+
       // ── social link arrow hover ──
       if (!reduced) {
         root.querySelectorAll('.contact__credits-link[data-soc]').forEach((a) => {
@@ -388,14 +418,14 @@ export default function Contact() {
       // ── outro: credits columns + closing headline, ported 1:1 from buildOutro() ──
       const credits = root.querySelector('.contact__credits')
       if (credits && !reduced) {
-        const cols = credits.querySelectorAll('.contact__credits-col')
+        const rows = credits.querySelectorAll('.contact__credits-label, .contact__credits-link, .contact__credits-static')
         const closing = credits.querySelectorAll('.contact__closing-line')
-        gsap.set(cols, { opacity: 0 })
+        gsap.set(rows, { opacity: 0 })
         gsap.set(closing, { yPercent: 108, opacity: 0 })
 
         ScrollTrigger.create({
           trigger: credits, start: 'top 78%', once: true,
-          onEnter: () => gsap.fromTo(cols, { opacity: 0, y: 26 * k }, { opacity: 1, y: 0, duration: 0.7, ease: E.field, stagger: 0.07 })
+          onEnter: () => gsap.fromTo(rows, { opacity: 0, y: 20 * k, skewY: 1.5 }, { opacity: 1, y: 0, skewY: 0, duration: 0.6, ease: E.field, stagger: 0.045 })
         })
         ScrollTrigger.create({
           trigger: credits.querySelector('.contact__closing-heading'), start: 'top 88%', once: true,
@@ -583,10 +613,11 @@ export default function Contact() {
                   key={d.label}
                   href={d.href}
                   className="contact__credits-link"
+                  data-soc
                   target={d.external ? '_blank' : undefined}
                   rel={d.external ? 'noopener noreferrer' : undefined}
                 >
-                  [&nbsp;{d.label}&nbsp;]
+                  [&nbsp;{d.label}&nbsp;] <span className="contact__credits-arrow" aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>

@@ -58,12 +58,6 @@ export default function Work() {
 
   return (
     <section className="work" id="work" ref={ref}>
-      <div className="work__header">
-        <h2 className="work__title">
-          <span className="work__label">Selected Projects</span>
-          Our Work
-        </h2>
-      </div>
       <div className="work__projects">
         {projects.map((p, i) => (
           <article key={i} className="work__project" data-category={p.category}>

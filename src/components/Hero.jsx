@@ -1,17 +1,20 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Hero.css'
 
 // Set once the asset exists (e.g. drop the file in /public and point here).
 const HERO_VIDEO_SRC = ''
 const HERO_VIDEO_POSTER = ''
 
+// A single bottom-left caption that loops continuously (matching the
+// reference), rather than cycling between five perimeter positions.
 const FLOAT_FACTS = [
-  { tag: 'EST.', text: '2013 — Dubai, UAE', zone: 'tl' },
-  { tag: 'TRACK RECORD', text: '12 years · 140+ activations', zone: 'mr' },
-  { tag: 'CRAFT', text: 'Film-level experiential craft', zone: 'bl' },
-  { tag: 'DISCIPLINE', text: 'Spatial design × brand experiences', zone: 'tr' },
-  { tag: 'WHY', text: 'Spaces people talk about a year later', zone: 'ml' },
+  { tag: 'EST.', text: '2013 — Dubai, UAE' },
+  { tag: 'TRACK RECORD', text: '12 years · 140+ activations' },
+  { tag: 'CRAFT', text: 'Film-level experiential craft' },
+  { tag: 'DISCIPLINE', text: 'Spatial design × brand experiences' },
+  { tag: 'WHY', text: 'Spaces people talk about a year later' },
 ]
 
 export default function Hero() {
@@ -35,7 +38,9 @@ export default function Hero() {
         .fromTo(scanRef.current, { opacity: 0, scaleX: 0 }, { opacity: 0.8, scaleX: 1, duration: 2, ease: 'expo.out' }, '-=0.5')
         .fromTo(scrollRef.current, { opacity: 0 }, { opacity: 0.5, duration: 1 }, '-=1')
 
-      // ── auto-cycling floating fact cards (perimeter zones, center stays clear) ──
+      // ── auto-cycling bottom-left caption — loops continuously while the
+      // hero is at rest, and pauses the moment the viewer starts scrolling
+      // (rather than ticking on invisibly behind a faded-out card) ──
       if (!reduced && floatRef.current) {
         const card = floatRef.current
         const ruleEl = card.querySelector('.hero__float-rule')
@@ -45,7 +50,6 @@ export default function Hero() {
         const setContent = () => {
           const i = floatIndexRef.current % FLOAT_FACTS.length
           const fact = FLOAT_FACTS[i]
-          card.className = `hero__float hero__float--${fact.zone}`
           indexEl.textContent = `${String(i + 1).padStart(2, '0')} — ${fact.tag}`
           textEl.innerHTML = fact.text
             .split('')
@@ -59,15 +63,17 @@ export default function Hero() {
         // single repeat:-1 timeline can't work here since its targets would go
         // stale the moment the text changes underneath it.
         let cancelled = false
+        let paused = false
+        let pendingCall = null
         let activeTl = null
         const runCycle = () => {
-          if (cancelled) return
+          if (cancelled || paused) return
           setContent()
           const chars = textEl.querySelectorAll('.hero__float-char')
           activeTl = gsap.timeline({
             onComplete: () => {
               floatIndexRef.current += 1
-              gsap.delayedCall(0.3, runCycle)
+              pendingCall = gsap.delayedCall(0.3, runCycle)
             }
           })
           activeTl
@@ -85,7 +91,16 @@ export default function Hero() {
         stopFloatLoop = () => {
           cancelled = true
           if (activeTl) activeTl.kill()
+          if (pendingCall) pendingCall.kill()
         }
+
+        ScrollTrigger.create({
+          trigger: heroRef.current,
+          start: 'top top',
+          end: '+=80',
+          onEnter: () => { paused = true },
+          onLeaveBack: () => { paused = false; if (!activeTl?.isActive()) runCycle() }
+        })
       }
 
       // ── scroll-triggered "video cut" transition into the next section ──
@@ -132,7 +147,7 @@ export default function Hero() {
         )}
       </div>
       <div className="hero__overlay" />
-      <div ref={floatRef} className="hero__float" aria-hidden="true">
+      <div ref={floatRef} className="hero__float hero__float--bl" aria-hidden="true">
         <span className="hero__float-rule" />
         <span className="hero__float-index" />
         <p className="hero__float-text" />

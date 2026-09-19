@@ -9,7 +9,7 @@
   --contact-ink-soft: rgba(245, 243, 238, 0.66);
   --contact-ink-faint: #66625e;
   --contact-line: rgba(245, 243, 238, 0.16);
-  --contact-orange: #ff5a1f;
+  --contact-orange: #f1571b;
   --contact-serif: 'Bodoni Moda', Georgia, serif;
   --contact-mono: 'IBM Plex Mono', var(--font-body, monospace);
 
@@ -75,7 +75,7 @@
   top: 32%;
   width: 46vw;
   height: 46vw;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 90, 31, 0.22), rgba(255, 90, 31, 0.05) 48%, rgba(5, 5, 5, 0) 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(241, 87, 27, 0.38), rgba(241, 87, 27, 0.1) 48%, rgba(5, 5, 5, 0) 70%);
 }
 
 .contact__blob--2 {
@@ -83,7 +83,7 @@
   top: 8%;
   width: 34vw;
   height: 34vw;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 140, 60, 0.15), rgba(255, 90, 31, 0.04) 50%, rgba(5, 5, 5, 0) 72%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 150, 70, 0.28), rgba(241, 87, 27, 0.08) 50%, rgba(5, 5, 5, 0) 72%);
 }
 
 .contact__blob--3 {
@@ -91,7 +91,7 @@
   bottom: -14%;
   width: 52vw;
   height: 40vw;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 90, 31, 0.14), rgba(5, 5, 5, 0) 66%);
+  background: radial-gradient(circle at 50% 50%, rgba(241, 87, 27, 0.26), rgba(5, 5, 5, 0) 66%);
 }
 
 .contact__sweep {
@@ -228,6 +228,12 @@
 /* ── form ── */
 .contact__form-col {
   min-width: 0;
+  perspective: 1400px;
+}
+
+.contact__form {
+  will-change: transform;
+  transform-style: preserve-3d;
 }
 
 .contact__form {
@@ -444,12 +450,13 @@
   align-items: center;
   gap: 8px;
   color: rgba(245, 243, 238, 0.8);
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   width: fit-content;
 }
 
 .contact__credits-link:hover {
   color: var(--contact-orange);
+  transform: translateX(3px);
 }
 
 .contact__credits-arrow {
