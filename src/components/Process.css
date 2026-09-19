@@ -134,11 +134,25 @@
 
 /* ---- Desktop Layout ---- */
 @media (min-width: 769px) {
-  .process__desktop { display: block; }
+  .process__desktop {
+    display: block;
+    position: relative;
+    width: 100%;
+  }
   .process__mobile { display: none; }
 
-  .process__trigger { height: 500vh; }
-  .process__sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .process__trigger {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .process__sticky {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 
   .process__header {
     position: absolute; top: 0; left: 0; right: 0; z-index: 10;

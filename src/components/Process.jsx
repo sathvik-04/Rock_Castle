@@ -95,29 +95,43 @@ export default function Process() {
   const [openStage, setOpenStage] = useState(0)
   const toggleStage = useCallback((i) => setOpenStage((prev) => (prev === i ? -1 : i)), [])
 
+  const scrollToStage = useCallback((index) => {
+    const st = ScrollTrigger.getById('process-scroll')
+    if (!st) return
+    const stageP = (index / 4) * 0.82
+    const targetScroll = st.start + stageP * (st.end - st.start)
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' })
+  }, [])
+
   useEffect(() => {
     const mm = gsap.matchMedia()
 
     // Desktop: horizontal scroll
     mm.add('(min-width: 769px)', () => {
       const track = trackRef.current
-      if (!track) return
+      const trigger = triggerRef.current
+      if (!track || !trigger) return
 
-      const scrollTween = gsap.to(track, {
-        x: () => -(track.scrollWidth - window.innerWidth),
-        ease: 'none',
+      const getScrollAmount = () => track.scrollWidth - window.innerWidth
+      const getHoldDistance = () => window.innerHeight * 0.5
+      const getTotalDistance = () => getScrollAmount() + getHoldDistance()
+
+      const scrollTl = gsap.timeline({
         scrollTrigger: {
-          trigger: triggerRef.current,
+          id: 'process-scroll',
+          trigger: trigger,
           start: 'top top',
-          end: () => '+=' + (track.scrollWidth - window.innerWidth),
+          end: () => '+=' + getTotalDistance(),
+          pin: true,
           scrub: 1,
-          pin: '.process__sticky',
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress
-            if (progressRef.current) progressRef.current.style.width = (p * 100) + '%'
-            const idx = Math.min(4, Math.floor(p * 5))
+            // 0 -> 0.82 animates through all 5 stages; 0.82 -> 1.0 holds on stage 5
+            const animP = Math.min(1, p / 0.82)
+            if (progressRef.current) progressRef.current.style.width = (animP * 100) + '%'
+            const idx = Math.min(4, Math.floor(animP * 4.999))
             if (labelRef.current) labelRef.current.textContent = `0${idx + 1} / 05`
             indicatorsRef.current.forEach((ind, i) => {
               if (ind) ind.classList.toggle('is-active', i === idx)
@@ -126,14 +140,23 @@ export default function Process() {
         }
       })
 
+      // Horizontal track scroll: translates entire track so stage 5 is fully visible
+      scrollTl.to(track, {
+        x: () => -getScrollAmount(),
+        ease: 'none',
+        duration: 0.82
+      })
+      // Hold on Final Delivery so the user can absorb stage 5
+      scrollTl.to({}, { duration: 0.18 })
+
       // Stage animations within horizontal scroll
       track.querySelectorAll('.process__stage').forEach(stage => {
         const textEls = stage.querySelectorAll('.process__stage-number, .process__stage-name, .process__stage-quote, .process__stage-desc')
         gsap.from(textEls, {
           y: 30, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out',
           scrollTrigger: {
-            trigger: stage, start: 'left 80%', end: 'left 20%',
-            containerAnimation: scrollTween, toggleActions: 'play none none reverse'
+            trigger: stage, start: 'left 85%', end: 'left 20%',
+            containerAnimation: scrollTl, toggleActions: 'play none none reverse'
           }
         })
 
@@ -143,7 +166,7 @@ export default function Process() {
             x: '50vw', ease: 'none',
             scrollTrigger: {
               trigger: stage, start: 'left center', end: 'right center',
-              containerAnimation: scrollTween, scrub: true
+              containerAnimation: scrollTl, scrub: true
             }
           })
         }
@@ -181,7 +204,21 @@ export default function Process() {
             </div>
             <div className="process__indicators">
               {stageNames.map((name, i) => (
-                <div key={i} className={`process__ind ${i === 0 ? 'is-active' : ''}`} ref={el => indicatorsRef.current[i] = el}>
+                <div
+                  key={i}
+                  className={`process__ind ${i === 0 ? 'is-active' : ''}`}
+                  ref={el => indicatorsRef.current[i] = el}
+                  onClick={() => scrollToStage(i)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Jump to stage ${i + 1}: ${name}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      scrollToStage(i)
+                    }
+                  }}
+                >
                   <div className="process__ind-dot" />
                   <span className="process__ind-label">{name}</span>
                 </div>

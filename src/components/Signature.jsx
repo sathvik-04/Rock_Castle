@@ -278,7 +278,7 @@ export default function Signature() {
   }
 
   return (
-    <section className="sig" id="signature" ref={sceneRef} aria-label="Rockcastle Signature Experience">
+    <section className="sig" id="work" ref={sceneRef} aria-label="Rockcastle Signature Experience">
 
       {/* SVG Grain Filter Definition */}
       <svg className="sig__noise-svg" width="0" height="0" aria-hidden="true">

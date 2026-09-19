@@ -8,6 +8,7 @@ import CaseStudy from './components/CaseStudy'
 
 gsap.registerPlugin(ScrollTrigger)
 
+
 export default function App() {
   const lenisRef = useRef(null)
   const location = useLocation()
