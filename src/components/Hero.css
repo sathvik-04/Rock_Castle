@@ -1,310 +1,356 @@
-/* Hero — mobile-first */
-/* Editorial opening spread: oversized black display statement on the
-   crisp white ground, a small framed media panel standing in for a
-   photograph rather than a full-bleed autoplay reel, and the existing
-   floating-caption cascade kept intact at bottom-left. */
+/* ========================================
+   HERO — Fullscreen Cinematic Video Experience
+   House of Yellow inspired, Rockcastle Identity
+   ======================================== */
+
 .hero {
   position: relative;
   width: 100%;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: var(--rc-white-warm);
-  color: var(--rc-black);
-}
-
-/* Small framed panel, top-right — a graphic element, not a hero video. */
-.hero__frame {
-  position: absolute;
-  z-index: 1;
-  top: var(--gutter);
-  right: var(--gutter);
-  width: clamp(88px, 28vw, 160px);
-}
-
-.hero__video-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
   background: var(--rc-black);
+  color: var(--rc-white-pure);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--gutter);
+  box-sizing: border-box;
+  z-index: 1;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* ---- Fullscreen Video Container ---- */
+.hero__video-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .hero__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transform-origin: center center;
+  filter: brightness(0.85) contrast(1.08);
 }
 
-.hero__placeholder {
-  width: 100%;
-  height: 100%;
-  background: var(--rc-dark);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero__placeholder-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--rc-gray-light);
-  z-index: 1;
-  text-align: center;
-  padding: var(--space-sm);
-}
-
-.hero__overlay {
+/* Atmospheric Scrim & Vignette */
+.hero__scrim {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  opacity: 0;
-  background: rgba(10, 10, 10, 0.55);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(10, 10, 10, 0.15) 0%,
+    rgba(10, 10, 10, 0.55) 70%,
+    rgba(5, 5, 5, 0.85) 100%
+  );
   pointer-events: none;
 }
 
-.hero__float {
+.hero__grain {
   position: absolute;
-  z-index: 2;
-  left: var(--gutter);
-  bottom: clamp(90px, 14vh, 140px);
-  max-width: min(20ch, 78vw);
-  text-align: left;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-size: 4px 4px;
   pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ---- Top Brand & Status Bar ---- */
+.hero__brand-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: clamp(8px, 1.5vh, 16px);
+}
+
+.hero__brand-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero__logo-mark {
+  width: 38px;
+  height: auto;
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.hero__status-label {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 0.9vw, 11px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(233, 226, 213, 0.7);
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hero__status-label {
+    display: inline-block;
+  }
+}
+
+.hero__state-indicators {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero__state-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--rc-white);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.hero__state-pill:hover,
+.hero__state-pill.is-active {
+  background: var(--rc-orange);
+  border-color: var(--rc-orange);
+  color: var(--rc-black);
+  font-weight: 600;
+  box-shadow: 0 0 12px var(--rc-orange-glow);
+}
+
+/* ---- Single Editorial Text Box Positioned at Left Bottom ---- */
+.hero__bottom-narrative {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: min(560px, 92vw);
+  margin-top: auto;
+  margin-bottom: clamp(16px, 3vh, 32px);
+  margin-left: 0;
+}
+
+.hero__narrative-card {
+  position: relative;
+  background: rgba(10, 10, 10, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3px solid var(--rc-orange);
+  padding: clamp(20px, 2.5vw, 32px);
+  border-radius: 4px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65);
+}
+
+.hero__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.hero__state-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1vw, 12px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rc-orange);
+  font-weight: 600;
+}
+
+.hero__block-rule {
+  width: 32px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.hero__paragraph {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 1.45vw, 1.3125rem);
+  font-weight: 450;
+  line-height: 1.55;
+  letter-spacing: -0.015em;
+  color: var(--rc-white-pure);
+  transition: opacity 0.3s ease;
+}
+
+/* ---- Mobile Playback Badge ---- */
+.hero__mobile-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--rc-white);
+  z-index: 2;
+  margin-bottom: 12px;
+  backdrop-filter: blur(6px);
+}
+
+@media (min-width: 769px) {
+  .hero__mobile-badge {
+    display: none;
+  }
+}
+
+.hero__mobile-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rc-orange);
+  animation: pulseDot 1.8s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* ---- Bottom Continuous Moving Ticker ---- */
+.hero__ticker {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  overflow: hidden;
+  background: rgba(5, 5, 5, 0.68);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 0;
+  backdrop-filter: blur(10px);
+}
+
+.hero__ticker-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  animation: heroTickerLoop 26s linear infinite;
   will-change: transform;
 }
 
-.hero__float-rule {
-  display: block;
-  width: 34px;
-  height: 1px;
-  margin-bottom: 10px;
-  background: var(--rc-orange);
-  transform-origin: left center;
-  transform: scaleX(0);
+.hero__ticker-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-right: 18px;
 }
 
-.hero__float-index {
-  display: block;
-  font-family: var(--font-body);
-  font-size: var(--fs-meta);
-  font-weight: 500;
-  letter-spacing: var(--ls-meta);
+.hero__ticker-item {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 0.85vw, 11px);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: rgba(233, 226, 213, 0.75);
+}
+
+.hero__ticker-sep {
   color: var(--rc-orange);
-  margin-bottom: 8px;
+  font-size: 8px;
+}
+
+@keyframes heroTickerLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+/* ---- Custom Interactive Cursor (Desktop) ---- */
+.hero__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: rgba(10, 10, 10, 0.82);
+  border: 1px solid var(--rc-orange);
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--rc-orange-glow);
   opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hero__float-text {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(21px, 6.2vw, 32px);
-  font-weight: 500;
-  letter-spacing: var(--ls-body);
-  line-height: 1.15;
-  color: var(--rc-black);
-  /* Overrides the global `p { overflow-wrap: break-word }` reset — with
-     every character split into its own inline-block span (for the letter
-     cascade below), break-word let the browser snap a line break mid-word
-     ("Dubai" -> "Dub" / "ai") whenever a run of chars didn't fit the
-     narrow --hero__float box. Only ever wrap at actual spaces. */
-  overflow-wrap: normal;
-  word-break: keep-all;
+.hero__cursor.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-/* Keeps a word's letters together as one unbreakable unit — see the JS
-   comment in Hero.jsx's setContent() for why this is needed. */
-.hero__float-word {
-  display: inline-block;
+.hero__cursor-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rc-orange);
+  box-shadow: 0 0 8px var(--rc-orange);
+}
+
+.hero__cursor-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--rc-white-pure);
   white-space: nowrap;
 }
 
-.hero__float-char-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-bottom: 0.1em;
+@media (hover: none) or (pointer: coarse) {
+  .hero__cursor {
+    display: none !important;
+  }
 }
 
-.hero__float-char {
-  display: inline-block;
-  will-change: transform;
-}
-
-.hero__content {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: var(--gutter);
-  padding-right: clamp(96px, 32vw, 200px);
-  text-align: left;
-}
-
-.hero__logo {
-  width: 40px;
-  height: auto;
-  margin-bottom: var(--space-md);
-  will-change: transform;
-}
-
-.hero__headline {
-  margin: 0 0 var(--space-md);
-}
-
-.hero__headline-mask {
-  display: block;
-  overflow: hidden;
-}
-
-.hero__headline-line {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 700;
-  /* fs-hero's shared clamp (up to 12rem) assumes full-bleed width; this hero
-     reserves a right-hand column for the framed media panel (see
-     .hero__content padding-right below), so the dominant statement is scaled
-     against that available column rather than the raw token to avoid the
-     single unbreakable word "Experiences" overflowing/wrapping mid-word at
-     common laptop widths (~1200-1600px) and at 390px mobile. Weight,
-     line-height band and letter-spacing token still follow the --fs-hero
-     spec (700 / 0.82-0.92 / -0.04em). */
-  font-size: clamp(2.75rem, 12vw, 4rem);
-  line-height: 0.9;
-  letter-spacing: var(--ls-hero);
-  text-transform: uppercase;
-  color: var(--rc-black);
-}
-
-.hero__headline-line--accent {
-  color: var(--rc-orange);
-}
-
-/* The one deliberate editorial-serif accent in the Hero: "Experiences" —
-   the single most emotionally-loaded word in the headline — drops to
-   Fraunces in its natural case at a lighter weight, contrasting against the
-   bold uppercase Switzer of "Un-Ltd." Restraint: only this one word, only
-   here. */
-.hero__headline-line--editorial {
-  font-family: var(--font-editorial);
-  font-weight: 500;
-  letter-spacing: var(--ls-body);
-  text-transform: none;
-}
-
-/* Replaces the old small mono tagline — this is the manifesto statement
-   that used to live in the (now-removed) Quote section, relocated here as
-   the closing line under the headline. A plain one-shot fade (see the
-   `tagRef` timeline in Hero.jsx), not a staggered/character reveal, so it
-   reads all at once. */
-.hero__manifesto {
-  max-width: 34ch;
-  margin-top: clamp(4px, 1vh, 10px);
-  font-family: var(--font-display);
-  font-size: var(--fs-body-lg);
-  font-weight: 400;
-  letter-spacing: var(--ls-body);
-  line-height: 1.4;
-  color: var(--rc-black);
-}
-
-.hero__scanline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--rc-orange);
-  z-index: 3;
-  transform-origin: left;
-}
-
-.hero__scroll {
-  position: absolute;
-  bottom: var(--space-lg);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.hero__scroll-line {
-  width: 1px;
-  height: 32px;
-  background: var(--rc-orange);
-  animation: scrollPulse 2s ease-in-out infinite;
-}
-
-@keyframes scrollPulse {
-  0%,100% { transform: scaleY(1); opacity: 0.5; }
-  50% { transform: scaleY(0.5); opacity: 1; }
-}
-
-.hero__scroll-text {
-  font-family: var(--font-body);
-  font-size: var(--fs-meta);
-  font-weight: 500;
-  letter-spacing: var(--ls-meta);
-  text-transform: uppercase;
-  color: var(--rc-gray-light);
-}
-
-/* Corner marks */
+/* ---- Architectural Corner Accents ---- */
 .hero__corner {
   position: absolute;
   width: 24px;
   height: 24px;
   z-index: 3;
-  opacity: 0.4;
+  opacity: 0.55;
+  pointer-events: none;
 }
+
 .hero__corner::before,
 .hero__corner::after {
   content: '';
   position: absolute;
   background: var(--rc-orange);
 }
+
 .hero__corner--tl { top: var(--gutter); left: var(--gutter); }
-.hero__corner--tl::before { top: 0; left: 0; width: 16px; height: 1px; }
-.hero__corner--tl::after  { top: 0; left: 0; width: 1px; height: 16px; }
+.hero__corner--tl::before { top: 0; left: 0; width: 14px; height: 1px; }
+.hero__corner--tl::after  { top: 0; left: 0; width: 1px; height: 14px; }
+
 .hero__corner--tr { top: var(--gutter); right: var(--gutter); }
-.hero__corner--tr::before { top: 0; right: 0; width: 16px; height: 1px; }
-.hero__corner--tr::after  { top: 0; right: 0; width: 1px; height: 16px; }
+.hero__corner--tr::before { top: 0; right: 0; width: 14px; height: 1px; }
+.hero__corner--tr::after  { top: 0; right: 0; width: 1px; height: 14px; }
+
 .hero__corner--bl { bottom: var(--gutter); left: var(--gutter); }
-.hero__corner--bl::before { bottom: 0; left: 0; width: 16px; height: 1px; }
-.hero__corner--bl::after  { bottom: 0; left: 0; width: 1px; height: 16px; }
+.hero__corner--bl::before { bottom: 0; left: 0; width: 14px; height: 1px; }
+.hero__corner--bl::after  { bottom: 0; left: 0; width: 1px; height: 14px; }
+
 .hero__corner--br { bottom: var(--gutter); right: var(--gutter); }
-.hero__corner--br::before { bottom: 0; right: 0; width: 16px; height: 1px; }
-.hero__corner--br::after  { bottom: 0; right: 0; width: 1px; height: 16px; }
-
-/* Tablet */
-@media (min-width: 768px) {
-  .hero__logo { width: 48px; }
-  .hero__content { padding-right: clamp(140px, 26vw, 240px); }
-  .hero__headline-line { font-size: clamp(4.5rem, 9vw, 8rem); line-height: 0.88; }
-  .hero__scroll-line { height: 40px; }
-  .hero__corner { width: 32px; height: 32px; }
-  .hero__corner--tl::before, .hero__corner--tr::before,
-  .hero__corner--bl::before, .hero__corner--br::before { width: 20px; }
-  .hero__corner--tl::after, .hero__corner--tr::after,
-  .hero__corner--bl::after, .hero__corner--br::after { height: 20px; }
-}
-
-/* Desktop */
-@media (min-width: 1200px) {
-  .hero__logo { width: 56px; }
-  .hero__frame { width: clamp(200px, 20vw, 320px); }
-  .hero__content { padding-right: clamp(220px, 22vw, 360px); }
-  .hero__headline-line { font-size: clamp(5rem, 8.5vw, 10rem); line-height: 0.85; }
-  .hero__float { max-width: min(20ch, 30vw); bottom: clamp(120px, 16vh, 180px); }
-}
+.hero__corner--br::before { bottom: 0; right: 0; width: 14px; height: 1px; }
+.hero__corner--br::after  { bottom: 0; right: 0; width: 1px; height: 14px; }

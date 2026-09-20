@@ -69,6 +69,28 @@ export const projects = [
     placeholder: '[ PROJECT VIDEO ]',
     image: '/images/work-03.webp',
   },
+  {
+    slug: 'continuum-pavilion',
+    name: 'Continuum Pavilion',
+    client: 'Al Wasl Cultural District',
+    year: '2024',
+    location: 'Dubai, UAE',
+    category: 'spatial',
+    catLabel: 'Spatial Installation',
+    tagline: 'A kinetic architectural pavilion engineered for 24-hour light shifts.',
+    stats: [
+      { value: '3,200', label: 'Square Metres' },
+      { value: '22', label: 'Days To Build' },
+      { value: '60K+', label: 'Visitors' },
+    ],
+    brief: 'A temporary cultural pavilion that transformed its spatial volume from sunrise to midnight.',
+    idea: 'Light-reactive louvers and kinetic steel planes dynamically filtering natural and theatrical light.',
+    design: 'Full bespoke steel fabrication and computer-choreographed lighting nodes integrated into the structure.',
+    result: 'Over sixty thousand visitors over two weeks; hailed as Dubai’s most daring temporary pavilion.',
+    shots: ['Dawn — Exterior', 'Interior — Kinetic Louvers', 'Night — Lighting Plot'],
+    placeholder: '[ PROJECT IMAGE ]',
+    image: '/images/signature-01.webp',
+  },
 ]
 
 export function getProjectBySlug(slug) {

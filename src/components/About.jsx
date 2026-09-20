@@ -9,13 +9,6 @@ const founders = [
   { name: 'Head of Creative', tag: 'CONCEPT → BUILD', label: 'PORTRAIT — HEAD OF CREATIVE', image: '/images/founder-2.webp' },
 ]
 
-const crewSteps = [
-  { tag: 'CREW 01', text: 'Strategy sits in the room from the first brief' },
-  { tag: 'CREW 02', text: 'Design draws it at build scale, not slide scale' },
-  { tag: 'CREW 03', text: 'Fabrication welds it in our own workshop' },
-  { tag: 'CREW 04', text: 'Crew stands in the venue the morning it opens' },
-]
-
 function MaskWords({ text }) {
   return text.split(' ').flatMap((w, i, arr) => {
     const nodes = [
@@ -29,358 +22,248 @@ function MaskWords({ text }) {
 
 export default function About() {
   const ref = useRef(null)
-  const zoomTextRef = useRef(null)
-  const zoomZeroRef = useRef(null)
-  const cardsRef = useRef([])
-  const deckIndexRef = useRef(null)
+  const mainImageRef = useRef(null)
+  const imageFrameRef = useRef(null)
+  const foundersGridRef = useRef(null)
 
   useEffect(() => {
-    let planeObserver
-    const cleanupFns = []
-    ScrollTrigger.config({ ignoreMobileResize: true })
+    const root = ref.current
+    if (!root) return
+
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const ctx = gsap.context(() => {
-      const root = ref.current
-
-      // ── INTRO (s1) + 2013 ZOOM, merged into one pinned sequence: parallax
-      // first, then the small "Founded — 2013" mark under the founder-film
-      // caption takes over the screen (everything else fades, the number
-      // scales up through its own "0", the frame morphs from white to
-      // orange behind it) and hands off straight into the manifesto — no
-      // separate section just for the zoom. About is the site's WHITE →
-      // ORANGE leg: this zoom is where that morph happens, and everything
-      // after it (manifesto / founders / crew deck / cta) lives in the
-      // resulting orange environment with black typography. ──
-      const introSection = root.querySelector('.about__intro')
-      const introPin = root.querySelector('.about__intro-grid')
-      const introHead = root.querySelector('.about__intro-head')
-      const introP1 = root.querySelector('.about__intro-p1')
-      const introP2 = root.querySelector('.about__intro-p2')
-      const introCard = root.querySelector('.about__video-card')
-      const introPlane = root.querySelector('.about__video-plate')
-      const zoomTxt = zoomTextRef.current
-      const zero = zoomZeroRef.current
-      const fadeEls = root.querySelectorAll('.about__intro-fade')
-      const manifesto = root.querySelector('.about__manifesto')
-      const manifestoRule = manifesto?.querySelector('.about__rule')
-      const manifestoTag = manifesto?.querySelector('.about__manifesto-tag')
-      const manifestoQuote = manifesto?.querySelector('.about__manifesto-quote span')
-
-      let zoomDrift = { x: 0, y: 0 }
-
-      if (introSection && introPin) {
-        const setZoomOrigin = () => {
-          if (!zoomTxt || !zero) return
-          gsap.set(zoomTxt, { scale: 1, x: 0, y: 0, opacity: 1 })
-          const t = zoomTxt.getBoundingClientRect()
-          const z = zero.getBoundingClientRect()
-          if (!t.width || !z.width) return
-          const ox = ((z.left + z.width * 0.5) - t.left) / t.width * 100
-          const oy = ((z.top + z.height * 0.52) - t.top) / t.height * 100
-          gsap.set(zoomTxt, { transformOrigin: `${ox.toFixed(2)}% ${oy.toFixed(2)}%` })
-          const pinRect = introPin.getBoundingClientRect()
-          const pivotX = z.left + z.width * 0.5
-          const pivotYInPin = (z.top - pinRect.top) + z.height * 0.52
-          zoomDrift = { x: window.innerWidth / 2 - pivotX, y: window.innerHeight / 2 - pivotYInPin }
-        }
-        setZoomOrigin()
-
-        const parTl = gsap.timeline({
+      // ── 1. Slide-over / Sheet Reveal onto Hero ──
+      // As About arrives at top of viewport, it covers Hero with solid elevation
+      gsap.fromTo(root, 
+        { yPercent: 0 },
+        { 
+          yPercent: 0,
+          ease: 'none',
           scrollTrigger: {
-            trigger: introSection,
-            start: 'top top',
-            end: '+=1500',
-            scrub: 0.5,
-            pin: introPin,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onRefresh: setZoomOrigin
+            trigger: root,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: true,
           }
-        })
-        // phase 1 — parallax
-        if (introHead) parTl.to(introHead, { yPercent: -15, ease: 'none', duration: 1 }, 0)
-        if (introP1) parTl.to(introP1, { yPercent: -7, ease: 'none', duration: 1 }, 0)
-        if (introP2) parTl.to(introP2, { yPercent: -11, ease: 'none', duration: 1 }, 0)
-        if (introCard) parTl.to(introCard, { yPercent: -16, ease: 'none', duration: 1 }, 0)
-
-        // phase 2 — the "2013" mark takes over, zooms and fades out
-        if (zoomTxt) {
-          if (fadeEls.length) parTl.to(fadeEls, { opacity: 0, ease: 'power1.in', duration: 0.4 }, 1.0)
-          parTl.fromTo(zoomTxt, { x: 0, y: 0 }, { x: () => zoomDrift.x, y: () => zoomDrift.y, ease: 'power2.out', duration: 0.85, force3D: true }, 1.0)
-          parTl.fromTo(zoomTxt, { scale: 1 }, { scale: 35, ease: 'power3.in', duration: 1.3, force3D: true }, 1.0)
-          // 2013 dissolves out as it expands past the viewport
-          parTl.to(zoomTxt, { opacity: 0, ease: 'power2.out', duration: 0.45 }, 1.8)
         }
+      )
 
-        // phase 2b — the frame itself morphs from warm editorial white to
-        // saturated brand orange as "2013" consumes the viewport, so the
-        // zoom's end-state is an ORANGE-saturated environment rather than a
-        // jump to black. Hex literals mirror --rc-white-warm / --rc-orange
-        // (src/index.css) — GSAP tweens actual computed color, not var()
-        // refs. The digit itself fades toward warm white as it dissolves so
-        // it reads as being "consumed" by the orange it leaves behind, and
-        // the color settles well before the manifesto (which is in ink/
-        // black, see About.css) fades in on top of the now-solid orange.
-        if (introSection) {
-          parTl.fromTo(introSection,
-            { backgroundColor: '#f7f7f5' },
-            { backgroundColor: '#fa5a32', ease: 'power2.inOut', duration: 0.9 },
-            1.0
-          )
-        }
-        if (zoomTxt) {
-          parTl.fromTo(zoomTxt,
-            { color: '#0a0a0a' },
-            { color: '#f7f7f5', ease: 'power2.in', duration: 0.75 },
-            1.05
-          )
-        }
-
-        // phase 3 — as soon as 2013 fades out, the manifesto emerges immediately (no black page)
-        if (manifesto) {
-          parTl.fromTo(manifesto,
-            { opacity: 0, scale: 0.93, y: 25 },
-            { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'power3.out' },
-            1.95
-          )
-          if (manifestoRule) {
-            parTl.fromTo(manifestoRule,
-              { scaleX: 0 },
-              { scaleX: 1, duration: 0.45, ease: 'power3.out' },
-              2.05
-            )
-          }
-          if (manifestoTag) {
-            parTl.fromTo(manifestoTag,
-              { opacity: 0, y: 10 },
-              { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
-              2.1
-            )
-          }
-          if (manifestoQuote) {
-            parTl.fromTo(manifestoQuote,
-              { clipPath: 'inset(0 100% 0 0)', filter: 'blur(8px)', opacity: 0 },
-              { clipPath: 'inset(0 0% 0 0)', filter: 'blur(0px)', opacity: 1, duration: 0.75, ease: 'power4.out' },
-              2.15
-            )
-          }
-          // Hold the manifesto clearly in view before unpinning
-          parTl.to({}, { duration: 0.7 }, 2.9)
-        }
-
-        const lines = root.querySelectorAll('.about__intro h2 > span, .about__intro p > span')
-        const ent = gsap.timeline({ defaults: { overwrite: 'auto' } })
-        if (lines.length) {
-          ent.fromTo(lines, { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 1.05, stagger: 0.055, ease: 'power3.out' }, 0)
-        }
-        if (introPlane) {
-          ent.fromTo(introPlane, { scale: 0.94, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.15, ease: 'power3.out' }, 0.35)
-        }
-
-        if (document.fonts?.ready) {
-          document.fonts.ready.then(() => ScrollTrigger.refresh())
-        }
-      }
-
-      // ── CREW DECK — ported 1:1 from the `deck` block, including the 3D
-      // rotate/z exit and the live "0x / 04" index counter ──
-      const deckSection = root.querySelector('.about__crew-deck')
-      const deckPinEl = root.querySelector('.about__crew-pin')
-      const cards = cardsRef.current.filter(Boolean)
-
-      if (deckSection && cards.length) {
-        gsap.set(cards, {
-          zIndex: (i) => cards.length - i,
-          yPercent: (i) => (i === 0 ? 0 : 100),
-          rotateX: (i) => (i === 0 ? 0 : 18),
-          rotateZ: 0,
-          z: 0,
-          opacity: (i) => (i === 0 ? 1 : 0)
-        })
-        const deckTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: deckSection,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 1,
-            pin: deckPinEl,
-            pinSpacing: false,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              if (!deckIndexRef.current) return
-              const n = Math.min(cards.length, 1 + Math.floor(self.progress * cards.length * 0.999))
-              deckIndexRef.current.textContent = `${String(n).padStart(2, '0')} / 04`
+      // ── 2. Editorial Text Reveal (Lines & Headings) ──
+      const textLines = root.querySelectorAll('.about__intro-headline span, .about__intro-p span, .about__intro-tag')
+      if (textLines.length) {
+        gsap.fromTo(textLines,
+          { opacity: 0, y: 35 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.08,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.about__intro',
+              start: 'top 75%',
+              toggleActions: 'play none none reverse'
             }
           }
+        )
+      }
+
+      // ── 3. Scroll-Driven Main Image Gradual Zoom ──
+      // Connected smoothly to scroll progress without sudden jumps
+      if (mainImageRef.current && imageFrameRef.current) {
+        gsap.fromTo(mainImageRef.current,
+          { scale: 1, filter: 'brightness(0.95)' },
+          {
+            scale: 1.22,
+            filter: 'brightness(1.05)',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: imageFrameRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.5,
+              invalidateOnRefresh: true
+            }
+          }
+        )
+      }
+
+      // ── 4. Founders Section Reveal ──
+      const foundersEl = root.querySelector('.about__founders')
+      if (foundersEl) {
+        const titleWords = foundersEl.querySelectorAll('.about__founders-title .about__mask-word')
+        const cards = foundersEl.querySelectorAll('.about__founder')
+
+        const fTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: foundersEl,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse'
+          }
         })
-        cards.forEach((card, i) => {
-          if (i > 0) deckTl.to(card, { yPercent: 0, rotateX: 0, rotateZ: 0, z: 0, opacity: 1, ease: 'power2.out', duration: 1 }, i - 0.5)
-          if (i < cards.length - 1) deckTl.to(card, { yPercent: -120, rotateX: -25, rotateZ: -5, z: -200, opacity: 0, ease: 'power2.in', duration: 1 }, i + 0.5)
+
+        fTl.fromTo(foundersEl.querySelector('.about__section-tag'),
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+        )
+        .fromTo(titleWords,
+          { yPercent: 110, rotate: 4 },
+          { yPercent: 0, rotate: 0, duration: 0.75, ease: 'power4.out', stagger: 0.02 },
+          '-=0.2'
+        )
+        .fromTo(cards,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' },
+          '-=0.3'
+        )
+      }
+
+      // ── 5. Mouse Parallax on Images (Desktop only) ──
+      if (finePointer && !reduced) {
+        const parallaxImages = root.querySelectorAll('.about__parallax-target')
+        parallaxImages.forEach((imgWrap) => {
+          const quickX = gsap.quickTo(imgWrap, 'x', { duration: 0.4, ease: 'power3.out' })
+          const quickY = gsap.quickTo(imgWrap, 'y', { duration: 0.4, ease: 'power3.out' })
+
+          const handleMouseMove = (e) => {
+            const rect = imgWrap.getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
+            const deltaX = (e.clientX - centerX) / (rect.width / 2)
+            const deltaY = (e.clientY - centerY) / (rect.height / 2)
+            quickX(deltaX * 12)
+            quickY(deltaY * 12)
+          }
+
+          const handleMouseLeave = () => {
+            quickX(0)
+            quickY(0)
+          }
+
+          imgWrap.addEventListener('mousemove', handleMouseMove)
+          imgWrap.addEventListener('mouseleave', handleMouseLeave)
         })
       }
 
-      // ── PLANE ENTRANCE SETTLE — the mockup drives this off a WebGL shader
-      // uniform (uProgress) via an IntersectionObserver; we don't ship
-      // three.js here, so the same observer + easing/duration is used to
-      // settle a blur/scale on the plate elements instead (video card,
-      // founder portraits) the moment each scrolls into view. ──
-      const planeEls = root.querySelectorAll('.about__video-plate, .about__portrait')
-      if (planeEls.length) {
-        const entered = new WeakSet()
-        planeObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting || entered.has(entry.target)) return
-            entered.add(entry.target)
-            gsap.fromTo(entry.target,
-              { filter: 'blur(10px)', scale: 1.04 },
-              { filter: 'blur(0px)', scale: 1, duration: 2.2, ease: 'elastic.out(1, 0.3)' })
-          })
-        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.01 })
-        planeEls.forEach((el) => planeObserver.observe(el))
+      // ── 6. Manifesto Banner Reveal ──
+      const manifesto = root.querySelector('.about__manifesto')
+      if (manifesto) {
+        gsap.fromTo(manifesto,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: manifesto,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        )
       }
+    }, ref)
 
-      // ── scroll reveals for the previously-static blocks (manifesto,
-      // founders, FAQ, closing CTA) — a thin rule overshoots then settles,
-      // headings cascade in word-by-word, and each section gets one
-      // signature move (clip-path wipe / rotateZ tilt / bounce) instead of
-      // a flat fade, matching the Hero and intro headline's craft ──
-      const reveal = (selector, build) => {
-        const el = root.querySelector(selector)
-        if (!el) return
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none reverse' }
-        })
-        const ruleEl = el.querySelector('.about__rule')
-        if (ruleEl) {
-          tl.fromTo(ruleEl, { scaleX: 0 }, { scaleX: 1.15, duration: 0.4, ease: 'power3.out' })
-            .to(ruleEl, { scaleX: 1, duration: 0.22, ease: 'power2.out' })
-        }
-        build(tl, el)
-      }
-
-
-
-      reveal('.about__founders', (tl, el) => {
-        const words = el.querySelectorAll('.about__founders-title .about__mask-word')
-        tl.fromTo(el.querySelector('.about__section-tag'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
-          .fromTo(words, { yPercent: 112, rotate: 5 }, { yPercent: 0, rotate: 0, duration: 0.75, ease: 'power4.out', stagger: 0.025 }, '-=0.2')
-          .fromTo(el.querySelectorAll('.about__founder'),
-            { opacity: 0, y: 50, rotateZ: -2.5 },
-            { opacity: 1, y: 0, rotateZ: 0, duration: 1, ease: 'power4.out', stagger: 0.18 },
-            '-=0.35')
-          .fromTo(el.querySelectorAll('.about__portrait'),
-            { clipPath: 'inset(0 0 100% 0)' },
-            { clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'power4.inOut', stagger: 0.18 },
-            '<')
-      })
-
-    }, ref.current)
-
-    return () => {
-      ctx.revert()
-      if (planeObserver) planeObserver.disconnect()
-      cleanupFns.forEach((fn) => fn())
-    }
+    return () => ctx.revert()
   }, [])
 
   return (
-    <section className="about" id="about" ref={ref} aria-label="About Rockcastle">
-
-      {/* ── INTRO — How it began, with the "2013" zoom folded in below the
-          founder-film card instead of wasting a whole separate section ── */}
+    <section className="about" id="about" ref={ref} aria-label="Who We Are / About Rockcastle">
+      {/* ── WHO WE ARE / INTRO ── */}
       <div className="about__intro">
-        <div className="about__intro-grid">
-          <div className="about__intro-head about__intro-fade">
-            <h2 className="about__headline">
-              <span className="about__headline-line">How it</span>
-              <span className="about__headline-line about__headline-line--accent">
-                <span className="about__headline-arrow" aria-hidden="true">↳</span>Began
-              </span>
+        <div className="about__intro-container">
+          <div className="about__intro-header">
+            <span className="about__intro-tag">[&nbsp;WHO WE ARE&nbsp;]</span>
+            <h2 className="about__intro-headline">
+              <span>Architects of</span>
+              <span className="about__intro-headline--accent">Unforgettable Spaces.</span>
             </h2>
-            <div className="about__eyebrow">EST 2013 — DUBAI, UAE</div>
           </div>
-          <div className="about__intro-copy">
-            <p className="about__intro-p1 about__intro-fade">
-              <span>
-                Rockcastle started in 2013 with a small crew and a single ambitious brief — turn a
-                product launch into something people would still talk about a year later.
-              </span>
-            </p>
-            <p className="about__intro-p2 about__intro-fade">
-              <span>
-                No in-house studio yet, just a conviction that experiential work deserved film-level
-                craft. Twelve years and 140 activations later, that is still the whole model.
-              </span>
-            </p>
-            <div className="about__video-card">
-              <MediaPlaceholder
-                ratio="16/9"
-                label="FOUNDER FILM — COMING SOON"
-                className="about__video-plate about__intro-fade"
-                src="/images/about-intro.webp"
-              />
-              <span className="about__video-caption about__intro-fade">FOUNDER FILM — WATCH THE STORY</span>
-              <div className="about__found-year">
-                <span className="about__found-label about__intro-fade">FOUNDED —</span>
-                <div className="about__zoom-number" ref={zoomTextRef}>
-                  <span>2</span><span ref={zoomZeroRef}>0</span><span>1</span><span>3</span>
+
+          <div className="about__intro-content">
+            <div className="about__intro-text-column">
+              <p className="about__intro-p about__intro-p--lead">
+                <span>
+                  Rockcastle was founded in Dubai with an uncompromising belief: experiential environments should possess the structural grandeur of architecture and the narrative weight of cinema.
+                </span>
+              </p>
+              <p className="about__intro-p">
+                <span>
+                  Over twelve years and more than 140 monumental activations, our studio has expanded from a visionary design atelier into a full-scale spatial production engine. We weld, program, and build our own concepts in-house.
+                </span>
+              </p>
+              <div className="about__metrics-row">
+                <div className="about__metric">
+                  <span className="about__metric-num">12+</span>
+                  <span className="about__metric-label">YEARS IN DUBAI</span>
+                </div>
+                <div className="about__metric">
+                  <span className="about__metric-num">140+</span>
+                  <span className="about__metric-label">ACTIVATIONS DELIVERED</span>
+                </div>
+                <div className="about__metric">
+                  <span className="about__metric-num">100%</span>
+                  <span className="about__metric-label">IN-HOUSE FABRICATION</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Interactive Zoom Image with Mouse Parallax */}
+            <div className="about__image-column" ref={imageFrameRef}>
+              <div className="about__parallax-target">
+                <div className="about__main-image-wrap">
+                  <img
+                    ref={mainImageRef}
+                    src="/images/about-intro.webp"
+                    alt="Rockcastle Dubai Studio & Fabrication"
+                    className="about__main-image"
+                  />
+                  <div className="about__image-overlay" />
+                  <span className="about__image-badge">STUDIO & ATELIER // DUBAI</span>
                 </div>
               </div>
             </div>
           </div>
-          {/* ── MANIFESTO — emerges seamlessly as 2013 zooms and fades out ── */}
-          <div className="about__manifesto">
-            <span className="about__rule about__rule--center" aria-hidden="true" />
-            <span className="about__manifesto-tag">[&nbsp;NO SHORTCUTS&nbsp;]</span>
-            <p className="about__manifesto-quote">
-              <span>
-                Nobody claps for a cable run or a rehearsal at 4am — and that is exactly where the
-                night is won or lost.
-              </span>
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* ── FOUNDERS — orange environment, black typography ── */}
+      {/* ── MANIFESTO BANNER ── */}
+      <div className="about__manifesto">
+        <div className="about__manifesto-inner">
+          <span className="about__rule" aria-hidden="true" />
+          <span className="about__manifesto-tag">[&nbsp;OUR CONVICTION&nbsp;]</span>
+          <p className="about__manifesto-quote">
+            &ldquo;Nobody claps for a cable run or a load calculation at 4am — yet that is precisely where monumental experiences are won or lost.&rdquo;
+          </p>
+        </div>
+      </div>
+
+      {/* ── FOUNDERS — Orange Accented Editorial Grid ── */}
       <div className="about__founders">
         <div className="about__founders-inner">
           <div className="about__founders-head">
             <span className="about__rule" aria-hidden="true" />
-            <span className="about__section-tag">[&nbsp;FOUNDERS&nbsp;]</span>
-            <h2 className="about__founders-title"><MaskWords text="Two people sign off on every show we put out" /></h2>
+            <span className="about__section-tag">[&nbsp;LEADERSHIP&nbsp;]</span>
+            <h2 className="about__founders-title">
+              <MaskWords text="Two partners personally sign off on every activation we build" />
+            </h2>
           </div>
-          <div className="about__founders-grid">
+          <div className="about__founders-grid" ref={foundersGridRef}>
             {founders.map((f) => (
               <div className="about__founder" key={f.name}>
-                <MediaPlaceholder ratio="3/4" label={f.label} className="about__portrait" src={f.image} />
+                <div className="about__parallax-target">
+                  <div className="about__portrait-wrap">
+                    <img src={f.image} alt={f.name} className="about__portrait-img" />
+                    <div className="about__portrait-overlay" />
+                  </div>
+                </div>
                 <div className="about__founder-meta">
                   <span className="about__founder-name">{f.name}</span>
                   <span className="about__founder-tag">[&nbsp;{f.tag}&nbsp;]</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── CREW / PROCESS DECK ── */}
-      <div className="about__crew-deck">
-        <div className="about__crew-pin">
-          <div className="about__crew-top">
-            <span>[&nbsp;THE CREW&nbsp;]</span>
-            <span ref={deckIndexRef} className="about__crew-index">01 / 04</span>
-          </div>
-          <div className="about__crew-stack">
-            {crewSteps.map((c, i) => (
-              <div
-                className={`about__crew-card about__crew-card--${i + 1}`}
-                key={c.tag}
-                ref={(el) => { cardsRef.current[i] = el }}
-              >
-                <span className="about__crew-tag">{c.tag}</span>
-                <span className="about__crew-text">{c.text}</span>
               </div>
             ))}
           </div>
