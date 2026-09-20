@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useMagnetic } from '../hooks/useMagnetic'
 import './Navigation.css'
 
 // How close to the very top of the page the nav reappears.
@@ -8,6 +9,8 @@ export default function Navigation() {
   const [hidden, setHidden] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const navRef = useRef(null)
+  useMagnetic(navRef, '.nav__link, .nav__logo-link', 0.4)
 
   useEffect(() => {
     const onScroll = () => {
@@ -48,7 +51,7 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className={`nav ${hidden ? 'nav--hidden' : ''} ${scrolled ? 'nav--scrolled' : ''}`}>
+      <nav ref={navRef} className={`nav ${hidden ? 'nav--hidden' : ''} ${scrolled ? 'nav--scrolled' : ''}`}>
         <a href="#hero" className="nav__logo-link" aria-label="Rockcastle home">
           <img src="/rockcastle-logo.jpg" alt="Rockcastle" className="nav__logo" />
         </a>

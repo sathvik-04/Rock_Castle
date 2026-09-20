@@ -1,18 +1,25 @@
 /* ==========================================================================
    FAQ — Frequently Asked Questions section
-   Mobile-First (390×844 base). Uses Bodoni Moda serif, IBM Plex Mono,
-   and Rock Castle signature orange accents (#f1571b).
+   Mobile-First (390×844 base). Fully grotesk (Switzer/Neue Montreal) —
+   no serif accent — plus IBM Plex Mono for meta numbering/labels,
+   and Rock Castle signature orange accents.
    ========================================================================== */
 
 .faq {
-  --faq-bg: #070707;
-  --faq-bg-raised: #131211;
-  --faq-ink: #f4f1ec;
-  --faq-ink-soft: rgba(244, 241, 236, 0.62);
-  --faq-ink-faint: rgba(244, 241, 236, 0.4);
-  --faq-line: rgba(244, 241, 236, 0.14);
-  --faq-orange: #f1571b;
-  --faq-serif: 'Bodoni Moda', Georgia, serif;
+  /* Reference the shared tokens (src/index.css) rather than hardcoding a
+     near-duplicate black/orange — keeps FAQ visually identical to the rest
+     of the site instead of one shade off.
+     Re-skinned for the landing stretch: FAQ sits inside the warm-white run
+     after Contact carries the page out of the black section, so ground/ink
+     flip to editorial white with near-black type — orange stays reserved
+     for the index numbers and the open-state indicator only. */
+  --faq-bg: var(--rc-white-warm);
+  --faq-bg-raised: var(--rc-white);
+  --faq-ink: var(--rc-black);
+  --faq-ink-soft: rgba(10, 10, 10, 0.72);
+  --faq-ink-faint: rgba(10, 10, 10, 0.55);
+  --faq-line: rgba(10, 10, 10, 0.14);
+  --faq-orange: var(--rc-orange);
   --faq-mono: 'IBM Plex Mono', var(--font-body, monospace);
 
   position: relative;
@@ -43,18 +50,19 @@
 .faq__tag {
   display: inline-block;
   font-family: var(--faq-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-weight: 500;
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta);
   color: var(--faq-orange);
   margin-bottom: clamp(14px, 2.5vh, 24px);
   text-transform: uppercase;
 }
 
-/* ── Title ── */
+/* ── Title — fully grotesk; no serif on FAQ questions or the title ── */
 .faq__title {
   margin: 0 0 clamp(30px, 5vh, 60px);
-  font-family: var(--faq-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(44px, 16vw, 120px);
   line-height: 0.9;
   letter-spacing: -0.03em;
@@ -82,7 +90,7 @@
 }
 
 .faq__item:hover {
-  background: rgba(244, 241, 236, 0.015);
+  background: rgba(10, 10, 10, 0.025);
 }
 
 .faq__q-row {
@@ -107,15 +115,20 @@
 
 .faq__index {
   font-family: var(--faq-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-weight: 500;
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta);
   color: var(--faq-orange);
   padding-top: 0.4em;
 }
 
+/* fully grotesk — hand-tuned ceiling (56px) sits under --fs-secondary's 64px
+   cap to match the 40-56px desktop spec for question text exactly */
 .faq__question {
-  font-family: var(--faq-serif);
-  font-size: clamp(19px, 4.6vw, 28px);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 3.5rem);
+  letter-spacing: var(--ls-secondary);
   line-height: 1.18;
   color: var(--faq-ink);
   transition: color 0.3s ease;
@@ -184,8 +197,11 @@
 .faq__answer {
   margin: 0;
   padding: 0 0 clamp(20px, 3.4vh, 32px) 48px;
-  font-size: 15px;
-  line-height: 1.65;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
+  line-height: 1.6;
   color: var(--faq-ink-soft);
   max-width: 56ch;
 }
@@ -202,7 +218,10 @@
 }
 
 .faq__footer-text {
-  font-size: 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
   color: var(--faq-ink-faint);
   margin: 0;
 }
@@ -212,15 +231,16 @@
   align-items: center;
   gap: 8px;
   font-family: var(--faq-mono);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-weight: 500;
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta);
   text-transform: uppercase;
   color: var(--faq-orange);
   transition: color 0.25s ease, transform 0.25s ease;
 }
 
 .faq__footer-link:hover {
-  color: #ff7844;
+  color: var(--rc-orange-bright);
   transform: translateX(3px);
 }
 

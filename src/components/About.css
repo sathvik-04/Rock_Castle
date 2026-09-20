@@ -7,16 +7,28 @@
    ========================================================================== */
 
 .about {
-  --about-bg: #070707;
-  --about-bg-raised: #131211;
-  --about-ink: #f4f1ec;
-  --about-ink-soft: rgba(244, 241, 236, 0.62);
-  --about-ink-faint: rgba(244, 241, 236, 0.4);
-  --about-line: rgba(244, 241, 236, 0.14);
-  --about-orange: #f1571b;
-  --about-cream: #f4f1ec;
-  --about-cream-ink: #12100e;
-  --about-serif: 'Bodoni Moda', Georgia, serif;
+  /* Point at the site's shared tokens (src/index.css) instead of a locally
+     hardcoded near-duplicate.
+
+     About is the WHITE → ORANGE leg of the full-site journey: it opens on
+     warm editorial white, then the "2013" zoom (below) morphs the pinned
+     intro's background from white to saturated brand orange instead of the
+     dark theme this section used to share with Hero/Process/Work. Every
+     section from the founders grid onward lives inside that orange
+     environment with black typography, so ink stays black throughout —
+     only the background shifts. Signature (next section) picks up the
+     orange and consumes it into black. */
+  --about-bg: var(--rc-white-warm);
+  --about-ink: var(--rc-black);
+  --about-ink-soft: rgba(10, 10, 10, 0.72);
+  --about-ink-faint: rgba(10, 10, 10, 0.5);
+  --about-line: rgba(10, 10, 10, 0.18);
+  --about-orange: var(--rc-orange);
+  /* Editorial serif — reserved for exactly one rare accent word (the
+     headline's "Began" below). Every other rule in this file now reads
+     through --about-display, the site's shared grotesk. */
+  --about-serif: var(--font-editorial);
+  --about-display: var(--font-display);
   --about-mono: 'IBM Plex Mono', var(--font-body, monospace);
 
   position: relative;
@@ -29,18 +41,28 @@
   color: var(--about-ink-soft);
 }
 
-/* ── shared section tag / pill ── */
+/* ── shared section tag / pill ──
+   Both live directly on the orange environment (founders-head sits on
+   .about__founders' orange background; the manifesto tag appears only
+   after the zoom has finished morphing the intro to orange) — orange text
+   on an orange field would vanish, so these read in ink (black) instead. */
 .about__section-tag,
 .about__manifesto-tag {
   display: inline-block;
   font-family: var(--about-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--about-orange);
+  color: var(--about-ink);
 }
 
 /* ── INTRO ── */
 .about__intro {
+  /* Explicit (not just inherited) so the GSAP scroll tween below has a
+     real background-color to animate from white to orange — this box is
+     exactly as tall as the pinned scroll distance, so once scrolled past,
+     its orange end-state sits flush behind .about__founders' own orange. */
+  background: var(--about-bg);
   padding: clamp(64px, 12vh, 140px) var(--gutter, 20px) clamp(48px, 8vh, 90px);
 }
 
@@ -55,11 +77,11 @@
 
 .about__headline {
   margin: 0;
-  font-family: var(--about-serif);
-  font-weight: 400;
-  font-size: clamp(42px, 13vw, 108px);
-  line-height: 0.94;
-  letter-spacing: -0.02em;
+  font-family: var(--about-display);
+  font-weight: 600;
+  font-size: var(--fs-section);
+  line-height: 0.9;
+  letter-spacing: var(--ls-section);
 }
 
 .about__headline-line {
@@ -68,6 +90,10 @@
 
 .about__headline-line--accent {
   padding-left: 0.6em;
+  /* The single rare editorial-serif accent in this component — the rest of
+     the headline (and every other rule below) reads through the grotesk. */
+  font-family: var(--about-serif);
+  font-weight: 500;
 }
 
 .about__headline-arrow {
@@ -81,6 +107,7 @@
 .about__eyebrow {
   font-family: var(--about-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.2em;
   color: var(--about-ink-faint);
   margin-top: clamp(20px, 4vh, 40px);
@@ -109,13 +136,14 @@
 }
 
 .about__video-plate {
-  border-radius: 20px;
+  border-radius: 0;
 }
 
 .about__video-caption {
   display: block;
   font-family: var(--about-mono);
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.14em;
   color: var(--about-ink-faint);
   margin-top: 14px;
@@ -124,8 +152,9 @@
 /* ── "Founded — 2013" mark + zoom, folded into the intro ──
    The mark sits right under the founder-film caption at rest. On scroll it
    becomes the zoom: transform-origin is computed off its own "0" glyph, it
-   scales up through the viewport, the rest of the intro fades, and a veil
-   closes to dark — handing off straight into the manifesto. No separate
+   scales up through the viewport while the rest of the intro fades and the
+   frame itself morphs from white to orange (see the JS timeline) — handing
+   off straight into the manifesto on a solid orange field. No separate
    section. The pin itself uses GSAP ScrollTrigger's `pin:` option
    (position:fixed) rather than CSS position:sticky, since this project's
    global `overflow-x:hidden` on ancestor elements auto-promotes their
@@ -141,13 +170,19 @@
 .about__found-label {
   font-family: var(--about-mono);
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.14em;
   color: var(--about-ink-faint);
 }
 
 .about__zoom-number {
   display: inline-flex;
-  font-family: var(--about-serif);
+  /* Grotesk, not the editorial serif — this mark scales up 35x on scroll
+     (see About.jsx), and a Didone-style serif's thin hairlines break down
+     badly under that much magnification. A grotesk's uniform stroke holds
+     up cleanly at any scale. */
+  font-family: var(--about-display);
+  font-weight: 600;
   font-size: clamp(26px, 4vw, 38px);
   line-height: 0.8;
   letter-spacing: -0.03em;
@@ -158,11 +193,14 @@
 
 
 /* ── reusable reveal rule (thin orange line that draws in before a tag) ── */
+/* Every place this rule appears (founders-head, manifesto, cta) now sits on
+   the orange environment, so it draws in ink (black) rather than the old
+   orange-on-dark treatment — an orange line on orange would be invisible. */
 .about__rule {
   display: block;
   width: 44px;
   height: 1px;
-  background: var(--about-orange);
+  background: var(--about-ink);
   transform-origin: left center;
   transform: scaleX(0);
   margin-bottom: 14px;
@@ -201,29 +239,43 @@
   display: inline-block;
   padding: 7px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(241, 87, 27, 0.45);
-  color: var(--about-ink);
+  /* Ink-based border, not the old orange-on-dark treatment — this tag sits
+     on the now-orange field once the zoom finishes, so an orange border
+     would nearly disappear into it. */
+  border: 1px solid rgba(10, 10, 10, 0.35);
   margin-bottom: clamp(24px, 4vh, 44px);
 }
 
 .about__manifesto-quote {
   margin: 0 auto;
   max-width: 900px;
-  font-family: var(--about-serif);
-  font-weight: 400;
-  font-size: clamp(26px, 6.5vw, 60px);
+  font-family: var(--about-display);
+  font-weight: 600;
+  font-size: var(--fs-secondary);
   line-height: 1.14;
-  letter-spacing: -0.01em;
-  color: #ffffff;
+  letter-spacing: var(--ls-secondary);
+}
+
+/* Full-strength black (not the softer --about-ink-soft used by body copy)
+   — this is the section's key statement and lands on solid orange. */
+.about__manifesto .about__manifesto-quote {
+  color: var(--about-ink);
 }
 
 .about__manifesto-quote span {
   display: block;
 }
 
-/* ── FOUNDERS ── */
+/* ── FOUNDERS — sits inside the orange environment the zoom just landed on;
+   background goes on the full-bleed outer element, the 1500px content
+   measure moves to ..-inner so the orange still reaches the viewport
+   edges on wide screens. ── */
 .about__founders {
+  background: var(--rc-orange);
   padding: clamp(60px, 12vh, 150px) var(--gutter, 20px);
+}
+
+.about__founders-inner {
   max-width: 1500px;
   margin-inline: auto;
 }
@@ -237,24 +289,36 @@
 
 .about__founders-title {
   margin: 0;
-  font-family: var(--about-serif);
-  font-weight: 400;
-  font-size: clamp(28px, 7vw, 56px);
+  font-family: var(--about-display);
+  font-weight: 600;
+  font-size: var(--fs-secondary);
   line-height: 1.05;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--ls-secondary);
 }
 
 .about__founders-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(24px, 3vw, 40px);
-  max-width: 1040px;
+  max-width: 760px;
 }
 
 .about__portrait {
-  border-radius: 20px;
+  /* Sharp full-bleed crop, not a rounded card. Capped so a single-column
+     mobile portrait doesn't run full viewport width — was spanning edge to
+     edge, which also made the second founder's 3/4 box tall enough to read
+     as spilling past the section on some viewports. */
+  max-width: 320px;
+  border-radius: 0;
   overflow: hidden;
   transition: transform 0.5s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+/* Black-and-white event imagery — only the photo desaturates, the
+   MediaPlaceholder's own corner brackets / caption stay orange so the
+   frame still reads as part of the brand environment around it. */
+.about__portrait .media-placeholder__media {
+  filter: grayscale(1) contrast(1.08);
 }
 
 .about__founder:hover .about__portrait {
@@ -270,15 +334,19 @@
 }
 
 .about__founder-name {
-  font-family: var(--about-serif);
+  font-family: var(--about-display);
+  font-weight: 600;
   font-size: clamp(20px, 3vw, 28px);
 }
 
 .about__founder-tag {
   font-family: var(--about-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.1em;
-  color: var(--about-orange);
+  /* Sits directly on the section's orange field, not a dark background —
+     ink (black), not the orange accent, so it stays legible. */
+  color: var(--about-ink);
 }
 
 /* ── CREW / PROCESS DECK ──
@@ -289,6 +357,10 @@
 .about__crew-deck {
   position: relative;
   height: 420vh;
+  /* Black, not orange — the crew deck sits on its own dark stage so the
+     photography (already grayscale) reads with real contrast; orange stays
+     reserved for the founders section above it. */
+  background: var(--rc-black);
 }
 
 .about__crew-pin {
@@ -315,8 +387,12 @@
   gap: 10px 20px;
   font-family: var(--about-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.18em;
-  color: var(--about-ink-faint);
+  /* Sits directly on the deck's own black background (not the photo scrim),
+     so it needs the light-ink pairing, not --about-ink-faint (tuned for the
+     orange founders section above). */
+  color: rgba(247, 247, 245, 0.55);
 }
 
 .about__crew-stack {
@@ -327,14 +403,14 @@
   perspective: 1400px;
 }
 
+/* Full-bleed masked photo, not a bordered/shadowed card — the photo layer
+   lives on its own ::before so grayscale can be applied to the image
+   without desaturating the tag/text sitting on top of it. */
 .about__crew-card {
   position: absolute;
   inset: 0;
-  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(244, 241, 236, 0.1);
-  background: var(--about-bg-raised);
-  box-shadow: 0 50px 90px rgba(0, 0, 0, 0.7);
+  background-color: var(--rc-dark);
   padding: clamp(22px, 4vw, 34px);
   display: flex;
   flex-direction: column;
@@ -343,27 +419,52 @@
   transform-style: preserve-3d;
 }
 
-.about__crew-card--2 { background: #171513; }
-.about__crew-card--3 { background: #1b1916; }
-.about__crew-card--4 { background: #201d19; }
+.about__crew-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  /* Black-and-white event imagery, per the direction brief — the scrim
+     keeps the tag/text legible regardless of the environment's orange. */
+  background-image: linear-gradient(180deg, rgba(10, 8, 6, 0.08) 0%, rgba(10, 8, 6, 0.88) 100%), var(--crew-photo);
+  filter: grayscale(1) contrast(1.1);
+}
+
+.about__crew-card--1 { --crew-photo: url('/images/about-intro.webp'); }
+.about__crew-card--2 { --crew-photo: url('/images/work-02.webp'); }
+.about__crew-card--3 { --crew-photo: url('/images/signature-01.webp'); }
+.about__crew-card--4 { --crew-photo: url('/images/hero-reel.webp'); }
 
 .about__crew-tag {
+  position: relative;
+  z-index: 1;
   font-family: var(--about-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.18em;
+  /* Sits on the card's own dark photo scrim, not the section's orange
+     field, so the orange accent still reads clearly here. */
   color: var(--about-orange);
 }
 
 .about__crew-text {
-  font-family: var(--about-serif);
+  position: relative;
+  z-index: 1;
+  font-family: var(--about-display);
+  font-weight: 500;
   font-size: clamp(21px, 5.5vw, 30px);
   line-height: 1.15;
+  color: var(--rc-white-warm);
 }
 
 
 
-/* ── CLOSING CTA ── */
+/* ── CLOSING CTA — still inside the orange environment, so About hands off
+   into Signature already at full orange saturation. ── */
 .about__cta {
+  background: var(--rc-orange);
   padding: clamp(60px, 11vh, 150px) var(--gutter, 20px) clamp(70px, 12vh, 160px);
   border-top: 1px solid var(--about-line);
 }
@@ -376,10 +477,13 @@
 
 .about__cta-pill {
   display: inline-block;
-  background: var(--about-orange);
-  color: #0a0a0a;
+  /* Inverted from the old orange-pill/black-text: this section's own
+     background is now orange, so the pill goes black with warm-white text. */
+  background: var(--rc-black);
+  color: var(--rc-white-warm);
   font-family: var(--about-mono);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.2em;
   padding: 7px 14px;
   border-radius: 999px;
@@ -388,11 +492,11 @@
 
 .about__cta-heading {
   margin: 0 0 clamp(30px, 5vh, 50px);
-  font-family: var(--about-serif);
-  font-weight: 400;
-  font-size: clamp(38px, 11vw, 82px);
+  font-family: var(--about-display);
+  font-weight: 600;
+  font-size: var(--fs-secondary);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--ls-secondary);
 }
 
 .about__cta-line {
@@ -410,7 +514,9 @@
 .about__cta-arrow {
   font-family: var(--about-mono);
   font-size: 0.3em;
-  color: var(--about-orange);
+  /* On the section's orange background now, not dark — ink reads, orange
+     accent would not. */
+  color: var(--about-ink);
   vertical-align: 0.7em;
   margin-right: 0.35em;
 }
@@ -419,18 +525,18 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: var(--about-orange);
-  color: #0a0a0a;
+  background: var(--rc-black);
+  color: var(--rc-white-warm);
   border-radius: 999px;
   padding: 15px 26px;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .about__cta-btn:hover {
-  background: #ff6e38;
-  color: #0a0a0a;
+  background: var(--rc-orange-bright);
+  color: var(--rc-black);
 }
 
 /* ── TABLET (768px+): layout-only refinements (motion is unconditional) ── */

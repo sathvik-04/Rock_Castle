@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import MediaPlaceholder from './MediaPlaceholder'
 import './Process.css'
 
 const stages = [
@@ -9,7 +10,7 @@ const stages = [
     name: 'The Brief',
     quote: '"Every project starts with a conversation."',
     desc: 'A global brand needed more than a booth — they needed a destination. The challenge: create an architectural experience that would stop people in their tracks.',
-    placeholder: '[ CLIENT BRIEF / IMAGE GOES HERE ]',
+    placeholder: 'BRIEF / 01',
     cls: 'brief'
   },
   {
@@ -17,7 +18,7 @@ const stages = [
     name: 'Strategy',
     quote: '"The brief becomes a point of view."',
     desc: 'We mapped the visitor journey. Every touchpoint, every sightline, every emotional beat. Research, moodboards, and strategic direction crystallized into a vision.',
-    placeholder: '[ STRATEGY / MOODBOARD GOES HERE ]',
+    placeholder: 'STRATEGY / 02',
     cls: 'strategy'
   },
   {
@@ -25,7 +26,7 @@ const stages = [
     name: 'Design',
     quote: '"The idea takes form."',
     desc: 'Sketches became renders. Renders became plans. Materials were chosen, lighting designed, spatial flow refined into precise architectural intent.',
-    placeholder: '[ DESIGN / DRAWING GOES HERE ]',
+    placeholder: 'DESIGN / 03',
     cls: 'design'
   },
   {
@@ -33,7 +34,7 @@ const stages = [
     name: 'Production',
     quote: '"The concept leaves the screen."',
     desc: 'Fabrication began. Steel, glass, wood, light — raw materials transformed by skilled hands. Every joint, every surface built to specification.',
-    placeholder: '[ PRODUCTION / SITE IMAGE GOES HERE ]',
+    placeholder: 'PRODUCTION / 04',
     cls: 'production'
   },
   {
@@ -41,12 +42,14 @@ const stages = [
     name: 'Final Delivery',
     quote: '"The space is alive."',
     desc: 'Doors opened. Lights on. The space that began as a conversation now holds thousands. The idea became an experience people talk about long after they\'ve left.',
-    placeholder: '[ FINAL PROJECT IMAGE / VIDEO GOES HERE ]',
+    placeholder: 'FINAL DELIVERY / 05',
     cls: 'final'
   },
 ]
 
 const stageNames = ['Brief', 'Strategy', 'Design', 'Production', 'Delivery']
+
+const stageImages = ['/images/process.webp', '/images/signature-01.webp']
 
 // Collapsed accordion row: number + name + quote only. Reveals the image and
 // full description on tap — same grid-template-rows mechanism as About's FAQ,
@@ -75,9 +78,7 @@ function ProcessStage({ s, index, isOpen, onToggle }) {
       </h3>
       <div className="process__m-panel-wrap" id={panelId} role="region" aria-labelledby={btnId}>
         <div className="process__m-panel-inner">
-          <div className="placeholder placeholder--16x9 process__m-placeholder">
-            <span className="placeholder__label">{s.placeholder}</span>
-          </div>
+          <MediaPlaceholder ratio="16/9" label={s.placeholder} className="process__m-placeholder" src={stageImages[index % 2]} />
           <p className="process__m-desc">{s.desc}</p>
         </div>
       </div>
@@ -235,14 +236,11 @@ export default function Process() {
                       <p className="process__stage-desc">{s.desc}</p>
                     </div>
                     <div className="process__stage-visual">
-                      <div className="placeholder placeholder--3x2">
-                        <span className="placeholder__label">{s.placeholder}</span>
-                      </div>
+                      <MediaPlaceholder ratio="3/2" label={s.placeholder} src={stageImages[i % 2]} />
                       <div className="process__grid-overlay" />
                       <div className="process__scanline" />
                     </div>
                   </div>
-                  <div className={`process__orbital process__orbital--${i % 2 === 0 ? '1' : '2'}`} />
                 </div>
               ))}
             </div>

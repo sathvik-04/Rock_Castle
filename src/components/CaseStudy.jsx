@@ -3,7 +3,18 @@ import { useParams, Link, Navigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { getProjectBySlug, getAdjacentProject } from '../data/projects'
+import MediaPlaceholder from './MediaPlaceholder'
+import { usePageTransition, transitionClick } from '../hooks/usePageTransition'
 import './CaseStudy.css'
+
+// Shared image pool (the same photos used across Hero/Work/Services/Process)
+// rotated per shot index so each project's detail grid shows real photography
+// instead of a bare label, without needing a unique photo per named shot.
+const SHOT_IMAGES = [
+  '/images/work-01.webp', '/images/work-02.webp', '/images/work-03.webp',
+  '/images/hero-reel.webp', '/images/services.webp', '/images/process.webp',
+  '/images/signature-01.webp', '/images/about-intro.webp',
+]
 
 function Reveal({ children, className = '', ...rest }) {
   return (
@@ -18,6 +29,7 @@ export default function CaseStudy() {
   const ref = useRef(null)
   const project = getProjectBySlug(slug)
   const next = project ? getAdjacentProject(slug) : null
+  const transitionTo = usePageTransition()
 
   useEffect(() => {
     if (!project || !ref.current) return
@@ -50,8 +62,8 @@ export default function CaseStudy() {
   return (
     <div className="case-study" ref={ref}>
       <header className="case-header">
-        <Link to="/" className="case-header__logo">ROCKCASTLE</Link>
-        <Link to="/#work" className="case-header__back">← Back to Work</Link>
+        <Link to="/" className="case-header__logo" onClick={(e) => transitionClick(e, transitionTo, '/')}>ROCKCASTLE</Link>
+        <Link to="/#work" className="case-header__back" onClick={(e) => transitionClick(e, transitionTo, '/#work')}>← Back to Work</Link>
       </header>
 
       <section className="case-hero">
@@ -64,8 +76,8 @@ export default function CaseStudy() {
           <div><span>Location</span><strong>{project.location}</strong></div>
           <div><span>Category</span><strong>{project.catLabel}</strong></div>
         </div>
-        <Reveal className="placeholder placeholder--16x9 case-hero__image">
-          <span className="placeholder__label">{project.placeholder}</span>
+        <Reveal>
+          <MediaPlaceholder ratio="16/9" label={project.placeholder} className="case-hero__image" src={project.image} />
         </Reveal>
       </section>
 
@@ -98,10 +110,14 @@ export default function CaseStudy() {
           </div>
         </Reveal>
         <Reveal className="case-grid">
-          {project.shots.map((label) => (
-            <div key={label} className="placeholder placeholder--4x3 case-grid__item">
-              <span className="placeholder__label">{label}</span>
-            </div>
+          {project.shots.map((label, i) => (
+            <MediaPlaceholder
+              key={label}
+              ratio="4/3"
+              label={label}
+              className="case-grid__item"
+              src={SHOT_IMAGES[(i + project.slug.length) % SHOT_IMAGES.length]}
+            />
           ))}
         </Reveal>
       </section>
@@ -125,7 +141,7 @@ export default function CaseStudy() {
         </Reveal>
       </section>
 
-      <Link to={`/work/${next.slug}`} className="case-next">
+      <Link to={`/work/${next.slug}`} className="case-next" onClick={(e) => transitionClick(e, transitionTo, `/work/${next.slug}`)}>
         <span className="case-next__label">Next Project</span>
         <span className="case-next__name">{next.name} →</span>
       </Link>

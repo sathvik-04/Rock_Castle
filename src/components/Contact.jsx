@@ -66,6 +66,7 @@ function Chars({ text }) {
 
 export default function Contact() {
   const ref = useRef(null)
+  const thresholdRef = useRef(null)
   const [form, setForm] = useState({ name: '', email: '', company: '', brief: '' })
   const [locked, setLocked] = useState(false)
   const nameRef = useRef(null)
@@ -113,7 +114,7 @@ export default function Contact() {
       if (underline) underline.style.transform = 'scaleX(1)'
     } else {
       if (underline) gsap.to(underline, { scaleX: 1, duration: 0.45, ease: E.micro, overwrite: 'auto' })
-      if (label) gsap.to(label, { color: '#ff5a1f', duration: 0.3, overwrite: 'auto' })
+      if (label) gsap.to(label, { color: '#fa5a32', duration: 0.3, overwrite: 'auto' })
     }
     if (label) {
       if (!label.dataset.original) label.dataset.original = label.textContent
@@ -133,7 +134,7 @@ export default function Contact() {
       return
     }
     if (underline) gsap.to(underline, { scaleX: keep ? 1 : 0, duration: 0.4, ease: E.micro, overwrite: 'auto' })
-    if (label) gsap.to(label, { color: keep ? 'rgba(245,243,238,0.7)' : '#8a8681', duration: 0.3, overwrite: 'auto' })
+    if (label) gsap.to(label, { color: keep ? 'rgba(10,10,10,0.72)' : 'rgba(10,10,10,0.5)', duration: 0.3, overwrite: 'auto' })
   }, [])
 
   const handleFieldInput = useCallback(() => {
@@ -241,8 +242,33 @@ export default function Contact() {
     if (!note) return
     const txt = isValid ? 'READY TO TRANSMIT' : 'NAME + EMAIL REQUIRED'
     if (note.textContent !== txt) scrambleText(note, txt, 0.55)
-    note.style.color = isValid ? '#ff5a1f' : '#66625e'
+    note.style.color = isValid ? '#fa5a32' : 'rgba(10,10,10,0.55)'
   }, [isValid])
+
+  // Bridges the hard black→white cut between the preceding all-black
+  // Services section and Contact's white ground: a black panel covers the
+  // section on entry and recedes upward as the user scrolls through, so the
+  // black stretch visibly gives way to white instead of jump-cutting.
+  useEffect(() => {
+    if (prefersReducedMotion()) return
+    const root = ref.current
+    const panel = thresholdRef.current
+    if (!root || !panel) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        panel,
+        { clipPath: 'inset(0% 0 0 0)' },
+        {
+          clipPath: 'inset(100% 0 0 0)',
+          ease: 'none',
+          scrollTrigger: { trigger: root, start: 'top bottom', end: 'top 15%', scrub: true },
+        }
+      )
+    }, root)
+
+    return () => ctx.revert()
+  }, [])
 
   useEffect(() => {
     const root = ref.current
@@ -442,6 +468,7 @@ export default function Contact() {
 
   return (
     <section className="contact" id="contact" ref={ref}>
+      <div className="contact__threshold" ref={thresholdRef} aria-hidden="true" />
       <div className="contact__progress" aria-hidden="true" />
 
       <div className="contact__atmos" aria-hidden="true">

@@ -1,12 +1,19 @@
-/* Services — mobile-first, orange block */
+/* Services — mobile-first. Dark ground with orange reserved as an accent
+   (numbers, hover state, active underline) rather than a full-bleed fill —
+   matches the restrained orange-on-dark treatment used everywhere else
+   (Hero, Process) instead of a wall-to-wall saturated block. */
 .services {
-  --services-ink: #0a0a0a;
-  --services-ink-soft: rgba(10, 10, 10, 0.65);
-  --services-line: rgba(10, 10, 10, 0.18);
-  --services-pop: #ffffff;
+  /* Was --rc-cream (a warm beige) — read as an orange/white mixture rather
+     than clean text. Every other black section (Work, Testimonials,
+     Process) uses --rc-white-warm for primary text on black; Services had
+     been left on the old cream token. */
+  --services-ink: var(--rc-white-warm);
+  --services-ink-soft: var(--rc-gray-light);
+  --services-line: rgba(245, 240, 235, 0.14);
+  --services-pop: var(--rc-orange);
 
   position: relative;
-  background: var(--rc-orange);
+  background: var(--rc-black);
   padding-block: var(--space-2xl);
 }
 
@@ -23,9 +30,10 @@
 
 .services__title {
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: var(--fs-section);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--ls-section);
+  line-height: 0.9;
   text-transform: uppercase;
   color: var(--services-ink);
 }
@@ -60,18 +68,20 @@
 }
 
 .services__item-num {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  letter-spacing: 0.2em;
-  color: var(--services-ink-soft);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: var(--ls-meta);
+  color: var(--services-pop);
   flex-shrink: 0;
 }
 
 .services__item-name {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-size: var(--fs-secondary);
+  font-weight: 600;
+  letter-spacing: var(--ls-secondary);
+  line-height: 0.95;
   text-transform: uppercase;
   color: var(--services-ink);
   transition: color 0.3s, transform 0.6s var(--ease-out-expo);
@@ -146,9 +156,12 @@
 }
 
 .services__item-desc {
-  font-size: var(--text-base);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  letter-spacing: var(--ls-body);
   color: var(--services-ink-soft);
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .services__item-tags {
@@ -159,12 +172,14 @@
 }
 
 .services__item-tag {
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: var(--ls-meta);
   text-transform: uppercase;
   color: var(--services-ink);
   padding: 0.3em 0.8em;
-  border: 1px solid rgba(10, 10, 10, 0.3);
+  border: 1px solid rgba(245, 240, 235, 0.22);
 }
 
 /* Placeholder in expanded */
@@ -180,7 +195,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--services-ink);
+  background: var(--services-pop);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 1s var(--ease-out-expo);
@@ -192,9 +207,6 @@
 
 /* Tablet */
 @media (min-width: 768px) {
-  .services__item-name {
-    font-size: var(--text-2xl);
-  }
   .services__item-inner {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-lg);
@@ -206,9 +218,6 @@
 
 /* Desktop */
 @media (min-width: 1200px) {
-  .services__item-name {
-    font-size: var(--text-3xl);
-  }
   .services__item-inner {
     grid-template-columns: 1fr 1.2fr;
   }

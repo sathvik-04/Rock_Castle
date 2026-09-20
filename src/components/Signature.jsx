@@ -1,10 +1,19 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { projects } from '../data/projects'
+import MediaPlaceholder from './MediaPlaceholder'
+import { usePageTransition, transitionClick } from '../hooks/usePageTransition'
 import './Signature.css'
+
+// The two projects shown as clickable glimpses inside the WE CREATE / SPACES
+// / MEMORY sequence — distinct from the ones already used in About's crew
+// deck (meridian-tower) so the same photo doesn't repeat across sections.
+const sigProjects = [projects[0], projects[2]]
 
 export default function Signature() {
   const sceneRef = useRef(null)
+  const transitionTo = usePageTransition()
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -29,6 +38,10 @@ export default function Signature() {
 
       if (prefersReduced) {
         // Simplified non-motion fade sequence
+        // Orange → black hand-off, reduced to a plain crossfade (no clip-path
+        // growth): the black panel is already fully open via CSS, opacity
+        // carries it in well before the final manifesto line at 0.8.
+        tl.to('.sig__consume', { opacity: 1, duration: 0.15 }, 0.55)
         tl.to('.sig__phase--we-create', { opacity: 1, duration: 0.15 }, 0.05)
           .to('.sig__phase--we-create', { opacity: 0, duration: 0.1 }, 0.2)
           .to('.sig__phase--spaces', { opacity: 1, duration: 0.15 }, 0.25)
@@ -59,6 +72,22 @@ export default function Signature() {
       // HUD & Atmosphere
       tl.to('.sig__hud', { opacity: 0.7, duration: 0.06 }, 0.02)
       tl.to('.sig__glow', { opacity: 0.6, duration: 0.2 }, 0.02)
+
+      // ─────────────────────────────────────────────────────────────
+      // THE CONSUME (0.08 → 0.72) — the section's whole reason for being
+      // the strongest transition on the site: orange is progressively
+      // masked away by an expanding black panel (clip-path circle, not a
+      // gradient) while the SPACE→STRUCTURE→EXPERIENCE→MEMORY typography
+      // plays out on top of it. Fully covered well before the final
+      // manifesto (0.76) so "We don't just create spaces." always lands in
+      // pure black-dominant space, primed to hand off into the black
+      // stretch that follows.
+      // ─────────────────────────────────────────────────────────────
+      tl.fromTo('.sig__consume',
+        { clipPath: 'circle(0% at 50% 100%)' },
+        { clipPath: 'circle(150% at 50% 100%)', ease: 'power2.inOut', duration: 0.64 },
+        0.08
+      )
 
       // ─────────────────────────────────────────────────────────────
       // SEQUENCE 1: SPACE (0.04 → 0.22)
@@ -278,7 +307,7 @@ export default function Signature() {
   }
 
   return (
-    <section className="sig" id="work" ref={sceneRef} aria-label="Rockcastle Signature Experience">
+    <section className="sig" id="signature" ref={sceneRef} aria-label="Rockcastle Signature Experience">
 
       {/* SVG Grain Filter Definition */}
       <svg className="sig__noise-svg" width="0" height="0" aria-hidden="true">
@@ -293,6 +322,13 @@ export default function Signature() {
 
       {/* Edge cinematic vignette */}
       <div className="sig__vignette" aria-hidden="true" />
+
+      {/* THE CONSUME — orange gets progressively overlaid/masked by an
+          expanding black panel as the visitor scrolls (see Signature.css
+          and the scroll timeline below); by the final manifesto line the
+          section is fully black, handing off into the black stretch that
+          follows. */}
+      <div className="sig__consume" aria-hidden="true" />
 
       {/* ── ARCHITECTURAL TELEMETRY HUD ── */}
       <div className="sig__hud" aria-hidden="true">
@@ -371,56 +407,36 @@ export default function Signature() {
         {/* ── EDITORIAL PHOTOGRAPHIC PLACEHOLDERS ── */}
         <div className="sig__photos-layer">
 
-          {/* Placeholder 1: 16:9 Architectural Wide Frame */}
+          {/* Two real project glimpses, not generic placeholder frames —
+              clicking either drops straight into that project's case study. */}
           <div className="sig__slot sig__slot--1">
-            <div className="sig__image-frame">
-              {/* Ready for real image insertion: <img src="..." alt="..." /> */}
-              <div className="sig__ph">
-                <div className="sig__ph-lighting" />
-                <div className="sig__ph-shadow-diagonal" />
-                <div className="sig__ph-beam" />
-                <div className="sig__ph-grid" />
-                <div className="sig__ph-grain" />
-
-                {/* Architectural crop registration crosshairs */}
-                <span className="sig__ph-cross sig__ph-cross--tl">+</span>
-                <span className="sig__ph-cross sig__ph-cross--tr">+</span>
-                <span className="sig__ph-cross sig__ph-cross--bl">+</span>
-                <span className="sig__ph-cross sig__ph-cross--br">+</span>
-
-                {/* Understated Editorial Label */}
-                <div className="sig__ph-meta">
-                  <span className="sig__ph-dot" />
-                  <span className="sig__ph-label">REAL IMAGE HERE</span>
-                  <span className="sig__ph-ratio">[ 16:9 ]</span>
-                </div>
-              </div>
-            </div>
+            <Link
+              className="sig__image-frame"
+              to={`/work/${sigProjects[0].slug}`}
+              onClick={(e) => transitionClick(e, transitionTo, `/work/${sigProjects[0].slug}`)}
+            >
+              <MediaPlaceholder
+                ratio={null}
+                label={`${sigProjects[0].catLabel.toUpperCase()} — ${sigProjects[0].name.toUpperCase()}`}
+                style={{ width: '100%', height: '100%' }}
+                src={sigProjects[0].image}
+              />
+            </Link>
           </div>
 
-          {/* Placeholder 2: 3:2 Architectural Editorial Frame */}
           <div className="sig__slot sig__slot--2">
-            <div className="sig__image-frame">
-              {/* Ready for real image insertion: <img src="..." alt="..." /> */}
-              <div className="sig__ph sig__ph--alt">
-                <div className="sig__ph-lighting" />
-                <div className="sig__ph-shadow-diagonal sig__ph-shadow--reverse" />
-                <div className="sig__ph-beam sig__ph-beam--alt" />
-                <div className="sig__ph-grid" />
-                <div className="sig__ph-grain" />
-
-                <span className="sig__ph-cross sig__ph-cross--tl">+</span>
-                <span className="sig__ph-cross sig__ph-cross--tr">+</span>
-                <span className="sig__ph-cross sig__ph-cross--bl">+</span>
-                <span className="sig__ph-cross sig__ph-cross--br">+</span>
-
-                <div className="sig__ph-meta">
-                  <span className="sig__ph-dot" />
-                  <span className="sig__ph-label">REAL IMAGE HERE</span>
-                  <span className="sig__ph-ratio">[ 3:2 ]</span>
-                </div>
-              </div>
-            </div>
+            <Link
+              className="sig__image-frame"
+              to={`/work/${sigProjects[1].slug}`}
+              onClick={(e) => transitionClick(e, transitionTo, `/work/${sigProjects[1].slug}`)}
+            >
+              <MediaPlaceholder
+                ratio={null}
+                label={`${sigProjects[1].catLabel.toUpperCase()} — ${sigProjects[1].name.toUpperCase()}`}
+                style={{ width: '100%', height: '100%' }}
+                src={sigProjects[1].image}
+              />
+            </Link>
           </div>
 
         </div>

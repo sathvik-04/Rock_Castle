@@ -1,0 +1,11 @@
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  background: var(--rc-black);
+  border-bottom: 2px solid var(--rc-orange);
+  transform: scaleY(0);
+  transform-origin: top;
+  pointer-events: none;
+  will-change: transform;
+}

@@ -11,9 +11,9 @@
 }
 .process__m-title {
   font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: 900;
-  letter-spacing: -0.03em;
+  font-size: var(--fs-section);
+  font-weight: 700;
+  letter-spacing: var(--ls-section);
   text-transform: uppercase;
   color: var(--rc-white);
   line-height: 0.9;
@@ -48,10 +48,10 @@
 
 .process__m-number {
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: var(--text-4xl);
   font-weight: 900;
   color: var(--rc-orange);
-  opacity: 0.4;
+  opacity: 0.5;
   line-height: 0.8;
 }
 
@@ -64,16 +64,18 @@
 
 .process__m-name {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: var(--fs-secondary);
+  font-weight: 600;
+  letter-spacing: var(--ls-secondary);
   text-transform: uppercase;
   color: var(--rc-white);
+  line-height: 1;
 }
 
 .process__m-quote {
   font-family: var(--font-body);
   font-size: var(--text-sm);
+  font-weight: 400;
   font-style: italic;
   color: var(--rc-gray-light);
 }
@@ -126,9 +128,12 @@
 }
 
 .process__m-desc {
-  font-size: var(--text-base);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  letter-spacing: var(--ls-body);
   color: var(--rc-gray-light);
-  line-height: 1.7;
+  line-height: 1.65;
   padding-bottom: var(--space-lg);
 }
 
@@ -160,10 +165,10 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .process__title {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: var(--ls-meta);
     text-transform: uppercase;
     color: var(--rc-gray-light);
   }
@@ -191,7 +196,8 @@
   }
   .process__ind.is-active .process__ind-dot { background: var(--rc-orange); transform: scale(1.5); }
   .process__ind-label {
-    font-size: var(--text-xs); letter-spacing: 0.1em; text-transform: uppercase;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta); font-weight: 500; letter-spacing: var(--ls-meta); text-transform: uppercase;
     color: var(--rc-gray-light); white-space: nowrap;
   }
   .process__ind.is-active .process__ind-label { color: var(--rc-white); }
@@ -217,11 +223,12 @@
     color: var(--rc-orange); opacity: 0.15; line-height: 0.8; margin-bottom: var(--space-md);
   }
   .process__stage-name {
-    font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 700;
-    letter-spacing: -0.03em; text-transform: uppercase; color: var(--rc-white); margin-bottom: var(--space-md);
+    font-family: var(--font-display); font-size: var(--fs-secondary); font-weight: 600;
+    letter-spacing: var(--ls-secondary); text-transform: uppercase; color: var(--rc-white); margin-bottom: var(--space-md);
+    line-height: 1;
   }
   .process__stage-quote {
-    font-family: var(--font-body); font-size: var(--text-lg); font-style: italic;
+    font-family: var(--font-body); font-size: var(--text-lg); font-weight: 400; font-style: italic;
     color: var(--rc-orange); margin-bottom: var(--space-md);
     position: relative; padding-left: var(--space-md);
   }
@@ -230,12 +237,13 @@
     width: 2px; background: var(--rc-orange);
   }
   .process__stage-desc {
-    font-size: var(--text-base); color: var(--rc-gray-light); line-height: 1.7; max-width: 45ch;
+    font-family: var(--font-body); font-size: var(--fs-body); font-weight: 400; letter-spacing: var(--ls-body);
+    color: var(--rc-gray-light); line-height: 1.65; max-width: 45ch;
   }
   .process__stage-visual {
     position: relative; display: flex; align-items: center; justify-content: center; z-index: 1;
   }
-  .process__stage-visual .placeholder {
+  .process__stage-visual .media-placeholder {
     width: 100%;
     min-height: 400px;
   }
@@ -249,11 +257,4 @@
                       linear-gradient(to bottom, var(--rc-white) 1px, transparent 1px);
     background-size: 60px 60px;
   }
-  .process__orbital {
-    position: absolute; border: 1px solid var(--rc-orange); border-radius: 50%;
-    opacity: 0.12; z-index: 5; pointer-events: none;
-  }
-  .process__orbital--1 { width: 120px; height: 120px; top: 15%; right: 10%; animation: orbSpin 20s linear infinite; }
-  .process__orbital--2 { width: 80px; height: 80px; bottom: 20%; left: 5%; animation: orbSpin 15s linear infinite reverse; }
-  @keyframes orbSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 }

@@ -1,7 +1,9 @@
-/* Testimonials — circular carousel, mobile-first */
+/* Testimonials — one large editorial quote at a time. Black ground, no
+   cards/pills/box styling: a single thin-framed photo, an oversized serif
+   quote, a hairline rule, and small mono-type attribution. */
 .testimonials {
   position: relative;
-  background: var(--rc-cream);
+  background: var(--rc-black);
   padding-block: var(--space-2xl);
   overflow: hidden;
 }
@@ -13,76 +15,50 @@
 
 .testimonials__label {
   display: block;
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--ls-meta);
   text-transform: uppercase;
   color: var(--rc-orange);
-  margin-bottom: 0.5em;
+  margin-bottom: 0.6em;
 }
 
 .testimonials__title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.05;
-  color: var(--rc-black-rich);
+  color: var(--rc-white-warm);
 }
 
 .testimonials__carousel {
   display: grid;
   gap: var(--space-2xl);
   padding-inline: var(--gutter);
-  max-width: 1100px;
+  max-width: 1200px;
   margin-inline: auto;
 }
 
-/* ── image stage: active center card + tilted left/right neighbors ── */
-.testimonials__stage {
+/* ── single framed portrait — thin hairline crop, no radius, no shadow ── */
+.testimonials__frame {
   position: relative;
   width: 100%;
-  max-width: 340px;
-  height: 300px;
+  max-width: 320px;
+  aspect-ratio: 4 / 5;
   margin-inline: auto;
-  perspective: 1000px;
-}
-
-.testimonials__portrait {
-  position: absolute;
-  inset: 0;
   overflow: hidden;
-  border-radius: 20px;
-  border: 1px solid var(--rc-gray-dark);
-  background: radial-gradient(circle at 30% 20%, var(--rc-gray-dark) 0%, var(--rc-dark-mid) 60%, var(--rc-dark) 100%);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.8s cubic-bezier(0.4, 2, 0.3, 1), opacity 0.8s ease;
+  border: 1px solid rgba(247, 247, 245, 0.14);
 }
 
-.testimonials__portrait[data-active="true"]::before {
-  content: '';
+.testimonials__photo {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(241, 87, 27, 0.16) 0%, transparent 70%);
-  animation: testimonialPulse 4.5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes testimonialPulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.08); }
-}
-
-.testimonials__initials {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: var(--text-5xl);
-  letter-spacing: -0.02em;
-  color: var(--rc-gray-light);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.3) contrast(1.05);
 }
 
 /* camera-flash sweep on testimonial change */
@@ -93,22 +69,6 @@
   opacity: 0;
   pointer-events: none;
   z-index: 2;
-}
-
-/* film-slate index tag on the active portrait */
-.testimonials__slate {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 2;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: var(--rc-orange);
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(241, 87, 27, 0.4);
-  border-radius: 999px;
-  padding: 4px 10px;
 }
 
 /* ── content panel ── */
@@ -126,8 +86,8 @@
   font-family: var(--font-display);
   font-size: clamp(160px, 22vw, 280px);
   line-height: 1;
-  color: var(--rc-black-rich);
-  opacity: 0.06;
+  color: var(--rc-white-warm);
+  opacity: 0.05;
   pointer-events: none;
   user-select: none;
 }
@@ -137,29 +97,50 @@
   z-index: 1;
 }
 
-.testimonials__name {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-2xl);
-  color: var(--rc-black-rich);
-  margin-bottom: 0.2em;
-}
-
-.testimonials__role {
-  font-size: var(--text-sm);
-  color: var(--rc-gray);
-  margin-bottom: var(--space-lg);
-}
-
 .testimonials__quote {
-  font-family: var(--font-body);
-  font-size: var(--text-lg);
-  line-height: 1.7;
-  color: var(--rc-dark);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-secondary);
+  line-height: 1.05;
+  letter-spacing: var(--ls-secondary);
+  color: var(--rc-white-warm);
 }
 
 .testimonials__word {
   display: inline-block;
+}
+
+.testimonials__rule {
+  width: 64px;
+  height: 1px;
+  background: var(--rc-orange);
+  margin-top: var(--space-lg);
+}
+
+.testimonials__attribution {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs) var(--space-md);
+  margin-top: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: var(--ls-meta);
+  text-transform: uppercase;
+}
+
+.testimonials__name {
+  color: var(--rc-white-warm);
+}
+
+.testimonials__role {
+  color: rgba(247, 247, 245, 0.5);
+}
+
+.testimonials__index {
+  margin-left: auto;
+  color: var(--rc-orange);
 }
 
 .testimonials__nav {
@@ -170,50 +151,46 @@
 }
 
 .testimonials__arrow {
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--rc-dark-mid);
-  border: 1px solid var(--rc-gray-dark);
-  color: var(--rc-cream);
-  font-size: 22px;
+  color: var(--rc-white-warm);
+  border-bottom: 1px solid rgba(247, 247, 245, 0.3);
+  font-size: 20px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 .testimonials__arrow:hover {
-  background: var(--rc-orange);
+  color: var(--rc-orange);
   border-color: var(--rc-orange);
-  color: #0a0a0a;
-  transform: scale(1.06);
 }
 
 .testimonials__dots {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   flex: 1;
   justify-content: center;
 }
 
 .testimonials__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--rc-gray-dark);
+  width: 16px;
+  height: 1px;
+  background: rgba(247, 247, 245, 0.3);
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, width 0.3s ease;
 }
 
 .testimonials__dot.is-active {
   background: var(--rc-orange);
-  transform: scale(1.3);
+  width: 28px;
 }
 
 .testimonials__more {
@@ -221,15 +198,16 @@
   align-items: center;
   gap: 10px;
   margin-top: var(--space-lg);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-meta);
   text-transform: uppercase;
-  color: var(--rc-dark);
-  border-bottom: 1px solid var(--rc-gray-dark);
+  color: var(--rc-white-warm);
+  border-bottom: 1px solid rgba(247, 247, 245, 0.3);
   padding-bottom: 4px;
   cursor: pointer;
+  align-self: flex-start;
   transition: color 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
 }
 
@@ -239,14 +217,8 @@
   gap: 14px;
 }
 
-/* Tablet+: image stage and content side by side */
+/* Tablet+: image frame and content side by side */
 @media (min-width: 768px) {
-  /* Fit the whole section within one normal-height screen: the previous
-     desktop pass scaled the card/text up but kept mobile-scale section
-     padding and a narrow heading column that wrapped to 3 lines, pushing
-     total height to ~1280px against a ~900px viewport. Tighten padding,
-     widen the heading so it wraps to 2 lines instead of 3, and trim the
-     card's max height. */
   .testimonials { padding-block: clamp(40px, 6vh, 70px); }
 
   .testimonials__head { max-width: 820px; padding-bottom: clamp(20px, 3vh, 36px); }
@@ -254,32 +226,18 @@
   .testimonials__title { font-size: clamp(30px, 3.6vw, 44px); }
 
   .testimonials__carousel {
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: 0.8fr 1.2fr;
     align-items: center;
     gap: clamp(40px, 5vw, 70px);
     max-width: 1320px;
   }
 
-  /* The card stayed pinned at its mobile 340×300 size here before — tiny
-     and lost inside a much wider desktop column. Scale it (and the copy
-     beside it) up to fill the space without overshooting the viewport. */
-  .testimonials__stage {
+  .testimonials__frame {
     margin-inline: 0;
     max-width: 100%;
-    height: clamp(300px, 22vw, 360px);
   }
 
-  .testimonials__initials { font-size: clamp(40px, 4vw, 56px); }
-
-  .testimonials__name { font-size: clamp(24px, 2.2vw, 32px); }
-
-  .testimonials__role { font-size: clamp(13px, 1vw, 15px); }
-
-  .testimonials__quote { font-size: clamp(17px, 1.4vw, 21px); }
-
   .testimonials__quote-mark { font-size: clamp(160px, 12vw, 240px); }
-
-  .testimonials__arrow { width: 48px; height: 48px; font-size: 24px; }
 
   .testimonials__nav { padding-top: clamp(20px, 3vh, 32px); }
 }

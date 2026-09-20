@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
-import Quote from './components/Quote'
 import About from './components/About'
 import Signature from './components/Signature'
 import Work from './components/Work'
@@ -20,7 +19,7 @@ import Footer from './components/Footer'
 // a `transform`/`filter`/`scale` on an ANCESTOR breaks `position:fixed`/`sticky`
 // for descendants (the same bug that broke About's zoom/crew-deck pins
 // earlier), so those keep their own bespoke internal motion instead.
-const ZOOM_SAFE_SELECTORS = ['#quote', '#work', '#testimonials', '.services', '.footer']
+const ZOOM_SAFE_SELECTORS = ['#work', '#testimonials', '.services', '.footer']
 
 export default function Home() {
   const location = useLocation()
@@ -64,7 +63,6 @@ export default function Home() {
       <Navigation />
       <main>
         <Hero />
-        <Quote />
         <About />
         <Signature />
         <Work />

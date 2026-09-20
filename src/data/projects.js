@@ -23,6 +23,7 @@ export const projects = [
     result: 'Doors opened. Lights on. The space that began as a conversation now holds thousands. The idea became an experience people talk about long after they\'ve left.',
     shots: ['Arrival — Wide', 'Atrium — Reveal', 'Crowd — Reaction', 'Fabrication — BTS', 'Lighting Plot', 'Exit — Night'],
     placeholder: '[ PROJECT IMAGE ]',
+    image: '/images/work-01.webp',
   },
   {
     slug: 'meridian-tower',
@@ -44,6 +45,7 @@ export const projects = [
     result: 'Corporate headquarters transformed into a living, breathing spatial narrative — leadership now walks candidates through the building instead of a deck.',
     shots: ['Lobby — Wide', 'Floor 04 — Detail', 'Stair Core', 'Material Study', 'Night Elevation', 'Staff Walkthrough'],
     placeholder: '[ PROJECT IMAGE ]',
+    image: '/images/work-02.webp',
   },
   {
     slug: 'horizon-festival',
@@ -65,6 +67,7 @@ export const projects = [
     result: 'Our activation had eleven moving parts across three days. Rockcastle\'s on-ground team never once made that our problem — the client\'s words, not ours.',
     shots: ['Site — Aerial', 'Stage — Build', 'Crowd — Night 1', 'Rigging — BTS', 'Sound Check', 'Load-Out'],
     placeholder: '[ PROJECT VIDEO ]',
+    image: '/images/work-03.webp',
   },
 ]
 

@@ -4,13 +4,19 @@
    ========================================================================== */
 
 .contact {
-  --contact-bg: #050505;
-  --contact-ink: #f5f3ee;
-  --contact-ink-soft: rgba(245, 243, 238, 0.66);
-  --contact-ink-faint: #66625e;
-  --contact-line: rgba(245, 243, 238, 0.16);
-  --contact-orange: #f1571b;
-  --contact-serif: 'Bodoni Moda', Georgia, serif;
+  /* Reference the shared tokens (src/index.css) rather than hardcoding a
+     near-duplicate black/orange — keeps Contact visually identical to the
+     rest of the site instead of one shade off.
+     Contact stays black, continuing straight out of the Work/Testimonials/
+     Process/Services run rather than handing off to white — near-black
+     ground, warm-white ink, orange as the accent throughout. */
+  --contact-bg: var(--rc-black);
+  --contact-ink: var(--rc-white-warm);
+  --contact-ink-soft: rgba(247, 247, 245, 0.72);
+  --contact-ink-faint: rgba(247, 247, 245, 0.5);
+  --contact-ink-mute: rgba(247, 247, 245, 0.55);
+  --contact-line: rgba(247, 247, 245, 0.14);
+  --contact-orange: var(--rc-orange);
   --contact-mono: 'IBM Plex Mono', var(--font-body, monospace);
 
   position: relative;
@@ -18,6 +24,20 @@
   color: var(--contact-ink);
   overflow: hidden;
   padding-block: clamp(70px, 12vh, 150px) 0;
+}
+
+/* Recedes upward on scroll-in to bridge the black Services section above
+   into Contact's white ground. Default clip-path keeps it invisible when
+   JS/motion is unavailable, so the fallback is a plain (motionless) cut
+   rather than a black block stuck over the form. */
+.contact__threshold {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100%;
+  background: var(--rc-black);
+  z-index: 2;
+  pointer-events: none;
+  clip-path: inset(100% 0 0 0);
 }
 
 .contact input,
@@ -34,7 +54,7 @@
 
 .contact input::placeholder,
 .contact textarea::placeholder {
-  color: rgba(245, 243, 238, 0.3);
+  color: rgba(247, 247, 245, 0.35);
 }
 
 .contact textarea {
@@ -75,7 +95,10 @@
   top: 32%;
   width: 46vw;
   height: 46vw;
-  background: radial-gradient(circle at 50% 50%, rgba(241, 87, 27, 0.38), rgba(241, 87, 27, 0.1) 48%, rgba(5, 5, 5, 0) 70%);
+  /* Back to full dark-environment intensity now that Contact is black again
+     — a heavy orange glow reads as a soft halo against black; it only
+     needed dimming when this section was briefly on a white ground. */
+  background: radial-gradient(circle at 50% 50%, rgba(250, 90, 50, 0.32), rgba(250, 90, 50, 0.1) 48%, rgba(250, 90, 50, 0) 70%);
 }
 
 .contact__blob--2 {
@@ -83,7 +106,7 @@
   top: 8%;
   width: 34vw;
   height: 34vw;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 150, 70, 0.28), rgba(241, 87, 27, 0.08) 50%, rgba(5, 5, 5, 0) 72%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 154, 100, 0.24), rgba(250, 90, 50, 0.08) 50%, rgba(250, 90, 50, 0) 72%);
 }
 
 .contact__blob--3 {
@@ -91,7 +114,7 @@
   bottom: -14%;
   width: 52vw;
   height: 40vw;
-  background: radial-gradient(circle at 50% 50%, rgba(241, 87, 27, 0.26), rgba(5, 5, 5, 0) 66%);
+  background: radial-gradient(circle at 50% 50%, rgba(250, 90, 50, 0.2), rgba(250, 90, 50, 0) 66%);
 }
 
 .contact__sweep {
@@ -101,7 +124,7 @@
   width: 34vw;
   height: 150%;
   transform: rotate(14deg) translateX(0);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 214, 190, 0.045) 45%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, rgba(250, 90, 50, 0) 0%, rgba(250, 90, 50, 0.1) 45%, rgba(250, 90, 50, 0) 100%);
   will-change: transform;
 }
 
@@ -111,7 +134,7 @@
   right: 0;
   top: 50%;
   height: 1px;
-  background: linear-gradient(90deg, rgba(255, 90, 31, 0) 0%, rgba(255, 90, 31, 0.22) 50%, rgba(255, 90, 31, 0) 100%);
+  background: linear-gradient(90deg, rgba(250, 90, 50, 0) 0%, rgba(250, 90, 50, 0.5) 50%, rgba(250, 90, 50, 0) 100%);
   transform: scaleX(0);
   transform-origin: center;
 }
@@ -163,13 +186,13 @@
   font-family: var(--contact-mono);
   font-size: 11px;
   letter-spacing: 0.2em;
-  color: #8a8681;
+  color: var(--contact-ink-mute);
 }
 
 .contact__meta-rule {
   width: 26px;
   height: 1px;
-  background: rgba(245, 243, 238, 0.25);
+  background: rgba(247, 247, 245, 0.25);
 }
 
 .contact__meta-strong {
@@ -178,11 +201,11 @@
 
 .contact__headline {
   margin: 0;
-  font-family: var(--contact-serif);
-  font-weight: 400;
-  font-size: clamp(46px, 14vw, 132px);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-section);
   line-height: 0.9;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--ls-section);
 }
 
 .contact__headline-mask {
@@ -201,7 +224,10 @@
   white-space: nowrap;
 }
 
+/* single-word editorial accent — the only serif in this section, reserved
+   for the closing word of the main headline */
 .contact__headline-word--italic {
+  font-family: var(--font-editorial);
   font-style: italic;
 }
 
@@ -213,7 +239,10 @@
 .contact__sub {
   margin: 0;
   max-width: 30ch;
-  font-size: clamp(15px, 2vw, 19px);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
   line-height: 1.55;
   color: var(--contact-ink-soft);
 }
@@ -260,10 +289,11 @@
 }
 
 .contact__field-label {
-  font-family: var(--contact-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  color: #8a8681;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
+  color: var(--contact-ink-mute);
   white-space: nowrap;
   transition: color 0.3s ease;
 }
@@ -282,8 +312,10 @@
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
-  font-size: clamp(17px, 4.4vw, 26px);
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body-lg);
+  letter-spacing: var(--ls-body);
   padding: 0 0 4px;
 }
 
@@ -291,8 +323,11 @@
   display: block;
   width: 100%;
   box-sizing: border-box;
-  font-size: clamp(16px, 4vw, 22px);
-  line-height: 1.45;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
+  line-height: 1.5;
   padding: 0;
 }
 
@@ -334,7 +369,7 @@
 }
 
 .contact__submit:hover {
-  background: #ff7a44;
+  background: var(--rc-orange-bright);
   transform: translateY(-2px);
 }
 
@@ -379,8 +414,8 @@
 
 .contact__confirm-title {
   margin: 0;
-  font-family: var(--contact-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(52px, 11vw, 190px);
   line-height: 0.88;
   letter-spacing: -0.035em;
@@ -393,7 +428,7 @@
 
 .contact__confirm-line {
   display: block;
-  color: #ffffff;
+  color: var(--contact-ink);
 }
 
 .contact__confirm-line--accent {
@@ -411,7 +446,7 @@
   font-size: clamp(11px, 1vw, 13px);
   letter-spacing: 0.2em;
   line-height: 2.1;
-  color: rgba(245, 243, 238, 0.72);
+  color: rgba(247, 247, 245, 0.7);
 }
 
 /* ── credits / footer strip ── */
@@ -449,7 +484,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: rgba(245, 243, 238, 0.8);
+  color: rgba(247, 247, 245, 0.75);
   transition: color 0.3s ease, transform 0.3s ease;
   width: fit-content;
 }
@@ -464,7 +499,7 @@
 }
 
 .contact__credits-static {
-  color: rgba(245, 243, 238, 0.8);
+  color: rgba(247, 247, 245, 0.75);
   line-height: 1.9;
 }
 
@@ -475,8 +510,8 @@
 
 .contact__closing-heading {
   margin: 0;
-  font-family: var(--contact-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(38px, 13vw, 150px);
   line-height: 0.9;
   letter-spacing: -0.03em;

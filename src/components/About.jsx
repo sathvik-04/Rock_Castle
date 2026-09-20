@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import MediaPlaceholder from './MediaPlaceholder'
 import './About.css'
 
 const founders = [
-  { name: 'Founder & MD', tag: 'BRIEF → STRATEGY', label: 'PORTRAIT — FOUNDER & MD' },
-  { name: 'Head of Creative', tag: 'CONCEPT → BUILD', label: 'PORTRAIT — HEAD OF CREATIVE' },
+  { name: 'Founder & MD', tag: 'BRIEF → STRATEGY', label: 'PORTRAIT — FOUNDER & MD', image: '/images/founder-1.webp' },
+  { name: 'Head of Creative', tag: 'CONCEPT → BUILD', label: 'PORTRAIT — HEAD OF CREATIVE', image: '/images/founder-2.webp' },
 ]
 
 const crewSteps = [
@@ -44,8 +45,12 @@ export default function About() {
       // ── INTRO (s1) + 2013 ZOOM, merged into one pinned sequence: parallax
       // first, then the small "Founded — 2013" mark under the founder-film
       // caption takes over the screen (everything else fades, the number
-      // scales up through its own "0", a veil closes to dark) and hands off
-      // straight into the manifesto — no separate section just for the zoom. ──
+      // scales up through its own "0", the frame morphs from white to
+      // orange behind it) and hands off straight into the manifesto — no
+      // separate section just for the zoom. About is the site's WHITE →
+      // ORANGE leg: this zoom is where that morph happens, and everything
+      // after it (manifesto / founders / crew deck / cta) lives in the
+      // resulting orange environment with black typography. ──
       const introSection = root.querySelector('.about__intro')
       const introPin = root.querySelector('.about__intro-grid')
       const introHead = root.querySelector('.about__intro-head')
@@ -105,6 +110,30 @@ export default function About() {
           parTl.fromTo(zoomTxt, { scale: 1 }, { scale: 35, ease: 'power3.in', duration: 1.3, force3D: true }, 1.0)
           // 2013 dissolves out as it expands past the viewport
           parTl.to(zoomTxt, { opacity: 0, ease: 'power2.out', duration: 0.45 }, 1.8)
+        }
+
+        // phase 2b — the frame itself morphs from warm editorial white to
+        // saturated brand orange as "2013" consumes the viewport, so the
+        // zoom's end-state is an ORANGE-saturated environment rather than a
+        // jump to black. Hex literals mirror --rc-white-warm / --rc-orange
+        // (src/index.css) — GSAP tweens actual computed color, not var()
+        // refs. The digit itself fades toward warm white as it dissolves so
+        // it reads as being "consumed" by the orange it leaves behind, and
+        // the color settles well before the manifesto (which is in ink/
+        // black, see About.css) fades in on top of the now-solid orange.
+        if (introSection) {
+          parTl.fromTo(introSection,
+            { backgroundColor: '#f7f7f5' },
+            { backgroundColor: '#fa5a32', ease: 'power2.inOut', duration: 0.9 },
+            1.0
+          )
+        }
+        if (zoomTxt) {
+          parTl.fromTo(zoomTxt,
+            { color: '#0a0a0a' },
+            { color: '#f7f7f5', ease: 'power2.in', duration: 0.75 },
+            1.05
+          )
         }
 
         // phase 3 — as soon as 2013 fades out, the manifesto emerges immediately (no black page)
@@ -246,32 +275,6 @@ export default function About() {
             '<')
       })
 
-      reveal('.about__cta', (tl, el) => {
-        const words = el.querySelectorAll('.about__cta-heading .about__mask-word')
-        tl.fromTo(el.querySelector('.about__cta-pill'), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
-          .fromTo(words, { yPercent: 118, rotate: 6, skewX: -6 }, { yPercent: 0, rotate: 0, skewX: 0, duration: 0.8, ease: 'power4.out', stagger: 0.03 }, '-=0.2')
-          .fromTo(el.querySelector('.about__cta-arrow'), { opacity: 0, x: -10, rotate: -30 }, { opacity: 1, x: 0, rotate: 0, duration: 0.5, ease: 'back.out(2)' }, '<+=0.1')
-          .fromTo(el.querySelector('.about__cta-em'), { opacity: 0, y: 10, skewX: 8 }, { opacity: 1, y: 0, skewX: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
-          .fromTo(el.querySelector('.about__cta-btn'), { opacity: 0, scale: 0.8, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.55)' }, '-=0.2')
-      })
-
-      // ── CTA button: magnetic hover, matching Contact's submit button ──
-      const ctaBtn = root.querySelector('.about__cta-btn')
-      if (ctaBtn) {
-        const onMove = (e) => {
-          const r = ctaBtn.getBoundingClientRect()
-          const dx = (e.clientX - (r.left + r.width / 2)) / r.width
-          const dy = (e.clientY - (r.top + r.height / 2)) / r.height
-          gsap.to(ctaBtn, { x: dx * 14, y: dy * 10, duration: 0.5, ease: 'power3.out', overwrite: 'auto' })
-        }
-        const onLeave = () => gsap.to(ctaBtn, { x: 0, y: 0, duration: 0.5, ease: 'power3.out', overwrite: 'auto' })
-        ctaBtn.addEventListener('mousemove', onMove)
-        ctaBtn.addEventListener('mouseleave', onLeave)
-        cleanupFns.push(() => {
-          ctaBtn.removeEventListener('mousemove', onMove)
-          ctaBtn.removeEventListener('mouseleave', onLeave)
-        })
-      }
     }, ref.current)
 
     return () => {
@@ -311,9 +314,12 @@ export default function About() {
               </span>
             </p>
             <div className="about__video-card">
-              <div className="placeholder placeholder--16x9 about__video-plate about__intro-fade">
-                <span className="placeholder__label">FOUNDER FILM</span>
-              </div>
+              <MediaPlaceholder
+                ratio="16/9"
+                label="FOUNDER FILM — COMING SOON"
+                className="about__video-plate about__intro-fade"
+                src="/images/about-intro.webp"
+              />
               <span className="about__video-caption about__intro-fade">FOUNDER FILM — WATCH THE STORY</span>
               <div className="about__found-year">
                 <span className="about__found-label about__intro-fade">FOUNDED —</span>
@@ -337,25 +343,25 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── FOUNDERS ── */}
+      {/* ── FOUNDERS — orange environment, black typography ── */}
       <div className="about__founders">
-        <div className="about__founders-head">
-          <span className="about__rule" aria-hidden="true" />
-          <span className="about__section-tag">[&nbsp;FOUNDERS&nbsp;]</span>
-          <h2 className="about__founders-title"><MaskWords text="Two people sign off on every show we put out" /></h2>
-        </div>
-        <div className="about__founders-grid">
-          {founders.map((f) => (
-            <div className="about__founder" key={f.name}>
-              <div className="placeholder placeholder--tall about__portrait">
-                <span className="placeholder__label">{f.label}</span>
+        <div className="about__founders-inner">
+          <div className="about__founders-head">
+            <span className="about__rule" aria-hidden="true" />
+            <span className="about__section-tag">[&nbsp;FOUNDERS&nbsp;]</span>
+            <h2 className="about__founders-title"><MaskWords text="Two people sign off on every show we put out" /></h2>
+          </div>
+          <div className="about__founders-grid">
+            {founders.map((f) => (
+              <div className="about__founder" key={f.name}>
+                <MediaPlaceholder ratio="3/4" label={f.label} className="about__portrait" src={f.image} />
+                <div className="about__founder-meta">
+                  <span className="about__founder-name">{f.name}</span>
+                  <span className="about__founder-tag">[&nbsp;{f.tag}&nbsp;]</span>
+                </div>
               </div>
-              <div className="about__founder-meta">
-                <span className="about__founder-name">{f.name}</span>
-                <span className="about__founder-tag">[&nbsp;{f.tag}&nbsp;]</span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
@@ -378,26 +384,6 @@ export default function About() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
-
-
-      {/* ── CLOSING CTA ── */}
-      <div className="about__cta">
-        <div className="about__cta-inner">
-          <span className="about__rule" aria-hidden="true" />
-          <span className="about__cta-pill">STAY IN TOUCH</span>
-          <h2 className="about__cta-heading">
-            <span className="about__cta-line"><MaskWords text="Let’s build" /></span>
-            <span className="about__cta-line about__cta-line--accent">
-              <span className="about__cta-arrow" aria-hidden="true">↳</span>
-              <MaskWords text="something" /> <em className="about__cta-em">loud</em>
-            </span>
-          </h2>
-          <a href="#contact" className="about__cta-btn">
-            <span>Start a project</span>
-            <span aria-hidden="true">↗</span>
-          </a>
         </div>
       </div>
     </section>

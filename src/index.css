@@ -12,17 +12,53 @@
   --rc-gray-dark: #2a2a2a;
   --rc-gray: #555555;
   --rc-gray-light: #888888;
-  --rc-white: #f5f0eb;
+  --rc-white: #e9e2d5;
   --rc-white-pure: #ffffff;
-  --rc-cream: #e8e0d6;
-  --rc-orange: #f1571b;
-  --rc-orange-bright: #ff6a35;
-  --rc-orange-deep: #c93f0f;
-  --rc-orange-glow: rgba(241, 87, 27, 0.3);
+  --rc-white-warm: #f7f7f5;
+  --rc-cream: #d9cfc0;
+  /* Corrected course from an earlier pass: muting the accent orange toward
+     brown (#c2410c) killed its contrast against near-black backgrounds —
+     labels/rules/tags read as a dull, faded smudge instead of a crisp
+     accent. Restraint belongs in WHERE orange appears (never a full-bleed
+     fill — see Services/Signature), not in how vivid the hue itself is.
+     -deep stays muted for the rare large-fill/hover-darken case. */
+  --rc-orange: #fa5a32;
+  --rc-orange-bright: #ff8a4c;
+  --rc-orange-deep: #a83a1c;
+  --rc-orange-glow: rgba(250, 90, 50, 0.35);
 
-  --font-display: 'Bodoni Moda', Georgia, serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Inter', monospace;
+  /* Typography refinement: Neue Montreal carries ~90% of the site (nav, body,
+     headings, UI, numbers). Switzer stands in until real Neue Montreal files
+     are licensed — closest free match in proportions/weight range, loaded
+     from Fontshare in index.html. Swap the family name here only when that
+     happens; every component reads through these two variables. */
+  --font-display: 'Switzer', 'Neue Montreal', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Switzer', 'Neue Montreal', -apple-system, 'Segoe UI', sans-serif;
+  /* Editorial serif — a deliberately rare accent (~10% of type), never the
+     structural font. Fraunces stands in for PP Editorial New (not freely
+     licensable): both are moderate-contrast, warm contemporary serifs —
+     unlike Bodoni Moda's Didone extremes, which is what made the old system
+     read as over-decorated. Reserve this for single words/lines only. */
+  --font-editorial: 'Fraunces', 'PP Editorial New', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Responsive type scale (clamp-based) — one source of truth per role so
+     scale/weight/tracking decisions aren't repeated or drift per component.
+     Desktop-max figures per role; mobile floor set to stay readable without
+     overflowing narrow viewports. */
+  --fs-hero: clamp(3.5rem, 16vw, 6rem);
+  --ls-hero: -0.04em;
+  --fs-section: clamp(2.75rem, 9vw, 9rem);
+  --ls-section: -0.035em;
+  --fs-project: clamp(2.25rem, 7vw, 6rem);
+  --ls-project: -0.025em;
+  --fs-secondary: clamp(1.75rem, 5vw, 4rem);
+  --ls-secondary: -0.02em;
+  --fs-body: clamp(1rem, 0.4vw + 0.9rem, 1.1875rem);
+  --fs-body-lg: clamp(1.125rem, 0.5vw + 1rem, 1.3125rem);
+  --ls-body: -0.01em;
+  --fs-meta: clamp(0.6875rem, 0.2vw + 0.65rem, 0.75rem);
+  --ls-meta: 0.08em;
 
   /* Typography — mobile-first, scales up */
   --text-xs: 0.6875rem;     /* 11px */
@@ -95,6 +131,8 @@
     --text-6xl: 6rem;
     --text-mega: 8rem;
 
+    --fs-hero: clamp(5rem, 11vw, 12rem);
+
     --space-xs: 0.375rem;
     --space-sm: 0.75rem;
     --space-md: 1.5rem;
@@ -166,7 +204,7 @@ p { overflow-wrap: break-word; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(135deg, transparent 40%, rgba(241, 87, 27,0.03) 50%, transparent 60%),
+    linear-gradient(135deg, transparent 40%, rgba(255, 90, 31,0.03) 50%, transparent 60%),
     linear-gradient(to bottom, rgba(255,255,255,0.01) 0%, transparent 100%);
   pointer-events: none;
 }

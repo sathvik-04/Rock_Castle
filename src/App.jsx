@@ -5,6 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import Home from './Home'
 import CaseStudy from './components/CaseStudy'
+import Cursor from './components/Cursor'
+import Loader from './components/Loader'
+import { PageTransitionProvider } from './components/PageTransition'
+import ScrollProgress from './components/ScrollProgress'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -46,9 +50,14 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/work/:slug" element={<CaseStudy />} />
-    </Routes>
+    <PageTransitionProvider>
+      <Loader />
+      <Cursor />
+      <ScrollProgress />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/work/:slug" element={<CaseStudy />} />
+      </Routes>
+    </PageTransitionProvider>
   )
 }
