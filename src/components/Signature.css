@@ -9,7 +9,13 @@
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: var(--rc-black-rich, #050505);
+  /* Signature is the site's ORANGE → BLACK hand-off: it opens on the same
+     saturated orange About's closing CTA ends on, then .sig__consume (below)
+     grows a solid black panel over it as the visitor scrolls through the
+     pin, so the section is fully black by the final manifesto line — ready
+     to drop straight into the black stretch (Work/Testimonials/Process/
+     Services) that follows. */
+  background: var(--rc-orange, #fa5a32);
   perspective: 900px;
   display: flex;
   align-items: center;
@@ -31,9 +37,9 @@
   inset: 0;
   background: radial-gradient(
     circle at 50% 50%,
-    rgba(232, 122, 46, 0.07) 0%,
-    rgba(245, 240, 235, 0.02) 40%,
-    transparent 75%
+    rgba(255, 90, 31, 0.16) 0%,
+    rgba(245, 240, 235, 0.04) 42%,
+    transparent 76%
   );
   opacity: 0;
   pointer-events: none;
@@ -43,10 +49,44 @@
 .sig__vignette {
   position: absolute;
   inset: 0;
-  box-shadow: inset 0 0 100px 45px #050505;
+  box-shadow: inset 0 0 100px 45px var(--rc-black-rich);
   pointer-events: none;
   z-index: 6;
   opacity: 0.45;
+}
+
+/* ── THE CONSUME — orange gets progressively overlaid by an expanding black
+   panel as the visitor scrolls through the pin (scroll-driven clip-path,
+   not a gradient). Sits BELOW the 3D world rig (geometry/photos/typography,
+   z-index 3) so it replaces the section's orange background while the
+   typography/photo sequence stays visible on top throughout — it was
+   previously z-index 5 (above the world), which hid the whole SPACE→
+   STRUCTURE→EXPERIENCE→MEMORY sequence and both photo frames the moment it
+   started growing. Still below the final manifesto and contact bridge
+   (z-index 7/8) so those land in the solid black left behind once .sig__world
+   itself fades near the end. Grows from the bottom edge, echoing the
+   direction scroll continues in, into the black stretch that follows. */
+.sig__consume {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: var(--rc-black, #0a0a0a);
+  clip-path: circle(0% at 50% 100%);
+  pointer-events: none;
+}
+
+/* Reuses the grain filter defined inline in the SVG below (id="rc-arch-grain")
+   as a texture layer on the expanding black itself — feTurbulence is a
+   generator, not dependent on this pseudo-element having visible content,
+   so it renders a full-frame grain regardless. Clipped together with its
+   parent, so grain only ever shows inside the revealed black region. */
+.sig__consume::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  filter: url(#rc-arch-grain);
+  opacity: 0.35;
+  mix-blend-mode: overlay;
 }
 
 /* ── ARCHITECTURAL TELEMETRY HUD ── */
@@ -77,7 +117,7 @@
 .sig__hud-corner--br { bottom: 65px; right: 20px; text-align: right; }
 
 .sig__hud-code {
-  color: var(--rc-orange, #e87a2e);
+  color: var(--rc-orange, #c2410c);
   font-weight: 600;
 }
 
@@ -116,7 +156,7 @@
 }
 
 .sig__ind-divider {
-  color: rgba(232, 122, 46, 0.4);
+  color: rgba(255, 90, 31, 0.4);
   font-size: 7px;
 }
 
@@ -190,7 +230,7 @@
   height: 5px;
   margin-top: -2.5px;
   margin-left: -2.5px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   border-radius: 50%;
   opacity: 0;
   transform: scale(0);
@@ -303,10 +343,10 @@
   width: 6px;
   height: 6px;
 }
-.sig__wf-corner--tl { top: -1px; left: -1px; border-top: 1px solid var(--rc-orange, #e87a2e); border-left: 1px solid var(--rc-orange, #e87a2e); }
-.sig__wf-corner--tr { top: -1px; right: -1px; border-top: 1px solid var(--rc-orange, #e87a2e); border-right: 1px solid var(--rc-orange, #e87a2e); }
-.sig__wf-corner--bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--rc-orange, #e87a2e); border-left: 1px solid var(--rc-orange, #e87a2e); }
-.sig__wf-corner--br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--rc-orange, #e87a2e); border-right: 1px solid var(--rc-orange, #e87a2e); }
+.sig__wf-corner--tl { top: -1px; left: -1px; border-top: 1px solid var(--rc-orange, #c2410c); border-left: 1px solid var(--rc-orange, #c2410c); }
+.sig__wf-corner--tr { top: -1px; right: -1px; border-top: 1px solid var(--rc-orange, #c2410c); border-right: 1px solid var(--rc-orange, #c2410c); }
+.sig__wf-corner--bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--rc-orange, #c2410c); border-left: 1px solid var(--rc-orange, #c2410c); }
+.sig__wf-corner--br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--rc-orange, #c2410c); border-right: 1px solid var(--rc-orange, #c2410c); }
 
 /* Orange structural tension lines */
 .sig__orange-line--1 {
@@ -315,7 +355,7 @@
   left: 20%;
   width: 60%;
   height: 1px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   transform: scaleX(0);
   transform-origin: left center;
   opacity: 0;
@@ -328,7 +368,7 @@
   width: 4px;
   height: 4px;
   margin: -2px 0 0 -2px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   border-radius: 50%;
   opacity: 0;
 }
@@ -339,7 +379,7 @@
   left: 80%;
   width: 1px;
   height: 52%;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   transform: scaleY(0);
   transform-origin: top center;
   opacity: 0;
@@ -352,7 +392,7 @@
   width: 4px;
   height: 4px;
   margin: -2px 0 0 -2px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   border-radius: 50%;
   opacity: 0;
 }
@@ -363,7 +403,7 @@
   left: 10%;
   width: 50%;
   height: 1px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   transform: scaleX(0);
   transform-origin: left center;
   opacity: 0;
@@ -403,11 +443,14 @@
 }
 
 .sig__image-frame {
+  display: block;
   position: relative;
   width: 100%;
   height: 100%;
+  color: inherit;
+  text-decoration: none;
   border: 1px solid rgba(245, 240, 235, 0.16);
-  background: #0d0d0d;
+  background: var(--rc-dark);
   overflow: hidden;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
 }
@@ -422,8 +465,59 @@
   z-index: 10;
 }
 
-.sig__image-frame:has(img) .sig__ph {
+.sig__image-frame:has(img) .media-placeholder {
   display: none;
+}
+
+.sig__project-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 5;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sig__image-frame:hover .sig__project-photo {
+  transform: scale(1.05);
+}
+
+.sig__photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.2) 60%, transparent 100%);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.sig__photo-info {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.sig__photo-cat {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rc-orange);
+}
+
+.sig__photo-name {
+  font-family: var(--font-display);
+  font-size: clamp(12px, 1.2vw, 15px);
+  font-weight: 600;
+  color: var(--rc-white-pure);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 /* Architectural photo placeholder composition */
@@ -432,7 +526,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background: #111111;
+  background: var(--rc-dark);
   overflow: hidden;
 }
 
@@ -535,7 +629,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   flex-shrink: 0;
 }
 
@@ -576,7 +670,7 @@
   font-family: var(--font-display, sans-serif);
   font-weight: 900;
   text-transform: uppercase;
-  color: var(--rc-white, #f5f0eb);
+  color: var(--rc-white, #e9e2d5);
   letter-spacing: -0.03em;
   line-height: 0.95;
   will-change: transform, opacity;
@@ -639,18 +733,25 @@
 
 .sig__final-line2 {
   font-family: var(--font-display, sans-serif);
-  font-size: clamp(1.75rem, 7.5vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
+  font-size: var(--fs-section, clamp(1.75rem, 7.5vw, 4.5rem));
+  font-weight: 700;
+  letter-spacing: var(--ls-section, -0.03em);
   text-transform: uppercase;
-  color: var(--rc-white, #f5f0eb);
-  line-height: 1.05;
+  color: var(--rc-white, #e9e2d5);
+  line-height: 0.94;
   position: relative;
   display: inline-block;
 }
 
 .sig__final-accent {
-  color: var(--rc-white, #f5f0eb);
+  /* The manifesto's single rare editorial-serif accent word, echoing the
+     one-word treatment used in About's headline — everything else in this
+     section stays on the grotesk. */
+  font-family: var(--font-editorial, serif);
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+  color: var(--rc-white, #e9e2d5);
 }
 
 .sig__final-underline {
@@ -659,7 +760,7 @@
   bottom: -6px;
   width: 100%;
   height: 2px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   transform: scaleX(0);
   transform-origin: left center;
 }
@@ -685,7 +786,7 @@
   font-weight: 900;
   letter-spacing: -0.03em;
   text-transform: uppercase;
-  color: var(--rc-white, #f5f0eb);
+  color: var(--rc-white, #e9e2d5);
   margin-bottom: 24px;
   line-height: 1.05;
 }
@@ -695,9 +796,9 @@
   align-items: center;
   gap: 12px;
   padding: 14px 28px;
-  border: 1px solid var(--rc-orange, #e87a2e);
+  border: 1px solid var(--rc-orange, #c2410c);
   background: transparent;
-  color: var(--rc-white, #f5f0eb);
+  color: var(--rc-white, #e9e2d5);
   font-family: var(--font-body, sans-serif);
   font-size: 11px;
   font-weight: 600;
@@ -710,18 +811,18 @@
 }
 
 .sig__trans-cta:hover {
-  background: var(--rc-orange, #e87a2e);
-  color: #050505;
+  background: var(--rc-orange, #c2410c);
+  color: var(--rc-black-rich);
   transform: translateY(-2px);
 }
 
 .sig__trans-cta-arrow {
-  color: var(--rc-orange, #e87a2e);
+  color: var(--rc-orange, #c2410c);
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .sig__trans-cta:hover .sig__trans-cta-arrow {
-  color: #050505;
+  color: var(--rc-black-rich);
   transform: translateX(4px);
 }
 
@@ -834,5 +935,12 @@
   .sig__final,
   .sig__transition {
     transform: none !important;
+  }
+
+  /* No shape/clip-path animation — the black panel is already fully open
+     and the JS instead just crossfades its opacity in (see Signature.jsx). */
+  .sig__consume {
+    clip-path: circle(150% at 50% 100%);
+    opacity: 0;
   }
 }

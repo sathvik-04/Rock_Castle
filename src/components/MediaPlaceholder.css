@@ -1,0 +1,152 @@
+/* ========================================
+   MediaPlaceholder — generative art-directed
+   stand-in for real photography/video.
+   Mobile-first; scales up like the rest of the
+   design system's components.
+   ======================================== */
+
+.media-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--rc-dark, #111111);
+  background-image:
+    radial-gradient(ellipse 75% 65% at 18% 15%, var(--rc-orange-glow, rgba(255, 90, 31, 0.3)) 0%, transparent 62%),
+    radial-gradient(ellipse 65% 55% at 88% 28%, rgba(255, 90, 31, 0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 85% 70% at 45% 105%, rgba(255, 90, 31, 0.1) 0%, transparent 68%),
+    linear-gradient(180deg, var(--rc-black-rich, #050505) 0%, var(--rc-dark, #111111) 100%);
+  box-shadow: inset 0 0 0 1px rgba(245, 240, 235, 0.06);
+}
+
+/* Real photo/video, once one exists — sits above the generative background
+   but below the grain/frame/caption layers so every image reads through the
+   same filmic treatment instead of looking like a raw, disconnected stock photo. */
+.media-placeholder__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Light touch only — let real photo color and brightness come through
+     instead of forcing every image toward grayscale/dark. */
+  filter: contrast(1.05) saturate(1.08);
+}
+
+.media-placeholder--media {
+  background-image: none;
+}
+
+.media-placeholder--media::before {
+  /* keep the grain, drop the plain white tint in favor of a warm wash so the
+     photo and the orange brand accent read as one system */
+  mix-blend-mode: overlay;
+  opacity: 0.12;
+}
+
+.media-placeholder--media::after {
+  /* hairline frame plus a bottom scrim so the mono caption stays legible over photo content */
+  background: linear-gradient(180deg, transparent 55%, rgba(5, 5, 5, 0.55) 100%);
+  border-color: rgba(245, 240, 235, 0.14);
+}
+
+/* Fine grain / noise texture — pure CSS via an inline SVG feTurbulence
+   filter, zero runtime cost. */
+.media-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='mp-grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23mp-grain)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* Hairline inset frame so the box reads as "designed", not empty. */
+.media-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  z-index: 1;
+  border: 1px solid rgba(245, 240, 235, 0.05);
+  pointer-events: none;
+}
+
+/* Corner brackets — same visual language as Hero's corner cross-marks. */
+.media-placeholder__corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  z-index: 2;
+  opacity: 0.65;
+  pointer-events: none;
+}
+.media-placeholder__corner--tl {
+  top: 8px;
+  left: 8px;
+  border-top: 1px solid var(--rc-orange, #ff5a1f);
+  border-left: 1px solid var(--rc-orange, #ff5a1f);
+}
+.media-placeholder__corner--tr {
+  top: 8px;
+  right: 8px;
+  border-top: 1px solid var(--rc-orange, #ff5a1f);
+  border-right: 1px solid var(--rc-orange, #ff5a1f);
+}
+.media-placeholder__corner--bl {
+  bottom: 8px;
+  left: 8px;
+  border-bottom: 1px solid var(--rc-orange, #ff5a1f);
+  border-left: 1px solid var(--rc-orange, #ff5a1f);
+}
+.media-placeholder__corner--br {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 1px solid var(--rc-orange, #ff5a1f);
+  border-right: 1px solid var(--rc-orange, #ff5a1f);
+}
+
+.media-placeholder__caption {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  z-index: 2;
+  max-width: calc(100% - 24px);
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: var(--fs-meta, 11px);
+  font-weight: 500;
+  letter-spacing: var(--ls-meta, 0.08em);
+  text-transform: uppercase;
+  color: var(--rc-orange, #ff5a1f);
+  opacity: 1;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .media-placeholder__corner {
+    width: 16px;
+    height: 16px;
+  }
+  .media-placeholder__caption {
+    left: 16px;
+    bottom: 14px;
+  }
+  .media-placeholder::after {
+    inset: 12px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1200px) {
+  .media-placeholder__caption {
+    left: 20px;
+    bottom: 18px;
+  }
+}
