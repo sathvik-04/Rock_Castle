@@ -36,12 +36,10 @@
 .sig__glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(255, 90, 31, 0.16) 0%,
-    rgba(245, 240, 235, 0.04) 42%,
-    transparent 76%
-  );
+  background: radial-gradient(circle at 50% 50%,
+      rgba(255, 90, 31, 0.16) 0%,
+      rgba(245, 240, 235, 0.04) 42%,
+      transparent 76%);
   opacity: 0;
   pointer-events: none;
   z-index: 1;
@@ -112,10 +110,27 @@
   gap: 2px;
 }
 
-.sig__hud-corner--tl { top: 18px; left: 20px; }
-.sig__hud-corner--tr { top: 18px; right: 20px; text-align: right; }
-.sig__hud-corner--bl { bottom: 65px; left: 20px; }
-.sig__hud-corner--br { bottom: 65px; right: 20px; text-align: right; }
+.sig__hud-corner--tl {
+  top: 18px;
+  left: 20px;
+}
+
+.sig__hud-corner--tr {
+  top: 18px;
+  right: 20px;
+  text-align: right;
+}
+
+.sig__hud-corner--bl {
+  bottom: 65px;
+  left: 20px;
+}
+
+.sig__hud-corner--br {
+  bottom: 65px;
+  right: 20px;
+  text-align: right;
+}
 
 .sig__hud-code {
   color: var(--rc-orange, #c2410c);
@@ -344,10 +359,34 @@
   width: 6px;
   height: 6px;
 }
-.sig__wf-corner--tl { top: -1px; left: -1px; border-top: 1px solid var(--rc-orange, #c2410c); border-left: 1px solid var(--rc-orange, #c2410c); }
-.sig__wf-corner--tr { top: -1px; right: -1px; border-top: 1px solid var(--rc-orange, #c2410c); border-right: 1px solid var(--rc-orange, #c2410c); }
-.sig__wf-corner--bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--rc-orange, #c2410c); border-left: 1px solid var(--rc-orange, #c2410c); }
-.sig__wf-corner--br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--rc-orange, #c2410c); border-right: 1px solid var(--rc-orange, #c2410c); }
+
+.sig__wf-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--rc-orange, #c2410c);
+  border-left: 1px solid var(--rc-orange, #c2410c);
+}
+
+.sig__wf-corner--tr {
+  top: -1px;
+  right: -1px;
+  border-top: 1px solid var(--rc-orange, #c2410c);
+  border-right: 1px solid var(--rc-orange, #c2410c);
+}
+
+.sig__wf-corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 1px solid var(--rc-orange, #c2410c);
+  border-left: 1px solid var(--rc-orange, #c2410c);
+}
+
+.sig__wf-corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid var(--rc-orange, #c2410c);
+  border-right: 1px solid var(--rc-orange, #c2410c);
+}
 
 /* Orange structural tension lines */
 .sig__orange-line--1 {
@@ -534,12 +573,10 @@
 .sig__ph-lighting {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(245, 240, 235, 0.1) 0%,
-    rgba(20, 20, 20, 0.1) 50%,
-    rgba(0, 0, 0, 0.75) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(245, 240, 235, 0.1) 0%,
+      rgba(20, 20, 20, 0.1) 50%,
+      rgba(0, 0, 0, 0.75) 100%);
   z-index: 1;
 }
 
@@ -559,21 +596,17 @@
   position: absolute;
   inset: 0;
   clip-path: polygon(0 40%, 65% 15%, 75% 100%, 0% 100%);
-  background: linear-gradient(
-    180deg,
-    rgba(34, 34, 34, 0.95) 0%,
-    rgba(16, 16, 16, 0.98) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(34, 34, 34, 0.95) 0%,
+      rgba(16, 16, 16, 0.98) 100%);
   z-index: 1;
 }
 
 .sig__ph-beam--alt {
   clip-path: polygon(30% 0, 100% 25%, 100% 100%, 15% 85%);
-  background: linear-gradient(
-    180deg,
-    rgba(28, 28, 28, 0.95) 0%,
-    rgba(14, 14, 14, 0.98) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(28, 28, 28, 0.95) 0%,
+      rgba(14, 14, 14, 0.98) 100%);
 }
 
 .sig__ph-grid {
@@ -604,10 +637,25 @@
   z-index: 4;
 }
 
-.sig__ph-cross--tl { top: 6px; left: 8px; }
-.sig__ph-cross--tr { top: 6px; right: 8px; }
-.sig__ph-cross--bl { bottom: 22px; left: 8px; }
-.sig__ph-cross--br { bottom: 22px; right: 8px; }
+.sig__ph-cross--tl {
+  top: 6px;
+  left: 8px;
+}
+
+.sig__ph-cross--tr {
+  top: 6px;
+  right: 8px;
+}
+
+.sig__ph-cross--bl {
+  bottom: 22px;
+  left: 8px;
+}
+
+.sig__ph-cross--br {
+  bottom: 22px;
+  right: 8px;
+}
 
 /* Placeholder understated metadata stamp */
 .sig__ph-meta {
@@ -881,8 +929,15 @@
     font-size: 11px;
   }
 
-  .sig__hud-corner--bl { bottom: 35px; left: 48px; }
-  .sig__hud-corner--br { bottom: 35px; right: 48px; }
+  .sig__hud-corner--bl {
+    bottom: 35px;
+    left: 48px;
+  }
+
+  .sig__hud-corner--br {
+    bottom: 35px;
+    right: 48px;
+  }
 
   .sig__indicator {
     bottom: 35px;
@@ -931,6 +986,7 @@
   .sig__world {
     transform: none !important;
   }
+
   .sig__slot,
   .sig__word,
   .sig__final,

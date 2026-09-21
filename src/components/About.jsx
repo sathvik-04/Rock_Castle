@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Factory, DraftingCompass, Zap, Cpu, HardHat, Leaf } from 'lucide-react'
 import './About.css'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const founders = [
   {
@@ -28,7 +31,7 @@ const founders = [
   },
 ]
 
-const differentiators = [
+const _differentiators = [
   { icon: Factory, name: 'In-House Fabrication', desc: 'Every weld, mill, and CNC cut happens on our own Dubai floor — nothing subcontracted, nothing diluted.' },
   { icon: DraftingCompass, name: 'Engineering-Led Design', desc: 'Structural sign-off happens before a single panel is built, not after something fails on site.' },
   { icon: Zap, name: 'Compressed Timelines', desc: 'Fabrication and install run in parallel under one roof, so builds move at the speed a launch date demands.' },
@@ -82,7 +85,7 @@ export default function About() {
             gsap.set(textLines, { opacity: 0, y: 28 })
           }
 
-          const slideTl = gsap.timeline({
+          gsap.timeline({
             scrollTrigger: {
               trigger: heroEl,
               start: 'top top',
@@ -104,34 +107,34 @@ export default function About() {
 
           // ── 2. Editorial Text Reveal: Starts as sheet begins entering so text is ready right on time ──
           // ── Editorial Text Pop Reveal ──
-// Text appears when the About section reaches 35% from the bottom.
-// 35% from bottom = top 65% of the viewport.
+          // Text appears when the About section reaches 35% from the bottom.
+          // 35% from bottom = top 65% of the viewport.
 
-if (!reduced && textLines.length) {
-  gsap.set(textLines, {
-    opacity: 0,
-    y: 32,
-    scale: 0.94,
-    rotateX: -8,
-    transformOrigin: '50% 100%'
-  })
+          if (!reduced && textLines.length) {
+            gsap.set(textLines, {
+              opacity: 0,
+              y: 32,
+              scale: 0.94,
+              rotateX: -8,
+              transformOrigin: '50% 100%'
+            })
 
-  gsap.to(textLines, {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    rotateX: 0,
-    duration: 0.65,
-    stagger: 0.055,
-    ease: 'back.out(1.5)',
-    scrollTrigger: {
-      trigger: root,
-      start: 'top 125%',
-      toggleActions: 'play none none reverse',
-      invalidateOnRefresh: true
-    }
-  })
-}
+            gsap.to(textLines, {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              rotateX: 0,
+              duration: 0.65,
+              stagger: 0.055,
+              ease: 'back.out(1.5)',
+              scrollTrigger: {
+                trigger: root,
+                start: 'top 125%',
+                toggleActions: 'play none none reverse',
+                invalidateOnRefresh: true
+              }
+            })
+          }
         })
 
         // Mobile: pinning full-height sections fights the dynamic address
@@ -263,11 +266,11 @@ if (!reduced && textLines.length) {
           { opacity: 0, y: 26 },
           { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out' }
         )
-        .fromTo(valueIcons,
-          { scale: 0.4, rotate: -12 },
-          { scale: 1, rotate: 0, duration: 0.5, stagger: 0.08, ease: 'back.out(2.4)' },
-          '<'
-        )
+          .fromTo(valueIcons,
+            { scale: 0.4, rotate: -12 },
+            { scale: 1, rotate: 0, duration: 0.5, stagger: 0.08, ease: 'back.out(2.4)' },
+            '<'
+          )
       }
 
       // ── 4. Founders Section Reveal — clip-path mask cards + credential pop ──
@@ -291,31 +294,31 @@ if (!reduced && textLines.length) {
           { opacity: 0, y: 12 },
           { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
         )
-        .fromTo(titleWords,
-          { yPercent: 110, rotate: 4 },
-          { yPercent: 0, rotate: 0, duration: 0.75, ease: 'power4.out', stagger: 0.02 },
-          '-=0.2'
-        )
-        .fromTo(cards,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' },
-          '-=0.3'
-        )
-        .fromTo(portraits,
-          { clipPath: 'inset(0% 0% 100% 0%)' },
-          { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, stagger: 0.12, ease: 'power4.out' },
-          '<'
-        )
-        .fromTo(metas,
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' },
-          '<+0.25'
-        )
-        .fromTo(credentials,
-          { opacity: 0, scale: 0.4 },
-          { opacity: 1, scale: 1, duration: 0.45, stagger: 0.12, ease: 'back.out(2.2)' },
-          '<+0.15'
-        )
+          .fromTo(titleWords,
+            { yPercent: 110, rotate: 4 },
+            { yPercent: 0, rotate: 0, duration: 0.75, ease: 'power4.out', stagger: 0.02 },
+            '-=0.2'
+          )
+          .fromTo(cards,
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' },
+            '-=0.3'
+          )
+          .fromTo(portraits,
+            { clipPath: 'inset(0% 0% 100% 0%)' },
+            { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, stagger: 0.12, ease: 'power4.out' },
+            '<'
+          )
+          .fromTo(metas,
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' },
+            '<+0.25'
+          )
+          .fromTo(credentials,
+            { opacity: 0, scale: 0.4 },
+            { opacity: 1, scale: 1, duration: 0.45, stagger: 0.12, ease: 'back.out(2.2)' },
+            '<+0.15'
+          )
 
         if (!reduced) {
           portraits.forEach((pWrap) => {
@@ -367,165 +370,6 @@ if (!reduced && textLines.length) {
         })
       }
 
-      // ── 6. Manifesto Banner Reveal — quote "pops" once the section's own
-      // scroll-into-view transition reaches 30% progress ──
-      // ── 6. Manifesto Banner Reveal ──
-// Banner starts when it reaches 35% from the bottom.
-// 35% from bottom = top 65% of viewport.
-
-const manifesto = root.querySelector('.about__manifesto')
-const manifestoInner = manifesto?.querySelector('.about__manifesto-inner')
-const manifestoRule = manifesto?.querySelector('.about__rule')
-const manifestoTag = manifesto?.querySelector('.about__manifesto-tag')
-const manifestoQuote = manifesto?.querySelector('.about__manifesto-quote')
-
-if (manifesto) {
-  if (reduced) {
-    gsap.set(manifesto, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      clipPath: 'inset(0% 0% 0% 0%)'
-    })
-
-    if (manifestoInner) {
-      gsap.set(manifestoInner, { opacity: 1, y: 0 })
-    }
-
-    if (manifestoQuote) {
-      gsap.set(manifestoQuote, {
-        opacity: 1,
-        scale: 1,
-        rotateX: 0
-      })
-    }
-  } else {
-    // Initial banner state
-    gsap.set(manifesto, {
-      opacity: 0,
-      y: 60,
-      scale: 0.96,
-      clipPath: 'inset(0% 8% 0% 8%)',
-      transformOrigin: 'center center'
-    })
-
-    if (manifestoInner) {
-      gsap.set(manifestoInner, {
-        opacity: 0,
-        y: 24
-      })
-    }
-
-    if (manifestoRule) {
-      gsap.set(manifestoRule, {
-        scaleX: 0,
-        transformOrigin: 'left center'
-      })
-    }
-
-    if (manifestoTag) {
-      gsap.set(manifestoTag, {
-        opacity: 0,
-        y: 15
-      })
-    }
-
-    if (manifestoQuote) {
-      gsap.set(manifestoQuote, {
-        opacity: 0,
-        scale: 0.82,
-        y: 28,
-        rotateX: -12,
-        transformOrigin: 'center center'
-      })
-    }
-
-    const manifestoTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: manifesto,
-        start: 'top 145%',
-        toggleActions: 'play none none reverse',
-        invalidateOnRefresh: true
-      }
-    })
-
-    // 1. Banner itself expands into view
-    manifestoTl.to(manifesto, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 0.8,
-      ease: 'power4.out'
-    })
-
-    // 2. Inner content follows slightly behind
-    if (manifestoInner) {
-      manifestoTl.to(
-        manifestoInner,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.55,
-          ease: 'power3.out'
-        },
-        '-=0.5'
-      )
-    }
-
-    // 3. Horizontal rule sweeps across
-    if (manifestoRule) {
-      manifestoTl.to(
-        manifestoRule,
-        {
-          scaleX: 1,
-          duration: 0.7,
-          ease: 'power4.out'
-        },
-        '-=0.4'
-      )
-    }
-
-    // 4. Tag pops in
-    if (manifestoTag) {
-      manifestoTl.to(
-        manifestoTag,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: 'back.out(1.7)'
-        },
-        '-=0.45'
-      )
-    }
-
-    // 5. Quote gets the main premium POP
-    if (manifestoQuote) {
-      manifestoTl
-        .to(
-          manifestoQuote,
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1.08,
-            rotateX: 0,
-            duration: 0.5,
-            ease: 'back.out(2)'
-          },
-          '-=0.25'
-        )
-        .to(
-          manifestoQuote,
-          {
-            scale: 1,
-            duration: 0.35,
-            ease: 'power3.out'
-          }
-        )
-    }
-  }
-}
     }, ref)
 
     return () => ctx.revert()
@@ -617,17 +461,6 @@ if (manifesto) {
           </div>
         </div>
       </div> */}
-
-      {/* ── MANIFESTO BANNER ── */}
-      <div className="about__manifesto">
-        <div className="about__manifesto-inner">
-          <span className="about__rule" aria-hidden="true" />
-          <span className="about__manifesto-tag">[&nbsp;OUR CONVICTION&nbsp;]</span>
-          <p className="about__manifesto-quote">
-            &ldquo;Nobody claps for a cable run or a load calculation at 4am — yet that is precisely where monumental experiences are won or lost.&rdquo;
-          </p>
-        </div>
-      </div>
 
       {/* ── FOUNDERS — Orange Accented Editorial Grid ── */}
       <div className="about__founders">

@@ -31,55 +31,55 @@ export default function CastleDrawing() {
         duration: 1.4,
         stagger: 0.15
       })
-      // Phase 2: Draw the towers, gatehouse, battlements
-      .to(
-        '.castle-path--towers',
-        {
-          strokeDashoffset: 0,
-          duration: 1.8,
-          stagger: 0.12
-        },
-        '-=0.8'
-      )
-      // Phase 3: Draw spires, flags, and ornamental windows
-      .to(
-        '.castle-path--details',
-        {
-          strokeDashoffset: 0,
-          duration: 1.4,
-          stagger: 0.08
-        },
-        '-=0.9'
-      )
-      // Phase 4: Golden bloom highlight pulse
-      .to('.castle-svg', {
-        filter: 'drop-shadow(0 0 10px rgba(255, 246, 214, 0.9)) drop-shadow(0 0 20px rgba(245, 224, 134, 0.45))',
-        duration: 0.8,
-        ease: 'power1.out'
-      })
-      // Phase 5: Hold steady
-      .to({}, { duration: 1.8 })
-      // Phase 6: Graceful erase / dissolve
-      .to('.castle-path', {
-        strokeDashoffset: (i, target) => {
-          const len = target.getTotalLength ? target.getTotalLength() : 100
-          return -len
-        },
-        duration: 1.2,
-        stagger: 0.04,
-        ease: 'power2.in'
-      })
-      .to(
-        '.castle-svg',
-        {
-          filter: 'drop-shadow(0 0 4px rgba(255, 246, 214, 0.3))',
-          duration: 0.6
-        },
-        '-=0.8'
-      )
-      .set('.castle-path', {
-        strokeDashoffset: (i, target) => (target.getTotalLength ? target.getTotalLength() : 100)
-      })
+        // Phase 2: Draw the towers, gatehouse, battlements
+        .to(
+          '.castle-path--towers',
+          {
+            strokeDashoffset: 0,
+            duration: 1.8,
+            stagger: 0.12
+          },
+          '-=0.8'
+        )
+        // Phase 3: Draw spires, flags, and ornamental windows
+        .to(
+          '.castle-path--details',
+          {
+            strokeDashoffset: 0,
+            duration: 1.4,
+            stagger: 0.08
+          },
+          '-=0.9'
+        )
+        // Phase 4: Golden bloom highlight pulse
+        .to('.castle-svg', {
+          filter: 'drop-shadow(0 0 10px rgba(255, 246, 214, 0.9)) drop-shadow(0 0 20px rgba(245, 224, 134, 0.45))',
+          duration: 0.8,
+          ease: 'power1.out'
+        })
+        // Phase 5: Hold steady
+        .to({}, { duration: 1.8 })
+        // Phase 6: Graceful erase / dissolve
+        .to('.castle-path', {
+          strokeDashoffset: (i, target) => {
+            const len = target.getTotalLength ? target.getTotalLength() : 100
+            return -len
+          },
+          duration: 1.2,
+          stagger: 0.04,
+          ease: 'power2.in'
+        })
+        .to(
+          '.castle-svg',
+          {
+            filter: 'drop-shadow(0 0 4px rgba(255, 246, 214, 0.3))',
+            duration: 0.6
+          },
+          '-=0.8'
+        )
+        .set('.castle-path', {
+          strokeDashoffset: (i, target) => (target.getTotalLength ? target.getTotalLength() : 100)
+        })
     }, svgRef)
 
     return () => ctx.revert()

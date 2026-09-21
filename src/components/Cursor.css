@@ -48,7 +48,9 @@ body.work-drag-active .cursor__ring {
   height: 28px;
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none),
+(pointer: coarse) {
+
   .cursor__dot,
   .cursor__ring {
     display: none;

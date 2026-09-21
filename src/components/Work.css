@@ -89,7 +89,8 @@
 .work__menu-area {
   position: relative;
   overflow: hidden;
-  margin: 0 calc(var(--gutter) * -1);            /* bleed to viewport edges */
+  margin: 0 calc(var(--gutter) * -1);
+  /* bleed to viewport edges */
   padding: clamp(20px, 3vh, 40px) var(--gutter);
   margin-bottom: clamp(64px, 10vh, 120px);
   cursor: grab;
@@ -156,13 +157,11 @@
 .work__strip-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(5, 5, 5, 0.92) 0%,
-    rgba(5, 5, 5, 0.5) 35%,
-    rgba(5, 5, 5, 0.08) 65%,
-    transparent 100%
-  );
+  background: linear-gradient(to top,
+      rgba(5, 5, 5, 0.92) 0%,
+      rgba(5, 5, 5, 0.5) 35%,
+      rgba(5, 5, 5, 0.08) 65%,
+      transparent 100%);
   pointer-events: none;
 }
 
@@ -299,7 +298,8 @@
   text-transform: uppercase;
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none),
+(pointer: coarse) {
   .work__drag-cursor {
     display: none;
   }

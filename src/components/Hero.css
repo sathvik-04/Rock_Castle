@@ -53,12 +53,10 @@
 .hero__scrim {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 50% 45%,
-    rgba(10, 10, 10, 0.22) 0%,
-    rgba(8, 8, 8, 0.6) 65%,
-    rgba(4, 4, 4, 0.88) 100%
-  );
+  background: radial-gradient(circle at 50% 45%,
+      rgba(10, 10, 10, 0.22) 0%,
+      rgba(8, 8, 8, 0.6) 65%,
+      rgba(4, 4, 4, 0.88) 100%);
   pointer-events: none;
 }
 
@@ -114,72 +112,50 @@
 /* ====================================================
    DUAL EDITORIAL PARAGRAPHS (HOUSE OF YELLOW REFERENCE)
    ==================================================== */
-.hero__editorial-wrapper {
-  position: relative;
-  z-index: 4;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(24px, 4vw, 64px);
-  width: 100%;
-  max-width: 1440px;
-  margin: auto 0;
-  padding: clamp(12px, 2vh, 28px) 0;
-}
-
-@media (min-width: 860px) {
-  .hero__editorial-wrapper {
-    grid-template-columns: 1.15fr 0.95fr;
-    align-items: flex-end;
-  }
+/* ====================================================
+   SINGLE EDITORIAL MANIFESTO (RIGHT BOTTOM)
+   ==================================================== */
+.hero__bottom-right {
+  position: absolute;
+  bottom: clamp(32px, 5vh, 60px);
+  right: clamp(24px, 4vw, 56px);
+  z-index: 6;
+  max-width: min(440px, calc(100vw - 48px));
+  pointer-events: auto;
 }
 
 .hero__editorial-col {
   position: relative;
-  background: transparent;
-  border: none;
-  padding: 0;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
-}
-
-.hero__editorial-col--left {
-  /* Clean borderless presentation */
-}
-
-.hero__editorial-col--right {
-  /* Clean borderless presentation */
+  background: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: clamp(16px, 2vw, 24px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
 }
 
 .hero__col-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.hero__tag-badge,
-.hero__subtag-badge {
-  font-family: var(--font-mono);
-  font-size: clamp(9.5px, 0.9vw, 11px);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 600;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
+  margin-bottom: 12px;
 }
 
 .hero__tag-badge {
-  color: #fae8a4;
-}
-
-.hero__subtag-badge {
+  font-family: var(--font-mono);
+  font-size: clamp(9.5px, 0.85vw, 11px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
   color: var(--rc-orange);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
 }
 
 .hero__col-line {
-  width: 32px;
+  width: 28px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ---- 3D Spiral Rope Twisting Text ---- */
@@ -207,26 +183,14 @@
   backface-visibility: hidden;
 }
 
-/* Left Paragraph: Same font, bold scale */
-.spiral-container--left .spiral-line-inner {
+.spiral-container .spiral-line-inner {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 1.8vw, 2.15rem);
+  font-size: clamp(0.95rem, 1.1vw, 1.22rem);
   font-weight: 500;
-  line-height: 1.32;
-  letter-spacing: -0.022em;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
   color: var(--rc-white-pure);
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 1px 4px rgba(0, 0, 0, 0.9);
-}
-
-/* Right Paragraph: Same font, smaller contrasting architectural scale */
-.spiral-container--right .spiral-line-inner {
-  font-family: var(--font-display);
-  font-size: clamp(0.925rem, 1.05vw, 1.2rem);
-  font-weight: 400;
-  line-height: 1.58;
-  letter-spacing: -0.008em;
-  color: rgba(245, 240, 230, 0.95);
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
 }
 
 /* ====================================================
@@ -299,21 +263,81 @@
   background: #fae8a4;
 }
 
-.box-corner--tl { top: -1px; left: -1px; }
-.box-corner--tl::before { top: 0; left: 0; width: 6px; height: 1.5px; }
-.box-corner--tl::after  { top: 0; left: 0; width: 1.5px; height: 6px; }
+.box-corner--tl {
+  top: -1px;
+  left: -1px;
+}
 
-.box-corner--tr { top: -1px; right: -1px; }
-.box-corner--tr::before { top: 0; right: 0; width: 6px; height: 1.5px; }
-.box-corner--tr::after  { top: 0; right: 0; width: 1.5px; height: 6px; }
+.box-corner--tl::before {
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 1.5px;
+}
 
-.box-corner--bl { bottom: -1px; left: -1px; }
-.box-corner--bl::before { bottom: 0; left: 0; width: 6px; height: 1.5px; }
-.box-corner--bl::after  { bottom: 0; left: 0; width: 1.5px; height: 6px; }
+.box-corner--tl::after {
+  top: 0;
+  left: 0;
+  width: 1.5px;
+  height: 6px;
+}
 
-.box-corner--br { bottom: -1px; right: -1px; }
-.box-corner--br::before { bottom: 0; right: 0; width: 6px; height: 1.5px; }
-.box-corner--br::after  { bottom: 0; right: 0; width: 1.5px; height: 6px; }
+.box-corner--tr {
+  top: -1px;
+  right: -1px;
+}
+
+.box-corner--tr::before {
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 1.5px;
+}
+
+.box-corner--tr::after {
+  top: 0;
+  right: 0;
+  width: 1.5px;
+  height: 6px;
+}
+
+.box-corner--bl {
+  bottom: -1px;
+  left: -1px;
+}
+
+.box-corner--bl::before {
+  bottom: 0;
+  left: 0;
+  width: 6px;
+  height: 1.5px;
+}
+
+.box-corner--bl::after {
+  bottom: 0;
+  left: 0;
+  width: 1.5px;
+  height: 6px;
+}
+
+.box-corner--br {
+  bottom: -1px;
+  right: -1px;
+}
+
+.box-corner--br::before {
+  bottom: 0;
+  right: 0;
+  width: 6px;
+  height: 1.5px;
+}
+
+.box-corner--br::after {
+  bottom: 0;
+  right: 0;
+  width: 1.5px;
+  height: 6px;
+}
 
 /* Square Box Interior Content */
 .hero__cursor-inner {
@@ -399,8 +423,17 @@
 }
 
 @keyframes pulseGoldDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.7); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
 }
 
 
@@ -421,34 +454,97 @@
   background: #fae8a4;
 }
 
-.hero__corner--tl { top: var(--gutter); left: var(--gutter); }
-.hero__corner--tl::before { top: 0; left: 0; width: 14px; height: 1px; }
-.hero__corner--tl::after  { top: 0; left: 0; width: 1px; height: 14px; }
+.hero__corner--tl {
+  top: var(--gutter);
+  left: var(--gutter);
+}
 
-.hero__corner--tr { top: var(--gutter); right: var(--gutter); }
-.hero__corner--tr::before { top: 0; right: 0; width: 14px; height: 1px; }
-.hero__corner--tr::after  { top: 0; right: 0; width: 1px; height: 14px; }
+.hero__corner--tl::before {
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 1px;
+}
 
-.hero__corner--bl { bottom: var(--gutter); left: var(--gutter); }
-.hero__corner--bl::before { bottom: 0; left: 0; width: 14px; height: 1px; }
-.hero__corner--bl::after  { bottom: 0; left: 0; width: 1px; height: 14px; }
+.hero__corner--tl::after {
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 14px;
+}
 
-.hero__corner--br { bottom: var(--gutter); right: var(--gutter); }
-.hero__corner--br::before { bottom: 0; right: 0; width: 14px; height: 1px; }
-.hero__corner--br::after  { bottom: 0; right: 0; width: 1px; height: 14px; }
+.hero__corner--tr {
+  top: var(--gutter);
+  right: var(--gutter);
+}
+
+.hero__corner--tr::before {
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 1px;
+}
+
+.hero__corner--tr::after {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 14px;
+}
+
+.hero__corner--bl {
+  bottom: var(--gutter);
+  left: var(--gutter);
+}
+
+.hero__corner--bl::before {
+  bottom: 0;
+  left: 0;
+  width: 14px;
+  height: 1px;
+}
+
+.hero__corner--bl::after {
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 14px;
+}
+
+.hero__corner--br {
+  bottom: var(--gutter);
+  right: var(--gutter);
+}
+
+.hero__corner--br::before {
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 1px;
+}
+
+.hero__corner--br::after {
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  height: 14px;
+}
 
 /* Small viewport adjustments */
 @media (max-width: 600px) {
   .hero {
     padding: 14px 12px;
   }
+
   .hero__editorial-col {
     padding: 16px 14px;
   }
+
   .spiral-container--left .spiral-line-inner {
     font-size: 1.05rem;
     line-height: 1.36;
   }
+
   .spiral-container--right .spiral-line-inner {
     font-size: 0.85rem;
     line-height: 1.45;

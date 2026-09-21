@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import CastleDrawing from './CastleDrawing'
+import KineticLogo from './KineticLogo'
 import './Hero.css'
 
 // 3 Curated narrative states.
@@ -71,8 +72,7 @@ export default function Hero() {
   const heroRef = useRef(null)
   const videoRef = useRef(null)
   const cursorBoxRef = useRef(null)
-  const leftParaRef = useRef(null)
-  const rightParaRef = useRef(null)
+  const textParaRef = useRef(null)
 
   const [activeStateIndex, setActiveStateIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
@@ -97,18 +97,16 @@ export default function Hero() {
     isTransitioningRef.current = true
 
     const nextState = HERO_STATES[nextIndex]
-    const leftContainer = leftParaRef.current
-    const rightContainer = rightParaRef.current
+    const container = textParaRef.current
 
-    if (!leftContainer || !rightContainer) {
+    if (!container) {
       stateIndexRef.current = nextIndex
       setActiveStateIndex(nextIndex)
       isTransitioningRef.current = false
       return
     }
 
-    const leftLines = leftContainer.querySelectorAll('.spiral-line-inner')
-    const rightLines = rightContainer.querySelectorAll('.spiral-line-inner')
+    const lines = container.querySelectorAll('.spiral-line-inner')
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -119,7 +117,7 @@ export default function Hero() {
     })
 
     // Outgoing: Clean, quick architectural lift & fade
-    tl.to(leftLines, {
+    tl.to(lines, {
       y: -18,
       rotateX: -16,
       opacity: 0,
@@ -128,39 +126,22 @@ export default function Hero() {
       ease: 'power2.in'
     }, 0)
 
-    tl.to(rightLines, {
-      y: -16,
-      rotateX: 16,
-      opacity: 0,
-      duration: 0.32,
-      stagger: 0.03,
-      ease: 'power2.in'
-    }, 0.02)
-
     // Mid-transition text update
     tl.add(() => {
-      leftLines.forEach((el, idx) => {
+      lines.forEach((el, idx) => {
         if (nextState.leftLines[idx]) el.textContent = nextState.leftLines[idx]
-      })
-      rightLines.forEach((el, idx) => {
-        if (nextState.rightLines[idx]) el.textContent = nextState.rightLines[idx]
       })
     })
 
     // Prepare incoming lines
-    tl.set(leftLines, {
+    tl.set(lines, {
       y: 20,
       rotateX: 16,
       opacity: 0
     })
-    tl.set(rightLines, {
-      y: 18,
-      rotateX: -16,
-      opacity: 0
-    })
 
     // Incoming: smooth, confident descent to normal reading plane
-    tl.to(leftLines, {
+    tl.to(lines, {
       y: 0,
       rotateX: 0,
       opacity: 1,
@@ -168,21 +149,12 @@ export default function Hero() {
       stagger: 0.04,
       ease: 'power3.out'
     }, '+=0.02')
-
-    tl.to(rightLines, {
-      y: 0,
-      rotateX: 0,
-      opacity: 1,
-      duration: 0.55,
-      stagger: 0.04,
-      ease: 'power3.out'
-    }, '<0.03')
   }, [])
 
   // Auto-cycle through states every 9s with hover pause so users can read comfortably
   useEffect(() => {
     let isPaused = false
-    const wrapper = document.querySelector('.hero__editorial-wrapper')
+    const wrapper = document.querySelector('.hero__bottom-right')
     const onEnter = () => { isPaused = true }
     const onLeave = () => { isPaused = false }
 
@@ -347,26 +319,26 @@ export default function Hero() {
           { opacity: 0, y: -20 },
           { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
         )
-        .fromTo('.hero__tag-badge, .hero__subtag-badge, .hero__col-line',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' },
-          '-=0.4'
-        )
-        .fromTo('.spiral-container--left .spiral-line-inner',
-          { opacity: 0, y: 28, rotateX: 15 },
-          { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.06, ease: 'power3.out' },
-          '-=0.3'
-        )
-        .fromTo('.spiral-container--right .spiral-line-inner',
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out' },
-          '-=0.6'
-        )
-        .fromTo('.castle-drawing-container',
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-          '-=0.4'
-        )
+          .fromTo('.hero__tag-badge, .hero__subtag-badge, .hero__col-line',
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' },
+            '-=0.4'
+          )
+          .fromTo('.hero__bottom-right .spiral-line-inner',
+            { opacity: 0, y: 24, rotateX: 14 },
+            { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.06, ease: 'power3.out' },
+            '-=0.3'
+          )
+          .fromTo('.kinetic-logo-wrapper',
+            { opacity: 0 },
+            { opacity: 1, duration: 1.1, ease: 'power2.out' },
+            '-=0.7'
+          )
+          .fromTo('.castle-drawing-container',
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+            '-=0.4'
+          )
       }
 
       // Check if loader is already done, or wait for it to lift so text reveal is seen right in time
@@ -404,7 +376,7 @@ export default function Hero() {
       })
 
       // Scroll-driven lift and fade for editorial text
-      gsap.to('.hero__editorial-wrapper', {
+      gsap.to('.hero__bottom-right', {
         yPercent: -18,
         opacity: 0.25,
         ease: 'none',
@@ -449,6 +421,9 @@ export default function Hero() {
         <div className="hero__scrim" />
         <div className="hero__grain" />
       </div>
+
+      {/* Kinetic Lockup & Resolve Logo (Centered Hero Emblem) */}
+      <KineticLogo />
 
       {/* DRAGGABLE SQUARE BOX CURSOR ("PLAYVIDEO") */}
       <div
@@ -504,47 +479,21 @@ export default function Hero() {
       </div>
 
       {/* ====================================================
-          DUAL EDITORIAL PARAGRAPHS (HOUSE OF YELLOW REFERENCE)
-          - Left: 5 lines, 6 words per line (Primary font, bold scale)
-          - Right: 5 lines, 6 words per line (Same font, sleek architectural scale)
-          - Spiral rope twisting transition on line change
+          SINGLE EDITORIAL MANIFESTO (RIGHT BOTTOM)
           ==================================================== */}
-      <div className="hero__editorial-wrapper">
-        {/* Left Side Paragraph */}
-        <div className="hero__editorial-col hero__editorial-col--left">
+      <div className="hero__bottom-right">
+        <div className="hero__editorial-col">
           <div className="hero__col-header">
             <span className="hero__tag-badge">{currentState.id} — {currentState.tag}</span>
             <span className="hero__col-line" />
           </div>
 
           <div
-            className="spiral-container spiral-container--left"
-            ref={leftParaRef}
+            className="spiral-container"
+            ref={textParaRef}
             aria-live="polite"
           >
             {currentState.leftLines.map((line, idx) => (
-              <div key={idx} className="spiral-line-wrapper">
-                <p className="spiral-line-inner">
-                  {line}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Side Paragraph */}
-        <div className="hero__editorial-col hero__editorial-col--right">
-          <div className="hero__col-header">
-            <span className="hero__subtag-badge">{currentState.subTag}</span>
-            <span className="hero__col-line" />
-          </div>
-
-          <div
-            className="spiral-container spiral-container--right"
-            ref={rightParaRef}
-            aria-live="polite"
-          >
-            {currentState.rightLines.map((line, idx) => (
               <div key={idx} className="spiral-line-wrapper">
                 <p className="spiral-line-inner">
                   {line}
