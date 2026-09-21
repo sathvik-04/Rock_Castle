@@ -63,51 +63,68 @@
   padding-left: clamp(12px, 2vw, 36px);
 }
 
-.about__intro-content {
+.about__intro-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(32px, 5vw, 64px);
+  gap: clamp(36px, 6vw, 72px);
   align-items: center;
 }
 
-@media (min-width: 900px) {
-  .about__intro-content {
-    grid-template-columns: 1.1fr 1fr;
+@media (min-width: 920px) {
+  .about__intro-grid {
+    grid-template-columns: 1.15fr 0.95fr;
   }
 }
 
 .about__intro-text-column {
   display: flex;
   flex-direction: column;
-  gap: clamp(18px, 3vh, 28px);
+  gap: clamp(24px, 4vh, 36px);
+}
+
+.about__intro-narrative {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.5vh, 24px);
 }
 
 .about__intro-p {
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.3vw, 1.1875rem);
-  line-height: 1.65;
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.7;
   color: rgba(10, 10, 10, 0.78);
   margin: 0;
 }
 
 .about__intro-p--lead {
-  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  font-size: clamp(1.15rem, 1.55vw, 1.35rem);
   font-weight: 500;
   color: var(--rc-black);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .about__metrics-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(10, 10, 10, 0.12);
+  gap: clamp(16px, 2.5vw, 28px);
+  padding-top: 28px;
+  border-top: 1px solid rgba(10, 10, 10, 0.14);
 }
 
 .about__metric {
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.about__metric:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 10%;
+  height: 80%;
+  width: 1px;
+  background: rgba(10, 10, 10, 0.1);
 }
 
 .about__metric-num {
@@ -120,10 +137,10 @@
 
 .about__metric-label {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 9.5px;
   letter-spacing: 0.14em;
-  color: rgba(10, 10, 10, 0.6);
-  margin-top: 6px;
+  color: rgba(10, 10, 10, 0.65);
+  margin-top: 8px;
 }
 
 /* ---- Main Zoom Image & Parallax Container ---- */
@@ -176,6 +193,79 @@
   backdrop-filter: blur(8px);
 }
 
+/* ---- Why Rockcastle — Differentiators Grid ---- */
+.about__values {
+  padding: clamp(48px, 7vh, 88px) var(--gutter) clamp(24px, 4vh, 40px);
+  background: var(--rc-white-warm);
+}
+
+.about__values-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.about__values-head {
+  margin-bottom: clamp(32px, 5vh, 56px);
+  max-width: 640px;
+}
+
+.about__values-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--rc-black);
+  margin: 8px 0 0;
+}
+
+.about__values-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 56px);
+}
+
+@media (min-width: 640px) {
+  .about__values-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1000px) {
+  .about__values-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.about__value {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.about__value-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(250, 90, 50, 0.08);
+  border: 1px solid rgba(250, 90, 50, 0.22);
+  color: var(--rc-orange-deep);
+}
+
+.about__value-name {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--rc-black);
+}
+
+.about__value-desc {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(10, 10, 10, 0.65);
+  margin: 0;
+}
+
 /* ---- Manifesto Banner ---- */
 .about__manifesto {
   background: #f0ede8;
@@ -204,6 +294,8 @@
   line-height: 1.35;
   color: var(--rc-black);
   margin: 0;
+  transform-origin: center center;
+  will-change: transform;
 }
 
 /* ---- Founders Section ---- */
@@ -235,26 +327,47 @@
 .about__founders-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(24px, 4vw, 48px);
+  gap: clamp(16px, 2.5vw, 28px);
+  max-width: 980px;
+  margin: 0 auto;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 560px) {
   .about__founders-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+@media (min-width: 900px) {
+  .about__founders-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Founder Card ---- */
 .about__founder {
   display: flex;
   flex-direction: column;
+  background: var(--rc-white-pure, #fff);
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  border-radius: 10px;
+  padding: 10px 10px 16px;
+  box-shadow: 0 10px 30px rgba(10, 10, 10, 0.06);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  transform-origin: center bottom;
+}
+
+.about__founder:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(10, 10, 10, 0.1);
 }
 
 .about__portrait-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 6px;
   background: var(--rc-dark);
 }
 
@@ -275,23 +388,72 @@
   background: linear-gradient(to top, rgba(10, 10, 10, 0.35) 0%, transparent 40%);
 }
 
+.about__founder-credential {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: var(--rc-white-pure);
+  color: var(--rc-black);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 9px;
+  border-radius: 20px;
+}
+
+/* Hover-reveal philosophy quote — slides up over the portrait, echoing the
+   site's other mask/reveal motifs rather than a plain tooltip. */
+.about__founder-quote {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding: 20px 14px 16px;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.94) 0%, rgba(10, 10, 10, 0.78) 55%, transparent 100%);
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about__founder-quote p {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--rc-white-pure);
+  margin: 0;
+}
+
+.about__founder:hover .about__founder-quote,
+.about__founder:focus-within .about__founder-quote {
+  transform: translateY(0);
+}
+
+/* Touch devices can't hover — surface a hint of the quote by default. */
+@media (hover: none) {
+  .about__founder-quote {
+    transform: translateY(62%);
+  }
+}
+
 .about__founder-meta {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 14px;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 0 4px;
 }
 
 .about__founder-name {
   font-family: var(--font-display);
-  font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+  font-size: clamp(0.95rem, 1.3vw, 1.0625rem);
   font-weight: 600;
   color: var(--rc-black);
 }
 
 .about__founder-tag {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 0.14em;
   color: var(--rc-orange-deep);
 }

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Crew.css'
 
 const crewCards = [
@@ -58,6 +57,23 @@ export default function Crew() {
         opacity: (i) => (i === 0 ? 1 : 0)
       })
 
+      // Right-side static content entrance reveal
+      gsap.fromTo('.crew__static-content > *',
+        { opacity: 0, y: 28 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.75,
+          stagger: 0.07,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: root,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      )
+
       const deckTl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
@@ -77,7 +93,7 @@ export default function Crew() {
         }
       })
 
-      // Card stacking animation on the left side
+      // Card stacking animation on the left side with subtle internal parallax
       cards.forEach((card, i) => {
         if (i > 0) {
           deckTl.to(
@@ -107,7 +123,7 @@ export default function Crew() {
 
     // Mobile adaptation
     mm.add('(max-width: 768px)', () => {
-      cards.forEach((card, i) => {
+      cards.forEach((card) => {
         gsap.fromTo(card,
           { opacity: 0, y: 30 },
           {

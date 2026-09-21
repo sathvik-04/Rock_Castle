@@ -18,12 +18,55 @@ export default function Signature() {
       const scene = sceneRef.current
       if (!scene) return
 
-      // GSAP Pinning: pin scene directly for 500% scroll distance with pinSpacing
+      // ── Roof / Arrow Reveal: incoming section opens through an expanding
+      // inverted-roof clip-path as it scrolls into place, flattening out to
+      // a full-bleed rectangle exactly as it reaches the top (where the pin
+      // below takes over). Scrubbed to real scroll position so it plays out
+      // during the approach rather than firing once on entry. ──
+      const ROOF_CLIP = 'polygon(0% 20%, 50% 0%, 100% 20%, 100% 100%, 0% 100%)'
+      const FLAT_CLIP = 'polygon(0% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)'
+
+      if (!prefersReduced) {
+        gsap.set(scene, { clipPath: ROOF_CLIP, opacity: 0.4 })
+
+        gsap.to(scene, {
+          clipPath: FLAT_CLIP,
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: scene,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          }
+        })
+
+        // Telemetry HUD and ambient atmosphere fade in as the section appears
+        gsap.fromTo(['.sig__hud', '.sig__glow'],
+          { opacity: 0 },
+          {
+            opacity: (i) => (i === 0 ? 0.7 : 0.6),
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: scene,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+              invalidateOnRefresh: true,
+            }
+          }
+        )
+      } else {
+        gsap.set(scene, { opacity: 1, clipPath: FLAT_CLIP })
+      }
+
+      // GSAP Pinning: pin scene directly for 360% scroll distance with pinSpacing
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scene,
           start: 'top top',
-          end: '+=500%',
+          end: '+=360%',
           pin: true,
           pinSpacing: true,
           scrub: 0.8,
@@ -52,13 +95,13 @@ export default function Signature() {
       // PHASE INDICATOR TRACKING (0.00 → 1.00)
       // ─────────────────────────────────────────────────────────────
       tl.to('.sig__ind--space', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.02)
-        .to('.sig__ind--space', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.20)
-        .to('.sig__ind--structure', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.22)
+        .to('.sig__ind--space', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.21)
+        .to('.sig__ind--structure', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.21)
         .to('.sig__ind--structure', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.40)
-        .to('.sig__ind--experience', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.42)
-        .to('.sig__ind--experience', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.58)
-        .to('.sig__ind--memory', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.60)
-        .to('.sig__ind--memory', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.76)
+        .to('.sig__ind--experience', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.40)
+        .to('.sig__ind--experience', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.59)
+        .to('.sig__ind--memory', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.59)
+        .to('.sig__ind--memory', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.77)
         .to('.sig__indicator', { opacity: 0, duration: 0.04 }, 0.82)
 
       // HUD & Atmosphere
@@ -71,11 +114,11 @@ export default function Signature() {
       tl.fromTo('.sig__consume',
         { clipPath: 'circle(0% at 50% 100%)' },
         { clipPath: 'circle(150% at 50% 100%)', ease: 'power2.inOut', duration: 0.64 },
-        0.06
+        0.04
       )
 
       // ─────────────────────────────────────────────────────────────
-      // SEQUENCE 1: "WE CREATE" (0.04 → 0.18)
+      // SEQUENCE 1: "WE CREATE" (0.04 → 0.22)
       // ─────────────────────────────────────────────────────────────
       tl.fromTo('.sig__word--we', {
         opacity: 0, scale: 0.6, z: -300
@@ -94,88 +137,88 @@ export default function Signature() {
       tl.to('.sig__line--v-axis', { scaleY: 1, opacity: 0.25, duration: 0.10 }, 0.10)
       tl.to('.sig__node--center', { scale: 1, opacity: 1, duration: 0.06 }, 0.11)
 
-      // Clean exit of WE CREATE before SPACES arrives
-      tl.to('.sig__word--we', { opacity: 0, scale: 1.25, z: 180, duration: 0.06, ease: 'power2.in' }, 0.16)
-      tl.to('.sig__word--create', { opacity: 0, scale: 0.75, y: -40, duration: 0.06, ease: 'power2.in' }, 0.16)
+      // Smooth exit of WE CREATE overlapping into SPACES
+      tl.to('.sig__word--we', { opacity: 0, scale: 1.2, z: 150, duration: 0.06, ease: 'power2.in' }, 0.18)
+      tl.to('.sig__word--create', { opacity: 0, scale: 0.8, y: -30, duration: 0.06, ease: 'power2.in' }, 0.18)
 
       // ─────────────────────────────────────────────────────────────
-      // SEQUENCE 2: "SPACES" (0.22 → 0.38) — Enters cleanly with no collision
+      // SEQUENCE 2: "SPACES" (0.19 → 0.40) — Seamless overlap
       // ─────────────────────────────────────────────────────────────
       tl.fromTo('.sig__word--spaces', {
-        opacity: 0, scale: 1.8, z: -350
+        opacity: 0, scale: 1.6, z: -300
       }, {
-        opacity: 1, scale: 1, z: 0, duration: 0.09, ease: 'power3.out'
-      }, 0.22)
+        opacity: 1, scale: 1, z: 0, duration: 0.08, ease: 'power3.out'
+      }, 0.19)
 
       // Grid lines expand
-      tl.to('.sig__line--h1', { scaleX: 1, opacity: 0.12, duration: 0.08 }, 0.24)
-      tl.to('.sig__line--h2', { scaleX: 1, opacity: 0.12, duration: 0.08 }, 0.26)
-      tl.to('.sig__line--v1', { scaleY: 1, opacity: 0.12, duration: 0.08 }, 0.26)
-      tl.to('.sig__line--v2', { scaleY: 1, opacity: 0.12, duration: 0.08 }, 0.28)
+      tl.to('.sig__line--h1', { scaleX: 1, opacity: 0.12, duration: 0.08 }, 0.21)
+      tl.to('.sig__line--h2', { scaleX: 1, opacity: 0.12, duration: 0.08 }, 0.23)
+      tl.to('.sig__line--v1', { scaleY: 1, opacity: 0.12, duration: 0.08 }, 0.23)
+      tl.to('.sig__line--v2', { scaleY: 1, opacity: 0.12, duration: 0.08 }, 0.25)
 
       // Wireframe volume 1
       tl.fromTo('.sig__wireframe--1', {
         opacity: 0, scale: 0.7, rotateX: 20, rotateY: -15
       }, {
         opacity: 0.5, scale: 1, rotateX: 10, rotateY: -8, duration: 0.10
-      }, 0.26)
+      }, 0.23)
 
-      tl.to('.sig__orange-line--1', { scaleX: 1, opacity: 0.7, duration: 0.08 }, 0.28)
-      tl.to('.sig__orange-node--1', { opacity: 1, scale: 1, duration: 0.06 }, 0.30)
+      tl.to('.sig__orange-line--1', { scaleX: 1, opacity: 0.7, duration: 0.08 }, 0.25)
+      tl.to('.sig__orange-node--1', { opacity: 1, scale: 1, duration: 0.06 }, 0.27)
 
-      // Clean exit of SPACES before EXPERIENCES arrives
-      tl.to('.sig__word--spaces', { opacity: 0, scale: 0.65, z: 250, duration: 0.06, ease: 'power2.in' }, 0.36)
+      // Smooth exit of SPACES overlapping into EXPERIENCES
+      tl.to('.sig__word--spaces', { opacity: 0, scale: 0.7, z: 200, duration: 0.06, ease: 'power2.in' }, 0.37)
 
       // ─────────────────────────────────────────────────────────────
-      // SEQUENCE 3: "EXPERIENCES" (0.42 → 0.56) — Enters cleanly
+      // SEQUENCE 3: "EXPERIENCES" (0.38 → 0.59) — Seamless overlap
       // ─────────────────────────────────────────────────────────────
       tl.fromTo('.sig__word--experiences', {
-        opacity: 0, scale: 0.6, z: -450
+        opacity: 0, scale: 0.65, z: -380
       }, {
-        opacity: 1, scale: 1, z: 0, duration: 0.09, ease: 'power3.out'
-      }, 0.42)
+        opacity: 1, scale: 1, z: 0, duration: 0.08, ease: 'power3.out'
+      }, 0.38)
 
-      tl.to('.sig__line--h3', { scaleX: 1, opacity: 0.15, duration: 0.07 }, 0.44)
-      tl.to('.sig__line--v3', { scaleY: 1, opacity: 0.15, duration: 0.07 }, 0.45)
-      tl.to('.sig__orange-line--2', { scaleY: 1, opacity: 0.7, duration: 0.07 }, 0.45)
-      tl.to('.sig__orange-node--2', { opacity: 1, scale: 1, duration: 0.05 }, 0.47)
+      tl.to('.sig__line--h3', { scaleX: 1, opacity: 0.15, duration: 0.07 }, 0.40)
+      tl.to('.sig__line--v3', { scaleY: 1, opacity: 0.15, duration: 0.07 }, 0.41)
+      tl.to('.sig__orange-line--2', { scaleY: 1, opacity: 0.7, duration: 0.07 }, 0.41)
+      tl.to('.sig__orange-node--2', { opacity: 1, scale: 1, duration: 0.05 }, 0.43)
 
       // Photographic project cards slide in
       tl.fromTo('.sig__slot--1', {
         opacity: 0, x: -70, y: 30, scale: 0.9, rotateY: 12
       }, {
         opacity: 1, x: 0, y: 0, scale: 1, rotateY: 6, duration: 0.10, ease: 'power2.out'
-      }, 0.46)
+      }, 0.42)
 
       tl.fromTo('.sig__slot--2', {
         opacity: 0, x: 70, y: -20, scale: 0.9, rotateY: -12
       }, {
         opacity: 1, x: 0, y: 0, scale: 1, rotateY: -6, duration: 0.10, ease: 'power2.out'
-      }, 0.48)
+      }, 0.44)
 
-      // Clean exit of EXPERIENCES before MEMORY arrives
-      tl.to('.sig__word--experiences', { opacity: 0, scale: 1.25, z: 200, duration: 0.06, ease: 'power2.in' }, 0.55)
+      // Smooth exit of EXPERIENCES overlapping into MEMORY
+      tl.to('.sig__word--experiences', { opacity: 0, scale: 1.2, z: 180, duration: 0.06, ease: 'power2.in' }, 0.56)
 
       // ─────────────────────────────────────────────────────────────
-      // SEQUENCE 4: "MEMORY" (0.60 → 0.72) — Enters cleanly
+      // SEQUENCE 4: "MEMORY" (0.57 → 0.76) — Seamless overlap
       // ─────────────────────────────────────────────────────────────
       tl.fromTo('.sig__word--memory', {
-        opacity: 0, scale: 0.55, z: -400
+        opacity: 0, scale: 0.6, z: -350
       }, {
         opacity: 1, scale: 1, z: 0, duration: 0.08, ease: 'power3.out'
-      }, 0.60)
+      }, 0.57)
 
       tl.fromTo('.sig__wireframe--2', {
         opacity: 0, scale: 0.8
       }, {
         opacity: 0.6, scale: 1, duration: 0.08
-      }, 0.62)
+      }, 0.59)
 
-      tl.to('.sig__plane--grid', { opacity: 0.12, duration: 0.08 }, 0.62)
-      tl.to('.sig__orange-line--3', { scaleX: 1, opacity: 0.8, duration: 0.06 }, 0.64)
+      tl.to('.sig__plane--grid', { opacity: 0.12, duration: 0.08 }, 0.59)
+      tl.to('.sig__orange-line--3', { scaleX: 1, opacity: 0.8, duration: 0.06 }, 0.61)
 
-      // Clean exit of MEMORY
-      tl.to('.sig__word--memory', { opacity: 0, scale: 1.6, z: 320, duration: 0.06, ease: 'power2.in' }, 0.70)
+      // Smooth exit of MEMORY overlapping into final drive
+      tl.to('.sig__word--memory', { opacity: 0, scale: 1.4, z: 260, duration: 0.06, ease: 'power2.in' }, 0.72)
 
       // ─────────────────────────────────────────────────────────────
       // SEQUENCE 5: IMMERSIVE DRIVE FORWARD (0.68 → 0.80)

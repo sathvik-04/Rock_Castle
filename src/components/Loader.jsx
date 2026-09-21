@@ -18,7 +18,11 @@ export default function Loader() {
   const barRef = useRef(null)
 
   useEffect(() => {
-    if (!active) return
+    if (!active) {
+      window.__RC_LOADER_DONE__ = true
+      window.dispatchEvent(new CustomEvent('rc-loader-done'))
+      return
+    }
     try { sessionStorage.setItem(SESSION_KEY, '1') } catch { /* private mode */ }
 
     document.documentElement.classList.add('is-loading')
@@ -27,9 +31,22 @@ export default function Loader() {
     const counter = { value: 0 }
     const finish = () => {
       document.documentElement.classList.remove('is-loading')
-      gsap.timeline({ onComplete: () => setDone(true) })
+      gsap.timeline({
+        onComplete: () => {
+          setDone(true)
+          window.__RC_LOADER_DONE__ = true
+          window.dispatchEvent(new CustomEvent('rc-loader-done'))
+        }
+      })
         .to(barRef.current, { scaleX: 1, duration: 0.2, ease: 'power2.out' })
-        .to(rootRef.current, { yPercent: -100, duration: reduced ? 0.01 : 0.9, ease: 'expo.inOut' }, '+=0.15')
+        .to(rootRef.current, {
+          yPercent: -100,
+          duration: reduced ? 0.01 : 0.85,
+          ease: 'expo.inOut',
+          onStart: () => {
+            window.dispatchEvent(new CustomEvent('rc-loader-lifting'))
+          }
+        }, '+=0.15')
     }
 
     if (reduced) {

@@ -392,17 +392,18 @@
   }
 
   .process__stage-img {
-    width: 100%;
+    width: 120%;
+    max-width: none;
+    margin-left: -10%;
     height: 100%;
     object-fit: cover;
     filter: brightness(0.9) contrast(1.05);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    transition: filter 0.4s ease;
     will-change: transform, filter;
   }
 
   /* Subtle image hover interaction */
   .process__image-wrapper:hover .process__stage-img {
-    transform: scale(1.05);
     filter: brightness(1.08) contrast(1.1);
   }
 

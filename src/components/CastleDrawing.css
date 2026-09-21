@@ -1,0 +1,107 @@
+/* ========================================
+   CASTLE DRAWING — Architectural SVG Loop
+   Yellowish-White Line Aesthetic
+   ======================================== */
+
+.castle-drawing-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+  margin-top: auto;
+  padding: 8px 0 4px;
+}
+
+.castle-drawing-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(340px, 85vw);
+  max-width: 100%;
+}
+
+.castle-svg {
+  width: 100%;
+  height: auto;
+  max-height: 120px;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgba(255, 248, 220, 0.45));
+  transition: filter 0.5s ease;
+}
+
+/* Yellowish-white stroke for the architectural castle */
+.castle-path {
+  stroke: #fff9d6; /* Yellowish white */
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.castle-path--base {
+  stroke-width: 1.6;
+  stroke: #fffbe3;
+}
+
+.castle-path--towers {
+  stroke-width: 1.4;
+  stroke: #fff8ce;
+}
+
+.castle-path--details {
+  stroke-width: 1.1;
+  stroke: #faeab0;
+}
+
+.castle-axis {
+  stroke: rgba(255, 248, 220, 0.35);
+  stroke-width: 0.8;
+}
+
+.castle-axis-center {
+  stroke: rgba(250, 90, 50, 0.4);
+  stroke-width: 0.8;
+}
+
+.castle-drawing-caption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  width: 100%;
+  justify-content: center;
+  opacity: 0.75;
+}
+
+.castle-caption-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 249, 214, 0.3), transparent);
+  max-width: 60px;
+}
+
+.castle-caption-text {
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 0.75vw, 9.5px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff9d6;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .castle-drawing-frame {
+    width: min(260px, 75vw);
+  }
+  .castle-svg {
+    max-height: 90px;
+  }
+  .castle-caption-text {
+    font-size: 8px;
+    letter-spacing: 0.16em;
+  }
+}

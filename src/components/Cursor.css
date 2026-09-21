@@ -17,6 +17,13 @@
   will-change: transform;
 }
 
+body.hero-hover-active .cursor__dot,
+body.hero-hover-active .cursor__ring,
+body.work-drag-active .cursor__dot,
+body.work-drag-active .cursor__ring {
+  opacity: 0 !important;
+}
+
 .cursor__dot {
   width: 6px;
   height: 6px;

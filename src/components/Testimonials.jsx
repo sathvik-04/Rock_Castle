@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Testimonials.css'
 
 const testimonials = [
@@ -71,27 +70,23 @@ export default function Testimonials() {
   const handlePrev = useCallback(() => goTo((activeIndex - 1 + count) % count), [activeIndex, count, goTo])
   const handleNext = useCallback(() => goTo((activeIndex + 1) % count), [activeIndex, count, goTo])
 
-  // scroll-driven advancement: scrolling naturally through the section also
-  // steps the active card through the currently-visible set (no pin/vh-jack —
-  // just a scrub mapped onto the section's own height), on top of the
-  // existing autoplay/arrow/dot navigation.
+  // Pause autoplay on hover so users can read testimonials comfortably
   useEffect(() => {
-    if (reduced || !ref.current) return
-    const trigger = ScrollTrigger.create({
-      trigger: ref.current,
-      start: 'top 65%',
-      end: 'bottom 45%',
-      scrub: true,
-      onUpdate: (self) => {
-        const idx = Math.min(count - 1, Math.max(0, Math.floor(self.progress * count)))
-        setActiveIndex((prev) => {
-          if (prev === idx) return prev
-          stopAutoplay()
-          return idx
-        })
+    const el = ref.current
+    if (!el) return
+    const onEnter = () => stopAutoplay()
+    const onLeave = () => {
+      if (!reduced) {
+        stopAutoplay()
+        autoplayRef.current = setInterval(() => setActiveIndex((i) => (i + 1) % count), 6000)
       }
-    })
-    return () => trigger.kill()
+    }
+    el.addEventListener('mouseenter', onEnter)
+    el.addEventListener('mouseleave', onLeave)
+    return () => {
+      el.removeEventListener('mouseenter', onEnter)
+      el.removeEventListener('mouseleave', onLeave)
+    }
   }, [reduced, count, stopAutoplay])
 
   const revealMore = useCallback(() => {
@@ -111,7 +106,7 @@ export default function Testimonials() {
     return () => window.removeEventListener('keydown', onKey)
   }, [handlePrev, handleNext])
 
-  // section entrance
+  // section entrance and scroll-based image parallax
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -119,12 +114,38 @@ export default function Testimonials() {
         { opacity: 0, y: 24 },
         {
           opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1,
-          scrollTrigger: { trigger: ref.current, start: 'top 75%', toggleActions: 'play none none reverse' }
+          scrollTrigger: { trigger: ref.current, start: 'top 80%', toggleActions: 'play none none reverse' }
         }
       )
+
+      gsap.fromTo(
+        '.testimonials__carousel',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+          scrollTrigger: { trigger: '.testimonials__carousel', start: 'top 85%', toggleActions: 'play none none reverse' }
+        }
+      )
+
+      // Parallax on the client photo
+      if (!reduced && stageRef.current) {
+        gsap.fromTo(stageRef.current,
+          { yPercent: -6 },
+          {
+            yPercent: 6,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: ref.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true
+            }
+          }
+        )
+      }
     }, ref)
     return () => ctx.revert()
-  }, [])
+  }, [reduced])
 
   // word-by-word blur-in reveal whenever the active testimonial changes,
   // synchronized with a camera-flash sweep across the portrait frame and an

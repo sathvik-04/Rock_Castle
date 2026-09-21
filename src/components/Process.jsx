@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import MediaPlaceholder from './MediaPlaceholder'
 import './Process.css'
 
 const stages = [
@@ -170,6 +169,25 @@ export default function Process() {
             toggleActions: 'play none none reverse'
           }
         })
+
+        const stageImg = stage.querySelector('.process__stage-img')
+        if (stageImg) {
+          gsap.fromTo(stageImg,
+            { xPercent: -10, scale: 1.12 },
+            {
+              xPercent: 10,
+              scale: 1.12,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: stage,
+                start: 'left right',
+                end: 'right left',
+                containerAnimation: scrollTl,
+                scrub: true
+              }
+            }
+          )
+        }
 
         const scanline = stage.querySelector('.process__scanline')
         if (scanline) {
