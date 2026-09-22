@@ -12,11 +12,7 @@
   --case-ink: var(--rc-white);
   --case-ink-soft: rgba(233, 226, 213, 0.82);
   --case-ink-faint: rgba(233, 226, 213, 0.62);
-  --case-orange: var(--rc-orange);
-  /* Editorial serif — reserved for exactly one rare accent moment (the
-     "Result" pull-quote below). Project titles, headings, numbers and the
-     wordmark all read through --case-display, the site's shared grotesk,
-     per the direction that project titles are Neue Montreal, not serif. */
+  --case-orange: var(--rc-yellow);
   --case-serif: var(--font-editorial);
   --case-display: var(--font-display);
   --case-mono: 'IBM Plex Mono', var(--font-body, monospace);
@@ -36,21 +32,22 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px var(--gutter, 20px);
-  border-bottom: 1px solid rgba(233, 226, 213, 0.22);
+  border-bottom: 1px solid rgba(242, 239, 163, 0.15);
 }
 
 .case-header__logo {
   font-family: var(--case-display);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--case-ink);
 }
 
 .case-header__back {
   font-family: var(--case-mono);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--case-ink-soft);
@@ -68,13 +65,16 @@
 }
 
 .case-hero__eyebrow {
-  display: block;
-  font-family: var(--case-mono);
+  display: inline-block;
+  font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--case-orange);
+  color: var(--rc-dark);
+  background: var(--rc-yellow);
+  padding: 4px 14px;
+  border-radius: 9999px;
   margin-bottom: 18px;
 }
 

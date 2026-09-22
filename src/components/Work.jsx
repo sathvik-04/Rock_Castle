@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { projects } from '../data/projects'
 import { usePageTransition, transitionClick } from '../hooks/usePageTransition'
+import SlideUpText from './ui/slide-up-text'
 import './Work.css'
 
 const ITEMS = projects.slice(0, 4)
@@ -323,8 +324,24 @@ export default function Work() {
           <div className="work__meta-tag">[&nbsp;SELECTED PORTFOLIO&nbsp;]</div>
           <div className="work__header-row">
             <h2 className="work__title">
-              <span>Featured</span>
-              <span className="work__title--accent">Projects.</span>
+              <SlideUpText
+                split="words"
+                stagger={0.06}
+                inView={true}
+                once={true}
+              >
+                Featured
+              </SlideUpText>
+              <SlideUpText
+                split="words"
+                stagger={0.06}
+                delay={0.12}
+                inView={true}
+                once={true}
+                className="work__title--accent"
+              >
+                Projects.
+              </SlideUpText>
             </h2>
             <p className="work__subtitle">
               Every build is bespoke. Every spatial experience is engineered to command attention and endure in memory.

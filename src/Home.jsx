@@ -5,15 +5,13 @@ import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import About from './components/About'
 import Signature from './components/Signature'
-import Work from './components/Work'
-import Process from './components/Process'
 import Crew from './components/Crew'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
 // Sections with no internal GSAP `pin:` of their own — safe to zoom-scale
-const ZOOM_SAFE_SELECTORS = ['#work', '#testimonials', '.footer']
+const ZOOM_SAFE_SELECTORS = ['#testimonials', '.footer']
 
 export default function Home() {
   const location = useLocation()
@@ -68,16 +66,10 @@ export default function Home() {
         {/* 2. WHO WE ARE / ABOUT */}
         <About />
 
-        {/* 3. WORKS INTRO ANIMATION / SIGNATURE SYSTEM */}
+        {/* 3. SIGNATURE EXPERIENCE */}
         <Signature />
 
-        {/* 4. WORKS PROJECT GRID */}
-        <Work />
-
-        {/* 5. STRATEGY */}
-        <Process />
-
-        {/* 6. CREW / STACKING CARDS */}
+        {/* 4. CREW / STACKING CARDS */}
         <Crew />
 
         {/* 7. TESTIMONIALS */}

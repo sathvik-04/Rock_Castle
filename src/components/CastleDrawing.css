@@ -35,7 +35,7 @@
 
 /* Yellowish-white stroke for the architectural castle */
 .castle-path {
-  stroke: #fff9d6; /* Yellowish white */
+  stroke: var(--rc-yellow);
   stroke-width: 1.4;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -44,26 +44,26 @@
 
 .castle-path--base {
   stroke-width: 1.6;
-  stroke: #fffbe3;
+  stroke: var(--rc-yellow-bright);
 }
 
 .castle-path--towers {
   stroke-width: 1.4;
-  stroke: #fff8ce;
+  stroke: var(--rc-yellow);
 }
 
 .castle-path--details {
   stroke-width: 1.1;
-  stroke: #faeab0;
+  stroke: var(--rc-yellow-muted);
 }
 
 .castle-axis {
-  stroke: rgba(255, 248, 220, 0.35);
+  stroke: rgba(242, 239, 163, 0.35);
   stroke-width: 0.8;
 }
 
 .castle-axis-center {
-  stroke: rgba(250, 90, 50, 0.4);
+  stroke: rgba(242, 239, 163, 0.5);
   stroke-width: 0.8;
 }
 

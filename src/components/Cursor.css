@@ -27,20 +27,21 @@ body.work-drag-active .cursor__ring {
 .cursor__dot {
   width: 6px;
   height: 6px;
-  background: var(--rc-orange);
+  background: var(--rc-yellow);
 }
 
 .cursor__ring {
   width: 36px;
   height: 36px;
-  border: 1px solid var(--rc-orange);
+  border: 1px solid var(--rc-yellow);
   transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, opacity 0.25s ease;
 }
 
 .cursor__ring--hover {
   width: 64px;
   height: 64px;
-  background: var(--rc-orange-glow);
+  background: var(--rc-yellow-glow);
+  border-color: var(--rc-yellow);
 }
 
 .cursor__ring--down {

@@ -10,7 +10,7 @@
   --services-ink: var(--rc-white-warm);
   --services-ink-soft: var(--rc-gray-light);
   --services-line: rgba(245, 240, 235, 0.14);
-  --services-pop: var(--rc-orange);
+  --services-pop: var(--rc-yellow);
 
   position: relative;
   background: var(--rc-black);
@@ -172,14 +172,22 @@
 }
 
 .services__item-tag {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--fs-meta);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: var(--ls-meta);
   text-transform: uppercase;
   color: var(--services-ink);
-  padding: 0.3em 0.8em;
-  border: 1px solid rgba(245, 240, 235, 0.22);
+  padding: 0.4em 1em;
+  border-radius: 9999px;
+  border: 1px solid rgba(242, 239, 163, 0.25);
+  transition: all 0.3s ease;
+}
+
+.services__item-tag:hover {
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
+  border-color: var(--rc-yellow);
 }
 
 /* Placeholder in expanded */

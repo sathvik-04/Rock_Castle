@@ -55,22 +55,24 @@
 }
 
 .crew__meta-tag {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 11px;
-  letter-spacing: 0.18em;
-  color: var(--rc-orange-deep);
+  letter-spacing: 0.14em;
+  color: var(--rc-dark);
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 .crew__counter {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--rc-black);
-  background: rgba(10, 10, 10, 0.08);
-  padding: 4px 12px;
-  border-radius: 999px;
+  letter-spacing: 0.16em;
+  color: var(--rc-dark);
+  background: var(--rc-yellow);
+  padding: 4px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(242, 239, 163, 0.35);
 }
 
 .crew__stack-stage {
@@ -85,7 +87,7 @@
   inset: 0;
   background: var(--rc-black);
   color: var(--rc-white-pure);
-  border-radius: 6px;
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -118,9 +120,9 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(10, 10, 10, 0.95) 0%,
-    rgba(10, 10, 10, 0.5) 50%,
-    rgba(10, 10, 10, 0.2) 100%
+    rgba(15, 15, 14, 0.96) 0%,
+    rgba(15, 15, 14, 0.5) 50%,
+    rgba(15, 15, 14, 0.2) 100%
   );
 }
 
@@ -133,10 +135,10 @@
 }
 
 .crew__card-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: var(--rc-orange);
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--rc-yellow);
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -175,12 +177,17 @@
 
 .crew__static-pill {
   display: inline-block;
-  font-family: var(--font-mono);
+  align-self: flex-start;
+  font-family: var(--font-body);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--rc-orange-deep);
+  color: var(--rc-dark);
+  background: var(--rc-yellow);
+  padding: 4px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(242, 239, 163, 0.3);
 }
 
 .crew__static-heading {
@@ -197,12 +204,15 @@
 }
 
 .crew__static-heading--accent {
-  font-family: var(--font-editorial);
-  font-weight: 500;
-  color: var(--rc-orange);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--rc-dark);
   text-transform: none;
-  font-style: italic;
+  font-style: normal;
   padding-left: clamp(10px, 1.5vw, 24px);
+  text-decoration: underline;
+  text-decoration-color: var(--rc-yellow);
+  text-underline-offset: 8px;
 }
 
 .crew__static-paragraph {
@@ -239,7 +249,7 @@
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
-  color: var(--rc-orange);
+  color: var(--rc-dark);
   line-height: 1;
 }
 

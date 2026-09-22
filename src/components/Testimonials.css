@@ -15,12 +15,12 @@
 
 .testimonials__label {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--fs-meta);
-  font-weight: 500;
-  letter-spacing: var(--ls-meta);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--rc-orange);
+  color: var(--rc-yellow);
   margin-bottom: 0.6em;
 }
 
@@ -41,7 +41,7 @@
   margin-inline: auto;
 }
 
-/* ── single framed portrait — thin hairline crop, no radius, no shadow ── */
+/* ── single framed portrait — rounded modern crop with tactile border ── */
 .testimonials__frame {
   position: relative;
   width: 100%;
@@ -49,7 +49,9 @@
   aspect-ratio: 4 / 5;
   margin-inline: auto;
   overflow: hidden;
-  border: 1px solid rgba(247, 247, 245, 0.14);
+  border-radius: 18px;
+  border: 1px solid rgba(242, 239, 163, 0.2);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
 }
 
 .testimonials__photo {
@@ -58,14 +60,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(0.3) contrast(1.05);
+  filter: grayscale(0.2) contrast(1.05);
 }
 
 /* camera-flash sweep on testimonial change */
 .testimonials__flash {
   position: absolute;
   inset: -20% -60%;
-  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.85) 48%, transparent 100%);
+  background: linear-gradient(100deg, transparent 0%, rgba(242, 239, 163, 0.8) 48%, transparent 100%);
   opacity: 0;
   pointer-events: none;
   z-index: 2;
@@ -86,8 +88,8 @@
   font-family: var(--font-display);
   font-size: clamp(160px, 22vw, 280px);
   line-height: 1;
-  color: var(--rc-white-warm);
-  opacity: 0.05;
+  color: var(--rc-yellow);
+  opacity: 0.08;
   pointer-events: none;
   user-select: none;
 }
@@ -101,8 +103,8 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-secondary);
-  line-height: 1.05;
-  letter-spacing: var(--ls-secondary);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
   color: var(--rc-white-warm);
 }
 
@@ -112,8 +114,9 @@
 
 .testimonials__rule {
   width: 64px;
-  height: 1px;
-  background: var(--rc-orange);
+  height: 3px;
+  background: var(--rc-yellow);
+  border-radius: 2px;
   margin-top: var(--space-lg);
 }
 
@@ -140,7 +143,8 @@
 
 .testimonials__index {
   margin-left: auto;
-  color: var(--rc-orange);
+  color: var(--rc-yellow);
+  font-weight: 600;
 }
 
 .testimonials__nav {
@@ -151,23 +155,26 @@
 }
 
 .testimonials__arrow {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   color: var(--rc-white-warm);
-  border-bottom: 1px solid rgba(247, 247, 245, 0.3);
-  font-size: 20px;
+  border: 1px solid rgba(242, 239, 163, 0.25);
+  border-radius: 50%;
+  font-size: 16px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: color 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .testimonials__arrow:hover {
-  color: var(--rc-orange);
-  border-color: var(--rc-orange);
+  color: var(--rc-dark);
+  background: var(--rc-yellow);
+  border-color: var(--rc-yellow);
+  box-shadow: 0 0 14px var(--rc-yellow-glow);
 }
 
 .testimonials__dots {
@@ -180,8 +187,9 @@
 
 .testimonials__dot {
   width: 16px;
-  height: 1px;
-  background: rgba(247, 247, 245, 0.3);
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(247, 247, 245, 0.25);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -189,8 +197,9 @@
 }
 
 .testimonials__dot.is-active {
-  background: var(--rc-orange);
-  width: 28px;
+  background: var(--rc-yellow);
+  width: 32px;
+  box-shadow: 0 0 8px var(--rc-yellow-glow);
 }
 
 .testimonials__more {
@@ -198,22 +207,27 @@
   align-items: center;
   gap: 10px;
   margin-top: var(--space-lg);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--fs-meta);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: var(--ls-meta);
   text-transform: uppercase;
-  color: var(--rc-white-warm);
-  border-bottom: 1px solid rgba(247, 247, 245, 0.3);
-  padding-bottom: 4px;
+  color: var(--rc-dark);
+  background: var(--rc-yellow);
+  padding: 8px 20px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
   cursor: pointer;
   align-self: flex-start;
-  transition: color 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(242, 239, 163, 0.25);
 }
 
 .testimonials__more:hover {
-  color: var(--rc-orange);
-  border-color: var(--rc-orange);
+  background: var(--rc-white-pure);
+  color: var(--rc-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(242, 239, 163, 0.4);
   gap: 14px;
 }
 

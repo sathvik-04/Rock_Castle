@@ -6,9 +6,15 @@ import Lenis from 'lenis'
 import Home from './Home'
 import CaseStudy from './components/CaseStudy'
 import Cursor from './components/Cursor'
+import FloatingAction from './components/FloatingAction'
 import Loader from './components/Loader'
 import { PageTransitionProvider } from './components/PageTransition'
 import ScrollProgress from './components/ScrollProgress'
+import DeviceDemo from './components/ui/device-demo'
+import MadeByRockCastle from './pages/MadeByRockCastle'
+import Stories from './pages/Stories'
+import HowWeWork from './pages/HowWeWork'
+import Connect from './pages/Connect'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -29,12 +35,14 @@ export default function App() {
       smoothWheel: true,
     })
     lenisRef.current = lenis
+    window.__lenis = lenis
 
     lenis.on('scroll', ScrollTrigger.update)
     gsap.ticker.add((time) => lenis.raf(time * 1000))
     gsap.ticker.lagSmoothing(0)
 
     return () => {
+      window.__lenis = null
       lenis.destroy()
       gsap.ticker.remove(lenis.raf)
     }
@@ -54,9 +62,17 @@ export default function App() {
       <Loader />
       <Cursor />
       <ScrollProgress />
+      <FloatingAction />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/made-by-rock-castle" element={<MadeByRockCastle />} />
+        <Route path="/work" element={<MadeByRockCastle />} />
+        <Route path="/stories" element={<Stories />} />
+        <Route path="/how-we-work" element={<HowWeWork />} />
+        <Route path="/connect" element={<Connect />} />
+        <Route path="/contact" element={<Connect />} />
         <Route path="/work/:slug" element={<CaseStudy />} />
+        <Route path="/device-demo" element={<DeviceDemo />} />
       </Routes>
     </PageTransitionProvider>
   )

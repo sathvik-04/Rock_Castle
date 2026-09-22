@@ -241,12 +241,6 @@ export default function CastleDrawing() {
             className="castle-path castle-path--details"
           />
         </svg>
-
-        <div className="castle-drawing-caption">
-          <span className="castle-caption-line" />
-          <span className="castle-caption-text">ROCKCASTLE ATELIER // ARCHITECTURAL FORTRESS</span>
-          <span className="castle-caption-line" />
-        </div>
       </div>
     </div>
   )

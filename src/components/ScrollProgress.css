@@ -12,7 +12,8 @@
 .scroll-progress__bar {
   width: 100%;
   height: 100%;
-  background: var(--rc-orange);
+  background: var(--rc-yellow);
+  box-shadow: 0 0 10px var(--rc-yellow-glow);
   transform: scaleX(0);
   transform-origin: left center;
   will-change: transform;

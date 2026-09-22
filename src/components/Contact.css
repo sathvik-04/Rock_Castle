@@ -95,10 +95,7 @@
   top: 32%;
   width: 46vw;
   height: 46vw;
-  /* Back to full dark-environment intensity now that Contact is black again
-     — a heavy orange glow reads as a soft halo against black; it only
-     needed dimming when this section was briefly on a white ground. */
-  background: radial-gradient(circle at 50% 50%, rgba(250, 90, 50, 0.32), rgba(250, 90, 50, 0.1) 48%, rgba(250, 90, 50, 0) 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(242, 239, 163, 0.16), rgba(242, 239, 163, 0.05) 48%, transparent 70%);
 }
 
 .contact__blob--2 {
@@ -106,7 +103,7 @@
   top: 8%;
   width: 34vw;
   height: 34vw;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 154, 100, 0.24), rgba(250, 90, 50, 0.08) 50%, rgba(250, 90, 50, 0) 72%);
+  background: radial-gradient(circle at 50% 50%, rgba(251, 249, 207, 0.14), rgba(242, 239, 163, 0.04) 50%, transparent 72%);
 }
 
 .contact__blob--3 {
@@ -114,7 +111,7 @@
   bottom: -14%;
   width: 52vw;
   height: 40vw;
-  background: radial-gradient(circle at 50% 50%, rgba(250, 90, 50, 0.2), rgba(250, 90, 50, 0) 66%);
+  background: radial-gradient(circle at 50% 50%, rgba(242, 239, 163, 0.1), transparent 66%);
 }
 
 .contact__sweep {
@@ -124,7 +121,7 @@
   width: 34vw;
   height: 150%;
   transform: rotate(14deg) translateX(0);
-  background: linear-gradient(90deg, rgba(250, 90, 50, 0) 0%, rgba(250, 90, 50, 0.1) 45%, rgba(250, 90, 50, 0) 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(242, 239, 163, 0.06) 45%, transparent 100%);
   will-change: transform;
 }
 
@@ -134,7 +131,7 @@
   right: 0;
   top: 50%;
   height: 1px;
-  background: linear-gradient(90deg, rgba(250, 90, 50, 0) 0%, rgba(250, 90, 50, 0.5) 50%, rgba(250, 90, 50, 0) 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(242, 239, 163, 0.4) 50%, transparent 100%);
   transform: scaleX(0);
   transform-origin: center;
 }
@@ -355,22 +352,29 @@
 .contact__submit {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 16px;
-  background: var(--contact-orange);
-  color: #050505;
-  padding: clamp(16px, 2.4vh, 22px) clamp(22px, 3vw, 34px);
-  font-weight: 600;
-  font-size: clamp(14px, 1.25vw, 17px);
-  letter-spacing: 0.04em;
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
+  padding: clamp(16px, 2.2vh, 20px) clamp(28px, 3.5vw, 42px);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(14px, 1.2vw, 16px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
   min-height: 52px;
-  border-radius: 2px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 24px rgba(242, 239, 163, 0.28);
 }
 
 .contact__submit:hover {
-  background: var(--rc-orange-bright);
-  transform: translateY(-2px);
+  background: var(--rc-white-pure);
+  color: var(--rc-dark);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 32px rgba(242, 239, 163, 0.5);
 }
 
 .contact__cta-note {

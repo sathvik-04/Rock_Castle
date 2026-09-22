@@ -13,13 +13,13 @@
      after Contact carries the page out of the black section, so ground/ink
      flip to editorial white with near-black type — orange stays reserved
      for the index numbers and the open-state indicator only. */
-  --faq-bg: var(--rc-white-warm);
-  --faq-bg-raised: var(--rc-white);
-  --faq-ink: var(--rc-black);
-  --faq-ink-soft: rgba(10, 10, 10, 0.72);
-  --faq-ink-faint: rgba(10, 10, 10, 0.55);
-  --faq-line: rgba(10, 10, 10, 0.14);
-  --faq-orange: var(--rc-orange);
+  --faq-bg: var(--rc-bg-light);
+  --faq-bg-raised: var(--rc-white-pure);
+  --faq-ink: var(--rc-dark);
+  --faq-ink-soft: rgba(29, 29, 27, 0.75);
+  --faq-ink-faint: rgba(29, 29, 27, 0.55);
+  --faq-line: rgba(29, 29, 27, 0.12);
+  --faq-orange: var(--rc-yellow);
   --faq-mono: 'IBM Plex Mono', var(--font-body, monospace);
 
   position: relative;
@@ -39,8 +39,9 @@
 .faq__rule {
   display: block;
   width: 44px;
-  height: 1px;
+  height: 3px;
   background: var(--faq-orange);
+  border-radius: 2px;
   transform-origin: left center;
   transform: scaleX(0);
   margin-bottom: 16px;
@@ -49,13 +50,17 @@
 /* ── Eyebrow tag ── */
 .faq__tag {
   display: inline-block;
-  font-family: var(--faq-mono);
-  font-weight: 500;
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: var(--fs-meta);
-  letter-spacing: var(--ls-meta);
-  color: var(--faq-orange);
+  letter-spacing: 0.14em;
+  color: var(--rc-dark);
+  background: var(--rc-yellow);
+  padding: 4px 14px;
+  border-radius: 9999px;
   margin-bottom: clamp(14px, 2.5vh, 24px);
   text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(242, 239, 163, 0.35);
 }
 
 /* ── Title — fully grotesk; no serif on FAQ questions or the title ── */

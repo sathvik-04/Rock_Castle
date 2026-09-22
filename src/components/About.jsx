@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Factory, DraftingCompass, Zap, Cpu, HardHat, Leaf } from 'lucide-react'
+import SlideUpText from './ui/slide-up-text'
+import { Device } from './ui/device'
 import './About.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -40,17 +43,6 @@ const _differentiators = [
   { icon: Leaf, name: 'Built to Be Reused', desc: 'Structural systems are engineered for multiple lifecycles, not a single night.' },
 ]
 
-function MaskWords({ text }) {
-  return text.split(' ').flatMap((w, i, arr) => {
-    const nodes = [
-      // eslint-disable-next-line react/no-array-index-key
-      <span className="about__mask" key={`w-${i}`}><span className="about__mask-word">{w}</span></span>
-    ]
-    if (i < arr.length - 1) nodes.push(' ')
-    return nodes
-  })
-}
-
 export default function About() {
   const ref = useRef(null)
   const mainImageRef = useRef(null)
@@ -68,9 +60,8 @@ export default function About() {
 
     const ctx = gsap.context(() => {
       // Font / editorial lines inside Intro
-      const textLines = root.querySelectorAll(
-        '.about__intro-tag, .about__intro-headline span, .about__intro-p, .about__metric'
-      )
+      // Font / editorial lines inside Intro handled by SlideUpText
+      const textLines = []
 
       // ── 1. Slide-over / Sheet Reveal onto Hero ──
       // Hero pins in place and eases back while About slides up from
@@ -276,7 +267,6 @@ export default function About() {
       // ── 4. Founders Section Reveal — clip-path mask cards + credential pop ──
       const foundersEl = root.querySelector('.about__founders')
       if (foundersEl) {
-        const titleWords = foundersEl.querySelectorAll('.about__founders-title .about__mask-word')
         const cards = foundersEl.querySelectorAll('.about__founder')
         const portraits = foundersEl.querySelectorAll('.about__portrait-wrap')
         const credentials = foundersEl.querySelectorAll('.about__founder-credential')
@@ -290,20 +280,10 @@ export default function About() {
           }
         })
 
-        fTl.fromTo(foundersEl.querySelector('.about__section-tag'),
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+        fTl.fromTo(cards,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' }
         )
-          .fromTo(titleWords,
-            { yPercent: 110, rotate: 4 },
-            { yPercent: 0, rotate: 0, duration: 0.75, ease: 'power4.out', stagger: 0.02 },
-            '-=0.2'
-          )
-          .fromTo(cards,
-            { opacity: 0, y: 24 },
-            { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' },
-            '-=0.3'
-          )
           .fromTo(portraits,
             { clipPath: 'inset(0% 0% 100% 0%)' },
             { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, stagger: 0.12, ease: 'power4.out' },
@@ -381,57 +361,161 @@ export default function About() {
       <div className="about__intro">
         <div className="about__intro-container">
           <div className="about__intro-header">
-            <span className="about__intro-tag">[&nbsp;WHO WE ARE&nbsp;]</span>
+            <SlideUpText
+              split="characters"
+              stagger={0.02}
+              inView={true}
+              once={true}
+              className="about__intro-tag"
+            >
+              [&nbsp;WHO WE ARE&nbsp;]
+            </SlideUpText>
             <h2 className="about__intro-headline">
-              <span>Architects of</span>
-              <span className="about__intro-headline--accent">Unforgettable Spaces.</span>
+              <SlideUpText
+                split="words"
+                stagger={0.06}
+                inView={true}
+                once={true}
+              >
+                Architects of
+              </SlideUpText>
+              <SlideUpText
+                split="words"
+                stagger={0.06}
+                delay={0.12}
+                inView={true}
+                once={true}
+                className="about__intro-headline--accent"
+              >
+                Unforgettable Spaces.
+              </SlideUpText>
             </h2>
           </div>
 
           <div className="about__intro-grid">
+            {/* Left Column: Device Mockup (Left Center of Who We Are) */}
+            <div className="about__intro-device-column">
+              <div className="about__device-frame-wrap">
+                <Device
+                  width={225}
+                  src="/rockcastle-logo.jpg"
+                  alt="Rockcastle Experience"
+                  className="about__device-element"
+                />
+              </div>
+            </div>
+
+            {/* Right Column: Studio Narrative & Metrics */}
             <div className="about__intro-text-column">
               <div className="about__intro-narrative">
-                <p className="about__intro-p about__intro-p--lead">
-                  <span>
-                    Rockcastle was founded in Dubai with an uncompromising belief: experiential environments should possess the structural grandeur of architecture and the narrative weight of cinema.
-                  </span>
-                </p>
-                <p className="about__intro-p">
-                  <span>
-                    Over twelve years and more than 140 monumental activations, our studio has expanded from a visionary design atelier into a full-scale spatial production engine. We weld, program, and build our own concepts in-house.
-                  </span>
-                </p>
+                <SlideUpText
+                  split="words"
+                  stagger={0.025}
+                  inView={true}
+                  once={true}
+                  className="about__intro-p about__intro-p--lead"
+                >
+                  Rockcastle was founded in Dubai with an uncompromising belief: experiential environments should possess the structural grandeur of architecture and the narrative weight of cinema.
+                </SlideUpText>
+                <SlideUpText
+                  split="words"
+                  stagger={0.02}
+                  delay={0.12}
+                  inView={true}
+                  once={true}
+                  className="about__intro-p"
+                >
+                  Over twelve years and more than 140 monumental activations, our studio has expanded from a visionary design atelier into a full-scale spatial production engine. We weld, program, and build our own concepts in-house.
+                </SlideUpText>
               </div>
 
               <div className="about__metrics-row">
                 <div className="about__metric">
-                  <span className="about__metric-num">12+</span>
-                  <span className="about__metric-label">YEARS IN DUBAI</span>
+                  <SlideUpText split="characters" stagger={0.03} inView={true} once={true} className="about__metric-num">
+                    12+
+                  </SlideUpText>
+                  <SlideUpText split="words" stagger={0.04} delay={0.08} inView={true} once={true} className="about__metric-label">
+                    YEARS IN DUBAI
+                  </SlideUpText>
                 </div>
                 <div className="about__metric">
-                  <span className="about__metric-num">140+</span>
-                  <span className="about__metric-label">ACTIVATIONS DELIVERED</span>
+                  <SlideUpText split="characters" stagger={0.03} inView={true} once={true} className="about__metric-num">
+                    140+
+                  </SlideUpText>
+                  <SlideUpText split="words" stagger={0.04} delay={0.08} inView={true} once={true} className="about__metric-label">
+                    ACTIVATIONS DELIVERED
+                  </SlideUpText>
                 </div>
                 <div className="about__metric">
-                  <span className="about__metric-num">100%</span>
-                  <span className="about__metric-label">IN-HOUSE FABRICATION</span>
+                  <SlideUpText split="characters" stagger={0.03} inView={true} once={true} className="about__metric-num">
+                    100%
+                  </SlideUpText>
+                  <SlideUpText split="words" stagger={0.04} delay={0.08} inView={true} once={true} className="about__metric-label">
+                    IN-HOUSE FABRICATION
+                  </SlideUpText>
                 </div>
               </div>
-            </div>
 
-            {/* Main Interactive Zoom Image with Scroll Parallax */}
-            <div className="about__image-column" ref={imageFrameRef}>
-              <div className="about__parallax-target">
-                <div className="about__main-image-wrap" ref={imageWrapRef}>
-                  <img
-                    ref={mainImageRef}
-                    src="/images/about-intro.webp"
-                    alt="Rockcastle Dubai Studio & Fabrication"
-                    className="about__main-image"
-                  />
-                  <div className="about__image-overlay" />
-                  <span className="about__image-badge" ref={imageBadgeRef}>STUDIO & ATELIER // DUBAI</span>
-                </div>
+              {/* Prompt Text Above Action Buttons */}
+              <div className="about__intro-prompt">
+                <SlideUpText
+                  split="words"
+                  stagger={0.025}
+                  inView={true}
+                  once={true}
+                  className="about__intro-prompt-line"
+                >
+                  Planning an event that needs
+                </SlideUpText>
+                <SlideUpText
+                  split="words"
+                  stagger={0.025}
+                  delay={0.1}
+                  inView={true}
+                  once={true}
+                  className="about__intro-prompt-line about__intro-prompt-line--bold"
+                >
+                  to make an impact? Let’s talk.
+                </SlideUpText>
+              </div>
+
+              {/* Action Buttons: CONNECT (Marquee Pill) & STORIES (Marquee Pill) */}
+              <div className="about__intro-actions">
+                <Link
+                  to="/connect"
+                  className="about__pill-btn about__pill-btn--connect"
+                  aria-label="Connect with Rockcastle"
+                >
+                  <div className="about__pill-track-mask">
+                    <div className="about__pill-track">
+                      <span>CONNECT</span>
+                      <span>CONNECT</span>
+                      <span>CONNECT</span>
+                      <span>CONNECT</span>
+                      <span>CONNECT</span>
+                      <span>CONNECT</span>
+                    </div>
+                  </div>
+                  <span className="about__pill-plus">+</span>
+                </Link>
+
+                <Link
+                  to="/stories"
+                  className="about__pill-btn about__pill-btn--culture"
+                  aria-label="Explore Rockcastle Stories"
+                >
+                  <div className="about__pill-track-mask">
+                    <div className="about__pill-track">
+                      <span>STORIES</span>
+                      <span>STORIES</span>
+                      <span>STORIES</span>
+                      <span>STORIES</span>
+                      <span>STORIES</span>
+                      <span>STORIES</span>
+                    </div>
+                  </div>
+                  <span className="about__pill-plus">+</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -467,9 +551,24 @@ export default function About() {
         <div className="about__founders-inner">
           <div className="about__founders-head">
             <span className="about__rule" aria-hidden="true" />
-            <span className="about__section-tag">[&nbsp;LEADERSHIP&nbsp;]</span>
+            <SlideUpText
+              split="characters"
+              stagger={0.02}
+              inView={true}
+              once={true}
+              className="about__section-tag"
+            >
+              [&nbsp;LEADERSHIP&nbsp;]
+            </SlideUpText>
             <h2 className="about__founders-title">
-              <MaskWords text="Three leads personally sign off on every activation we build" />
+              <SlideUpText
+                split="words"
+                stagger={0.03}
+                inView={true}
+                once={true}
+              >
+                Three leads personally sign off on every activation we build
+              </SlideUpText>
             </h2>
           </div>
           <div className="about__founders-grid" ref={foundersGridRef}>
@@ -486,8 +585,12 @@ export default function About() {
                   </div>
                 </div>
                 <div className="about__founder-meta">
-                  <span className="about__founder-name">{f.name}</span>
-                  <span className="about__founder-tag">[&nbsp;{f.tag}&nbsp;]</span>
+                  <SlideUpText split="words" stagger={0.03} inView={true} once={true} className="about__founder-name">
+                    {f.name}
+                  </SlideUpText>
+                  <SlideUpText split="characters" stagger={0.02} inView={true} once={true} className="about__founder-tag">
+                    {`[ ${f.tag} ]`}
+                  </SlideUpText>
                 </div>
               </div>
             ))}

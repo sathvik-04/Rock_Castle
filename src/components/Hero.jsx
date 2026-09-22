@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import CastleDrawing from './CastleDrawing'
 import KineticLogo from './KineticLogo'
+import SlideUpText from './ui/slide-up-text'
 import './Hero.css'
 
 // 3 Curated narrative states.
@@ -315,15 +316,10 @@ export default function Hero() {
       const playEntrance = () => {
         const tl = gsap.timeline()
 
-        tl.fromTo('.hero__brand-bar',
-          { opacity: 0, y: -20 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+        tl.fromTo('.hero__tag-badge, .hero__subtag-badge, .hero__col-line',
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
         )
-          .fromTo('.hero__tag-badge, .hero__subtag-badge, .hero__col-line',
-            { opacity: 0, y: 12 },
-            { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' },
-            '-=0.4'
-          )
           .fromTo('.hero__bottom-right .spiral-line-inner',
             { opacity: 0, y: 24, rotateX: 14 },
             { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.06, ease: 'power3.out' },
@@ -457,26 +453,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Top Controls / Phase Switcher Bar */}
-      <div className="hero__brand-bar hero__interactive">
-        {/* Phase / State Switcher Pills */}
-        <div className="hero__state-indicators">
-          {HERO_STATES.map((s, idx) => (
-            <button
-              key={s.id}
-              type="button"
-              className={`hero__state-pill ${idx === activeStateIndex ? 'is-active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                transitionToState(idx)
-              }}
-              aria-label={`Switch to narrative phase ${s.id}`}
-            >
-              <span>{s.id}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* ====================================================
           SINGLE EDITORIAL MANIFESTO (RIGHT BOTTOM)
@@ -484,7 +460,16 @@ export default function Hero() {
       <div className="hero__bottom-right">
         <div className="hero__editorial-col">
           <div className="hero__col-header">
-            <span className="hero__tag-badge">{currentState.id} — {currentState.tag}</span>
+            <span className="hero__tag-badge">
+              <SlideUpText
+                key={currentState.id}
+                split="characters"
+                stagger={0.02}
+                autoStart={true}
+              >
+                {`${currentState.id} — ${currentState.tag}`}
+              </SlideUpText>
+            </span>
             <span className="hero__col-line" />
           </div>
 
@@ -522,11 +507,6 @@ export default function Hero() {
           ==================================================== */}
       <CastleDrawing />
 
-      {/* Architectural Viewport Corners */}
-      <div className="hero__corner hero__corner--tl" />
-      <div className="hero__corner hero__corner--tr" />
-      <div className="hero__corner hero__corner--bl" />
-      <div className="hero__corner hero__corner--br" />
     </section>
   )
 }

@@ -1,0 +1,347 @@
+/* ==========================================================================
+   ROCKCASTLE — High-Fidelity CSS Mobile Device Mockup (iPhone Pro Frame)
+   Zero external heavy 3D engine needed; 100% hardware-accelerated CSS.
+   Uses container queries (cqw) for mathematically exact scaling at any size.
+   ========================================================================== */
+
+.rc-device-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+  --device-w: 240px;
+  --device-radius: clamp(28px, 13.5cqw, 48px);
+  --screen-radius: clamp(22px, 11cqw, 40px);
+  --bezel-size: clamp(6px, 2.7cqw, 10px);
+  --frame-color: #1a1a1c;
+  --frame-edge: #2c2c30;
+  --frame-glow: rgba(0, 0, 0, 0.5);
+  width: var(--device-w);
+  max-width: 100%;
+  container-type: inline-size;
+}
+
+/* Outer chassis with metallic rim highlight and deep shadow */
+.rc-device-body {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 393 / 852;
+  background: var(--frame-color);
+  border-radius: var(--device-radius);
+  padding: var(--bezel-size);
+  box-sizing: border-box;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 0 0 2px #0d0d0f,
+    0 0 0 3px var(--frame-edge),
+    0 20px 48px -12px var(--frame-glow),
+    0 10px 20px -8px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+/* Subtle outer body gradient reflecting light on titanium */
+.rc-device-body::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--device-radius) + 1px);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.05) 85%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --- Hardware Side Buttons & Antenna Bands --- */
+
+.rc-device-buttons-left {
+  position: absolute;
+  left: -2.5px;
+  top: 0;
+  bottom: 0;
+  width: 2.5px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Action button (top-left) */
+.rc-device-btn-action {
+  position: absolute;
+  top: 13.5%;
+  left: 0;
+  width: 2.5px;
+  height: clamp(16px, 7.5cqw, 24px);
+  background: linear-gradient(to right, #38383e, #1a1a1c);
+  border-radius: 2px 0 0 2px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Volume Up button */
+.rc-device-btn-volup {
+  position: absolute;
+  top: 19.5%;
+  left: 0;
+  width: 2.5px;
+  height: clamp(32px, 14.5cqw, 46px);
+  background: linear-gradient(to right, #38383e, #1a1a1c);
+  border-radius: 2px 0 0 2px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Volume Down button */
+.rc-device-btn-voldown {
+  position: absolute;
+  top: 27.5%;
+  left: 0;
+  width: 2.5px;
+  height: clamp(32px, 14.5cqw, 46px);
+  background: linear-gradient(to right, #38383e, #1a1a1c);
+  border-radius: 2px 0 0 2px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Right Side Button (Power/Sleep) */
+.rc-device-buttons-right {
+  position: absolute;
+  right: -2.5px;
+  top: 0;
+  bottom: 0;
+  width: 2.5px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rc-device-btn-power {
+  position: absolute;
+  top: 21%;
+  right: 0;
+  width: 2.5px;
+  height: clamp(48px, 21.5cqw, 68px);
+  background: linear-gradient(to left, #38383e, #1a1a1c);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Antenna Bands */
+.rc-device-antenna {
+  position: absolute;
+  width: 2.5px;
+  height: 3px;
+  background: #09090b;
+  opacity: 0.8;
+  z-index: 2;
+}
+.rc-device-antenna-tl { top: 9.5%; left: 0; }
+.rc-device-antenna-bl { bottom: 9.5%; left: 0; }
+.rc-device-antenna-tr { top: 9.5%; right: 0; }
+.rc-device-antenna-br { bottom: 9.5%; right: 0; }
+
+/* Top Speaker Slit */
+.rc-device-speaker {
+  position: absolute;
+  top: clamp(2px, 1.1cqw, 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(26px, 11cqw, 40px);
+  height: 2.5px;
+  background: #111113;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
+
+/* --- Internal Screen Container --- */
+.rc-device-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  border-radius: var(--screen-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+/* Dynamic Island Pill */
+.rc-device-dynamic-island {
+  position: absolute;
+  top: clamp(6px, 2.8cqw, 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(68px, 29cqw, 98px);
+  height: clamp(19px, 8cqw, 27px);
+  background: #000000;
+  border-radius: 9999px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(6px, 2.5cqw, 9px);
+  box-sizing: border-box;
+  box-shadow:
+    0 0 1px 1px rgba(255, 255, 255, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Left sensor */
+.rc-device-sensor {
+  width: clamp(5px, 2cqw, 7px);
+  height: clamp(5px, 2cqw, 7px);
+  border-radius: 50%;
+  background: #09090b;
+}
+
+/* Right camera lens with optical sheen */
+.rc-device-lens {
+  width: clamp(7px, 3cqw, 10px);
+  height: clamp(7px, 3cqw, 10px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #18223c 0%, #0a0e1a 50%, #000000 100%);
+  box-shadow:
+    inset 0 0 1.5px rgba(255, 255, 255, 0.25),
+    0 0 2px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.rc-device-lens::after {
+  content: '';
+  position: absolute;
+  top: 1.5px;
+  left: 1.5px;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Status Bar Overlay */
+.rc-device-status-bar {
+  position: absolute;
+  top: clamp(8px, 3.6cqw, 13px);
+  left: 0;
+  right: 0;
+  padding: 0 clamp(14px, 6.2cqw, 22px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 25;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(9px, 3.6cqw, 11px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.rc-device-status-time {
+  padding-left: 2px;
+}
+
+.rc-device-status-icons {
+  display: flex;
+  align-items: center;
+  gap: clamp(3px, 1.4cqw, 5px);
+  transform: scale(clamp(0.8, 1cqw / 2.7px, 1));
+  transform-origin: right center;
+}
+
+.rc-device-icon-signal,
+.rc-device-icon-wifi,
+.rc-device-icon-battery {
+  display: inline-flex;
+}
+
+/* Screen Media / Inner Image Content */
+.rc-device-screen-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rc-device-screen-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Branded Rockcastle Screen Presentation (when rendered as card or wallpaper) */
+.rc-device-rockcastle-screen {
+  width: 100%;
+  height: 100%;
+  background: #ea580c;
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 45%, #c2410c 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.rc-device-rockcastle-logo {
+  width: 82%;
+  max-width: 220px;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.4s ease;
+}
+
+.rc-device-rockcastle-tag {
+  margin-top: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Realistic Glass Reflection Over Screen */
+.rc-device-reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 32%,
+    transparent 48%
+  );
+  pointer-events: none;
+  z-index: 28;
+}
+
+/* Home Indicator Bar */
+.rc-device-home-bar {
+  position: absolute;
+  bottom: clamp(6px, 2.4cqw, 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(75px, 34cqw, 115px);
+  height: clamp(3px, 1.2cqw, 4px);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 9999px;
+  z-index: 30;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
