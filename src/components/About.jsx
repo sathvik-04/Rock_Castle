@@ -35,7 +35,7 @@ const founders = [
 ]
 
 const _differentiators = [
-  { icon: Factory, name: 'In-House Fabrication', desc: 'Every weld, mill, and CNC cut happens on our own Dubai floor — nothing subcontracted, nothing diluted.' },
+  { icon: Factory, name: 'In-House Fabrication', desc: 'Every weld, mill, and CNC cut happens on our own fabrication floor — nothing subcontracted, nothing diluted.' },
   { icon: DraftingCompass, name: 'Engineering-Led Design', desc: 'Structural sign-off happens before a single panel is built, not after something fails on site.' },
   { icon: Zap, name: 'Compressed Timelines', desc: 'Fabrication and install run in parallel under one roof, so builds move at the speed a launch date demands.' },
   { icon: Cpu, name: 'Show Control In-House', desc: 'Lighting, motion, and AV systems are programmed and stress-tested on our own floor before they reach a venue.' },
@@ -360,162 +360,177 @@ export default function About() {
       {/* ── WHO WE ARE / INTRO ── */}
       <div className="about__intro">
         <div className="about__intro-container">
-          <div className="about__intro-header">
-            <SlideUpText
-              split="characters"
-              stagger={0.02}
-              inView={true}
-              once={true}
-              className="about__intro-tag"
-            >
-              [&nbsp;WHO WE ARE&nbsp;]
-            </SlideUpText>
-            <h2 className="about__intro-headline">
-              <SlideUpText
-                split="words"
-                stagger={0.06}
-                inView={true}
-                once={true}
-              >
-                Architects of
-              </SlideUpText>
-              <SlideUpText
-                split="words"
-                stagger={0.06}
-                delay={0.12}
-                inView={true}
-                once={true}
-                className="about__intro-headline--accent"
-              >
-                Unforgettable Spaces.
-              </SlideUpText>
-            </h2>
-          </div>
-
           <div className="about__intro-grid">
-            {/* Left Column: Device Mockup (Left Center of Who We Are) */}
+            {/* Left Column: Device Mockup (Media Composition) */}
             <div className="about__intro-device-column">
               <div className="about__device-frame-wrap">
                 <Device
-                  width={225}
+                  width={290}
                   src="/images/video1.mp4"
-                  alt="Rockcastle Experience"
+                  alt="Rockcastle Experiential Production"
                   className="about__device-element"
                 />
               </div>
             </div>
 
-            {/* Right Column: Studio Narrative & Metrics */}
+            {/* Right Column: Editorial Header, Studio Narrative, Metrics & CTA */}
             <div className="about__intro-text-column">
+              {/* Header: Small Label & Main Heading */}
+              <div className="about__intro-header">
+                <SlideUpText
+                  split="characters"
+                  stagger={0.02}
+                  inView={true}
+                  once={true}
+                  className="about__intro-tag"
+                >
+                  [&nbsp;WHO WE ARE&nbsp;]
+                </SlideUpText>
+                <h2 className="about__intro-headline">
+                  <SlideUpText
+                    split="words"
+                    stagger={0.05}
+                    inView={true}
+                    once={true}
+                    className="about__headline-part"
+                  >
+                    ARCHITECTS OF
+                  </SlideUpText>
+                  <SlideUpText
+                    split="words"
+                    stagger={0.05}
+                    delay={0.08}
+                    inView={true}
+                    once={true}
+                    className="about__headline-part"
+                  >
+                    UNFORGETTABLE EXPERIENCES.
+                  </SlideUpText>
+                </h2>
+              </div>
+
+              {/* Narrative: Primary & Secondary Descriptions */}
               <div className="about__intro-narrative">
                 <SlideUpText
                   split="words"
-                  stagger={0.025}
+                  stagger={0.02}
                   inView={true}
                   once={true}
                   className="about__intro-p about__intro-p--lead"
                 >
-                  Rockcastle was founded in Dubai with an uncompromising belief: experiential environments should possess the structural grandeur of architecture and the narrative weight of cinema.
+                  Rock Castle is an experiential design and production studio creating immersive environments where architecture, storytelling, and human connection come together.
                 </SlideUpText>
                 <SlideUpText
                   split="words"
-                  stagger={0.02}
-                  delay={0.12}
+                  stagger={0.018}
+                  delay={0.1}
                   inView={true}
                   once={true}
-                  className="about__intro-p"
+                  className="about__intro-p about__intro-p--sub"
                 >
-                  Over twelve years and more than 140 monumental activations, our studio has expanded from a visionary design atelier into a full-scale spatial production engine. We weld, program, and build our own concepts in-house.
+                  From concept to execution, we bring ideas to life through experience design, brand activations, events, exhibitions, and spatial production — all delivered with precision, detail, and craftsmanship.
                 </SlideUpText>
               </div>
 
+              {/* Three-Column Statistics with Subtle Vertical Dividers */}
               <div className="about__metrics-row">
                 <div className="about__metric">
                   <SlideUpText split="characters" stagger={0.03} inView={true} once={true} className="about__metric-num">
                     12+
                   </SlideUpText>
-                  <SlideUpText split="words" stagger={0.04} delay={0.08} inView={true} once={true} className="about__metric-label">
-                    YEARS IN DUBAI
-                  </SlideUpText>
+                  <span className="about__metric-label">
+                    YEARS OF EXPERIENCE
+                  </span>
                 </div>
                 <div className="about__metric">
-                  <SlideUpText split="characters" stagger={0.03} inView={true} once={true} className="about__metric-num">
+                  <SlideUpText split="characters" stagger={0.03} delay={0.05} inView={true} once={true} className="about__metric-num">
                     140+
                   </SlideUpText>
-                  <SlideUpText split="words" stagger={0.04} delay={0.08} inView={true} once={true} className="about__metric-label">
+                  <span className="about__metric-label">
                     ACTIVATIONS DELIVERED
-                  </SlideUpText>
+                  </span>
                 </div>
                 <div className="about__metric">
-                  <SlideUpText split="characters" stagger={0.03} inView={true} once={true} className="about__metric-num">
+                  <SlideUpText split="characters" stagger={0.03} delay={0.1} inView={true} once={true} className="about__metric-num">
                     100%
                   </SlideUpText>
-                  <SlideUpText split="words" stagger={0.04} delay={0.08} inView={true} once={true} className="about__metric-label">
+                  <span className="about__metric-label">
                     IN-HOUSE FABRICATION
-                  </SlideUpText>
+                  </span>
                 </div>
               </div>
 
-              {/* Prompt Text Above Action Buttons */}
-              <div className="about__intro-prompt">
-                <SlideUpText
-                  split="words"
-                  stagger={0.025}
-                  inView={true}
-                  once={true}
-                  className="about__intro-prompt-line"
-                >
-                  Planning an event that needs
-                </SlideUpText>
-                <SlideUpText
-                  split="words"
-                  stagger={0.025}
-                  delay={0.1}
-                  inView={true}
-                  once={true}
-                  className="about__intro-prompt-line about__intro-prompt-line--bold"
-                >
-                  to make an impact? Let’s talk.
-                </SlideUpText>
-              </div>
+              {/* CTA Section */}
+              <div className="about__intro-cta">
+                <div className="about__intro-prompt">
+                  <SlideUpText
+                    split="words"
+                    stagger={0.025}
+                    inView={true}
+                    once={true}
+                    className="about__intro-prompt-line"
+                  >
+                    Planning an experience that needs
+                  </SlideUpText>
+                  <SlideUpText
+                    split="words"
+                    stagger={0.025}
+                    delay={0.06}
+                    inView={true}
+                    once={true}
+                    className="about__intro-prompt-line"
+                  >
+                    to make an impact?
+                  </SlideUpText>
+                  <SlideUpText
+                    split="words"
+                    stagger={0.025}
+                    delay={0.12}
+                    inView={true}
+                    once={true}
+                    className="about__intro-prompt-line about__intro-prompt-line--bold"
+                  >
+                    Let’s make it unforgettable.
+                  </SlideUpText>
+                </div>
 
-              {/* Action Buttons: CONNECT (Marquee Pill) & STORIES (Marquee Pill) */}
-              <div className="about__intro-actions">
-                <Link
-                  to="/connect"
-                  className="about__pill-btn about__pill-btn--connect"
-                  aria-label="Connect with Rockcastle"
-                >
-                  <div className="about__pill-track-mask">
-                    <div className="about__pill-track">
-                      <span>CONNECT</span>
-                      <span>CONNECT</span>
-                      <span>CONNECT</span>
-                      <span>CONNECT</span>
-                      <span>CONNECT</span>
-                      <span>CONNECT</span>
+                <div className="about__intro-actions">
+                  <Link
+                    to="/connect"
+                    className="about__pill-btn about__pill-btn--connect"
+                    aria-label="Connect with Rockcastle"
+                  >
+                    <div className="about__pill-track-mask">
+                      <div className="about__pill-track">
+                        <span>CONNECT</span>
+                        <span>CONNECT</span>
+                        <span>CONNECT</span>
+                        <span>CONNECT</span>
+                        <span>CONNECT</span>
+                        <span>CONNECT</span>
+                      </div>
                     </div>
-                  </div>
-                  <span className="about__pill-plus">+</span>
-                </Link>
+                    <span className="about__pill-plus">+</span>
+                  </Link>
 
-                <Link
-                  to="/stories"
-                  className="about__pill-btn about__pill-btn--culture"
-                  aria-label="Explore Rockcastle Stories"
-                >
-                  <div className="about__pill-track-mask">
-                    <div className="about__pill-track">
-                      <span>STORIES</span>
-                      <span>STORIES</span>
-                      <span>STORIES</span>
-                      <span>STORIES</span>
-                      <span>STORIES</span>
-                      <span>STORIES</span>
+                  <Link
+                    to="/stories"
+                    className="about__pill-btn about__pill-btn--culture"
+                    aria-label="Explore Rockcastle Stories"
+                  >
+                    <div className="about__pill-track-mask">
+                      <div className="about__pill-track">
+                        <span>OUR STORIES</span>
+                        <span>OUR STORIES</span>
+                        <span>OUR STORIES</span>
+                        <span>OUR STORIES</span>
+                        <span>OUR STORIES</span>
+                        <span>OUR STORIES</span>
+                      </div>
                     </div>
-                  </div>
-                  <span className="about__pill-plus">+</span>
-                </Link>
+                    <span className="about__pill-plus">+</span>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
