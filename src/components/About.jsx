@@ -398,7 +398,7 @@ export default function About() {
               <div className="about__device-frame-wrap">
                 <Device
                   width={225}
-                  src="/rockcastle-logo.jpg"
+                  src="/images/video1.mp4"
                   alt="Rockcastle Experience"
                   className="about__device-element"
                 />

@@ -1,23 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import "./device.css";
 
+const isVideoSource = (url?: string) => {
+  if (!url) return false;
+  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.includes("video1");
+};
+
 export interface DeviceProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Source URL for the screen image. Defaults to "/rockcastle-logo.jpg" */
+  /** Source URL for the screen media (video or image). Defaults to "/images/video1.mp4" */
   src?: string;
+  /** Optional video source URL if distinct from src */
+  videoSrc?: string;
   /** Alt text for the screen image */
   alt?: string;
   /** Custom children to render inside the mobile screen */
   children?: React.ReactNode;
   /** Target device width (e.g. 320, "320px", "360px") */
   width?: number | string;
-  /** Mode for rendering default screen image: "cover" | "contain" | "branded" */
+  /** Mode for rendering default screen media: "cover" | "contain" | "branded" */
   mode?: "cover" | "contain" | "branded";
   /** Optional custom class for screen container */
   screenClassName?: string;
-  /** Optional custom class for the image element */
+  /** Optional custom class for the media element */
   imageClassName?: string;
   /** Show the Dynamic Island cutout (default true) */
   showDynamicIsland?: boolean;
@@ -38,7 +45,8 @@ export interface DeviceProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Device = React.forwardRef<HTMLDivElement, DeviceProps>(
   (
     {
-      src = "/rockcastle-logo.jpg",
+      src = "/images/video1.mp4",
+      videoSrc,
       alt = "Rockcastle",
       children,
       width = 320,
@@ -59,6 +67,17 @@ export const Device = React.forwardRef<HTMLDivElement, DeviceProps>(
     ref
   ) => {
     const formattedWidth = typeof width === "number" ? `${width}px` : width;
+    const mediaSrc = videoSrc || (src === "/rockcastle-logo.jpg" ? "/images/video1.mp4" : src);
+    const isVideo = isVideoSource(mediaSrc);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+      if (isVideo && videoRef.current) {
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+        videoRef.current.play().catch(() => {});
+      }
+    }, [isVideo, mediaSrc]);
 
     return (
       <div
@@ -172,14 +191,34 @@ export const Device = React.forwardRef<HTMLDivElement, DeviceProps>(
             {/* Screen Inner Content */}
             <div
               className="rc-device-screen-content"
-              style={src.includes("rockcastle-logo") ? { backgroundColor: "#e8590c" } : undefined}
+              style={
+                !isVideo && mediaSrc.includes("rockcastle-logo")
+                  ? { backgroundColor: "#e8590c" }
+                  : { backgroundColor: "#000000" }
+              }
             >
               {children ? (
                 children
+              ) : isVideo ? (
+                <video
+                  ref={videoRef}
+                  src={mediaSrc}
+                  className={cn("rc-device-screen-video", imageClassName)}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{
+                    objectFit: mode === "contain" ? "contain" : "cover",
+                    width: "100%",
+                    height: "100%",
+                    display: "block",
+                  }}
+                />
               ) : mode === "branded" ? (
                 <div className="rc-device-rockcastle-screen">
                   <img
-                    src={src}
+                    src={mediaSrc}
                     alt={alt}
                     className={cn("rc-device-rockcastle-logo", imageClassName)}
                   />
@@ -187,11 +226,15 @@ export const Device = React.forwardRef<HTMLDivElement, DeviceProps>(
                 </div>
               ) : (
                 <img
-                  src={src}
+                  src={mediaSrc}
                   alt={alt}
                   className={cn("rc-device-screen-img", imageClassName)}
                   style={{
-                    objectFit: src.includes("rockcastle-logo") ? "contain" : (mode === "contain" ? "contain" : "cover"),
+                    objectFit: mediaSrc.includes("rockcastle-logo")
+                      ? "contain"
+                      : mode === "contain"
+                      ? "contain"
+                      : "cover",
                     width: "100%",
                     height: "100%",
                   }}

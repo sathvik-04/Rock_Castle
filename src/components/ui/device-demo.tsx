@@ -14,12 +14,12 @@ export default function DeviceDemo() {
         minHeight: "100vh",
       }}
     >
-      {/* 1. Default with Rockcastle Image */}
+      {/* 1. Default with Rockcastle Video */}
       <div style={{ textAlign: "center" }}>
         <p style={{ color: "#aaa", marginBottom: "16px", fontSize: "14px", letterSpacing: "0.05em" }}>
-          DEFAULT — ROCKCASTLE SCREEN
+          DEFAULT — ROCKCASTLE VIDEO
         </p>
-        <Device width={320} src="/rockcastle-logo.jpg" alt="Rockcastle" />
+        <Device width={320} src="/images/video1.mp4" alt="Rockcastle" />
       </div>
 
       {/* 2. Branded Wallpaper Presentation */}
@@ -27,7 +27,7 @@ export default function DeviceDemo() {
         <p style={{ color: "#aaa", marginBottom: "16px", fontSize: "14px", letterSpacing: "0.05em" }}>
           BRANDED PRESENTATION
         </p>
-        <Device width={320} mode="branded" src="/rockcastle-logo.jpg" alt="Rockcastle" />
+        <Device width={320} mode="branded" src="/images/video1.mp4" alt="Rockcastle" />
       </div>
     </div>
   );
