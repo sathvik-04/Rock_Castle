@@ -1,22 +1,734 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23e87a2e'/><text x='50%25' y='55%25' font-size='18' font-weight='bold' text-anchor='middle' dominant-baseline='central' fill='white'>R</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Rockcastle — Architecture, experiential design and spatial experiences. We transform ideas into spaces people remember." />
-    <title>ROCKCASTLE — Experiences Un-Ltd.</title>
+    <meta name="description" content="Rock Castle — a Dubai studio that designs, fabricates and stages brand experiences. Experiences un-ltd." />
+    <meta name="theme-color" content="#f0ede8" />
+    <title>Rock Castle | Experiences Un-Ltd.</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Two families only: Satoshi carries every size from display to body,
+         IBM Plex Mono is reserved for indices, labels and metadata. -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://api.fontshare.com" />
-    <!-- Switzer stands in for Neue Montreal (not freely licensable) as the
-         primary grotesk — closest free match in proportions/weight range.
-         Swap the family name here once real Neue Montreal files are licensed. -->
-    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <!-- Set before first paint so reveal start-states never flash. Reduced-
+         motion users never get the class, so nothing is ever hidden for them. -->
+    <script>
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('has-motion');
+    </script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label" id="cursor-label"></span></div>
+
+    <!-- ── HEADER ─────────────────────────────────────────────────────────
+         Stable, light bar. Navigation left, lockup centred, social and the
+         one CTA right. Below 1024px the nav collapses into a full-screen menu. -->
+    <header class="site-header" id="site-header">
+        <nav class="site-header__nav" aria-label="Main navigation">
+            <a href="#top" class="nav-link is-current">Home</a>
+            <a href="#we-create-section" class="nav-link">Our work</a>
+            <a href="#studio" class="nav-link">Culture</a>
+            <a href="#crew" class="nav-link">How we roll</a>
+        </nav>
+
+        <a href="#top" class="lockup" aria-label="Rock Castle — home">
+            <span class="lockup__mark">RC</span>
+            <span class="lockup__type">Rock<br />Castle</span>
+        </a>
+
+        <div class="site-header__aside">
+            <a href="#" class="icon-link" aria-label="Rock Castle on LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11H3v-11Zm7 0h3.8v1.5h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.37 2.65 4.37 6.1v5.46h-4v-4.84c0-1.16-.02-2.64-1.61-2.64-1.61 0-1.86 1.26-1.86 2.56v4.92H10v-11Z" /></svg>
+            </a>
+            <a href="#" class="icon-link" aria-label="Rock Castle on Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.3a4.7 4.7 0 1 0 0 9.4 4.7 4.7 0 0 0 0-9.4Zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm4.9-8.95a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2ZM12 2.5c-2.58 0-2.9.01-3.92.06-3.46.16-5.38 2.08-5.54 5.54C2.51 9.1 2.5 9.42 2.5 12s.01 2.9.06 3.92c.16 3.46 2.08 5.38 5.54 5.54 1.02.05 1.34.06 3.92.06s2.9-.01 3.92-.06c3.45-.16 5.38-2.08 5.54-5.54.05-1.02.06-1.34.06-3.92s-.01-2.9-.06-3.92c-.16-3.45-2.08-5.38-5.54-5.54C14.9 2.51 14.58 2.5 12 2.5Zm0 1.7c2.54 0 2.84.01 3.84.06 2.58.12 3.78 1.34 3.9 3.9.05 1 .06 1.3.06 3.84s-.01 2.84-.06 3.84c-.12 2.56-1.32 3.78-3.9 3.9-1 .05-1.3.06-3.84.06s-2.84-.01-3.84-.06c-2.6-.12-3.78-1.35-3.9-3.9-.05-1-.06-1.3-.06-3.84s.01-2.84.06-3.84c.12-2.56 1.32-3.78 3.9-3.9 1-.05 1.3-.06 3.84-.06Z" /></svg>
+            </a>
+            <a href="#connect" class="btn btn--accent btn--sm site-header__cta">
+                <span>Start a project</span><span class="btn__plus" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="menu-toggle__label">Menu</span>
+            <span class="menu-toggle__icon" aria-hidden="true"></span>
+        </button>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+        <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+            <a href="#top"><span class="mono">01</span>Home</a>
+            <a href="#we-create-section"><span class="mono">02</span>Our work</a>
+            <a href="#studio"><span class="mono">03</span>Culture</a>
+            <a href="#crew"><span class="mono">04</span>How we roll</a>
+            <a href="#connect"><span class="mono">05</span>Connect</a>
+        </nav>
+        <div class="mobile-menu__foot">
+            <span class="label">Dubai, United Arab Emirates</span>
+            <a href="mailto:hello@rockcastle.com" class="text-link">hello@rockcastle.com</a>
+        </div>
+    </div>
+
+    <main id="main">
+        <!-- ── 01 HERO — dark, cinematic ─────────────────────────────────────
+             Full-bleed reel under the bar. The composition is weighted to the
+             bottom-left (the tagline from the logo, set as display type) and
+             balanced by small copy at the top corners. -->
+        <section id="top" class="hero env-dark" aria-label="Introduction">
+            <div class="hero__media" id="hero-media" data-cursor="play">
+                <video class="hero__video" id="hero-video" muted loop playsinline preload="none"
+                    poster="/images/hero-reel.webp" data-src="/images/rockcastle.mp4"
+                    data-src-webm="/images/rockcastle.webm"></video>
+                <div class="hero__scrim" aria-hidden="true"></div>
+            </div>
+
+            <div class="hero__inner container">
+                <div class="hero__top">
+                    <div class="hero__intro" data-hero-in>
+                        <span class="label label--accent">Welcome</span>
+                        <p class="hero__lede">A Dubai experience company. We design, fabricate and stage events,
+                            activations and brand worlds &mdash; from the first render to the final load&#8209;out.</p>
+                    </div>
+
+                    <div class="hero__narrative" data-hero-in>
+                        <div class="hero__tabs" role="group" aria-label="What we do">
+                            <button type="button" class="hero__tab is-active" data-state="0" aria-pressed="true">01</button>
+                            <button type="button" class="hero__tab" data-state="1" aria-pressed="false">02</button>
+                            <button type="button" class="hero__tab" data-state="2" aria-pressed="false">03</button>
+                        </div>
+                        <p class="hero__state" aria-live="polite">
+                            <span class="hero__state-tag" id="hero-state-tag">Spatial architecture</span>
+                            <span class="hero__state-text" id="hero-paragraph">We architect physical realms where brand
+                                identity takes monumental form. Spaces sculpted with filmic precision to turn fleeting
+                                observation into lifelong emotional conviction.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hero__bottom">
+                    <h1 class="hero__title">
+                        <span class="sr-only">Rock Castle &mdash; </span>
+                        <span class="mask"><span class="hero__line">Experiences</span></span>
+                        <span class="mask"><span class="hero__line">un&#8209;ltd.</span></span>
+                    </h1>
+                    <div class="hero__meta" data-hero-in>
+                        <button type="button" class="hero__play" id="hero-play" aria-pressed="false">
+                            <span class="hero__play-icon" aria-hidden="true"></span>
+                            <span id="hero-play-label">Play reel</span>
+                        </button>
+                        <span class="meta">25.2048&deg; N &middot; 55.2708&deg; E</span>
+                        <span class="meta">Events &times; brand activations</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 02 WHO WE ARE — light, quiet ─────────────────────────────────
+             Typography only. The statement is the one paragraph on the page that
+             scroll brightens word by word. -->
+        <section id="studio" class="intro env-light section">
+            <div class="container grid">
+                <div class="section-head section-head--row">
+                    <span class="label">Who we are</span>
+                    <span class="index">[ 01 ]</span>
+                </div>
+                <p class="intro__statement statement" data-split>We design, fabricate and stage brand experiences
+                    &mdash; from the first render to the final load&#8209;out. Strategy, spatial design, engineering
+                    and CNC production argue in the same room, under one roof in Dubai.</p>
+                <div class="intro__foot">
+                    <p class="intro__sub" data-reveal>Looking for a partner that builds what conventional agencies
+                        consider unbuildable? Let&rsquo;s talk.</p>
+                    <div class="btn-row" data-reveal>
+                        <a href="#connect" class="btn btn--solid"><span>Start a project</span><span class="btn__plus" aria-hidden="true"></span></a>
+                        <a href="#we-create-section" class="btn btn--ghost"><span>See the work</span></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── LIVE EXPERIENCE — dark, pinned ───────────────────────────────
+             The event moment. A small framed crowd shot sits between two lines
+             of existing copy; scrolling opens it to full bleed while the lines
+             spread to the edges, then it dims into the Signature section.
+             Driven by src/main.js (unpinned, simpler on phones). -->
+        <section id="experience" class="expand env-dark" aria-labelledby="expand-title">
+            <div class="expand__stage">
+                <figure class="expand__media">
+                    <img src="/images/work-03.webp" alt="Crowd with raised hands silhouetted against stage light"
+                        loading="lazy" decoding="async" />
+                </figure>
+                <div class="expand__scrim" aria-hidden="true"></div>
+
+                <div class="expand__meta container">
+                    <span class="label">Live experience</span>
+                    <span class="index">[ 02 ]</span>
+                </div>
+
+                <h2 class="expand__title" id="expand-title">
+                    <span class="mask"><span class="expand__line">From first render</span></span>
+                    <span class="mask"><span class="expand__line">to final load&#8209;out.</span></span>
+                </h2>
+
+                <ul class="expand__foot container" aria-label="What happens on site">
+                    <li class="meta">Events</li>
+                    <li class="meta">Activations</li>
+                    <li class="meta">Stage &amp; lighting</li>
+                    <li class="meta">Load&#8209;out</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ── 03 SIGNATURE — dark, pinned ──────────────────────────────────
+             The Rock Castle manifesto as a scrubbed sequence:
+             WE CREATE → SPACES → EXPERIENCES → MEMORY → manifesto.
+             Driven by the timeline in src/main.js. -->
+        <section id="we-create-section" class="sigx env-dark" aria-label="We don't just create spaces. We create experiences.">
+            <div class="sigx__stage">
+                <div class="sigx__frame container" aria-hidden="true">
+                    <span class="index">[ 03 ]</span>
+                    <span class="label">The signature</span>
+                </div>
+
+                <div class="sigx__world">
+                    <div class="sigx__photos" aria-hidden="true">
+                        <figure class="sigx__slot sigx__slot--1"><img src="/images/work-01.webp" alt="" loading="lazy" decoding="async" /></figure>
+                        <figure class="sigx__slot sigx__slot--2"><img src="/images/work-02.webp" alt="" loading="lazy" decoding="async" /></figure>
+                        <figure class="sigx__slot sigx__slot--3"><img src="/images/work-03.webp" alt="" loading="lazy" decoding="async" /></figure>
+                        <figure class="sigx__slot sigx__slot--4"><img src="/images/signature-01.webp" alt="" loading="lazy" decoding="async" /></figure>
+                        <figure class="sigx__slot sigx__slot--5"><img src="/images/hero-reel.webp" alt="" loading="lazy" decoding="async" /></figure>
+                        <figure class="sigx__slot sigx__slot--6"><img src="/images/process.webp" alt="" loading="lazy" decoding="async" /></figure>
+                    </div>
+
+                    <div class="sigx__words" aria-hidden="true">
+                        <div class="sigx__phase sigx__phase--we-create">
+                            <span class="sigx__word sigx__word--we">We</span>
+                            <span class="sigx__word sigx__word--create">create</span>
+                        </div>
+                        <div class="sigx__phase sigx__phase--spaces"><span class="sigx__word sigx__word--spaces">spaces</span></div>
+                        <div class="sigx__phase sigx__phase--experiences"><span class="sigx__word sigx__word--experiences">experiences</span></div>
+                        <div class="sigx__phase sigx__phase--memory"><span class="sigx__word sigx__word--memory">memory</span></div>
+                    </div>
+                </div>
+
+                <div class="sigx__final">
+                    <p class="sigx__final-line1">We don&rsquo;t just create spaces.</p>
+                    <h2 class="sigx__final-line2">We create <span class="sigx__final-accent">experiences.<span class="sigx__final-underline" aria-hidden="true"></span></span></h2>
+                </div>
+
+                <!-- ARCHITECTURE IN MOTION — restored from the pre-redesign build: ten
+                     projects at deliberately uneven sizes around an open centre that
+                     holds the heading and CTA. Each slot slides in from the edge it
+                     sits nearest, all on the same beat (Signature timeline, main.js).
+                     The registration marks / datum / coordinates are left out. -->
+                <div class="sigx__matrix">
+                        <div class="sigx__matrix-canvas">
+    
+                            <div class="sigx__matrix-grid">
+                                <div class="sigx__mslot sigx__mslot--1">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">01</span>
+                                            <span class="sigx__mslot-cat">Campaign</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Brand Campaign</span>
+                                            <span class="sigx__mslot-tags">Strategy / Direction / Film</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--2">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">02</span>
+                                            <span class="sigx__mslot-cat">Production</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Hero Production</span>
+                                            <span class="sigx__mslot-tags">Direction / Stage / Lighting</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--3">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">03</span>
+                                            <span class="sigx__mslot-cat">Social</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Social Content</span>
+                                            <span class="sigx__mslot-tags">Motion / Post / Film</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--4">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">04</span>
+                                            <span class="sigx__mslot-cat">Editorial</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Editorial</span>
+                                            <span class="sigx__mslot-tags">Strategy / Post / Motion</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--5">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">05</span>
+                                            <span class="sigx__mslot-cat">Film</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Film &amp; Motion</span>
+                                            <span class="sigx__mslot-tags">Film / Motion / Post</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--6">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">06</span>
+                                            <span class="sigx__mslot-cat">Spatial</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Spatial Design</span>
+                                            <span class="sigx__mslot-tags">Spatial Design / Fabrication / Stage</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--7">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">07</span>
+                                            <span class="sigx__mslot-cat">Stage</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Stage</span>
+                                            <span class="sigx__mslot-tags">Stage / Lighting / Load-Out</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--8">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">08</span>
+                                            <span class="sigx__mslot-cat">Lighting</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Lighting</span>
+                                            <span class="sigx__mslot-tags">Lighting / Stage / Direction</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--9">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">09</span>
+                                            <span class="sigx__mslot-cat">Post</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Post</span>
+                                            <span class="sigx__mslot-tags">Post / Motion / Film</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+                                <div class="sigx__mslot sigx__mslot--10">
+                                    <a class="sigx__mslot-card" href="#connect" data-cursor="view">
+                                        <span class="sigx__mslot-media" aria-hidden="true"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&amp;fit=crop&amp;crop=entropy&amp;w=700&amp;q=70" alt="" loading="lazy" /></span>
+                                        <span class="sigx__mslot-top">
+                                            <span class="sigx__mslot-num">10</span>
+                                            <span class="sigx__mslot-cat">Fabrication</span>
+                                        </span>
+                                        <span class="sigx__mslot-foot">
+                                            <span class="sigx__mslot-title">Fabrication</span>
+                                            <span class="sigx__mslot-tags">Fabrication / Spatial Design / Load-Out</span>
+                                        </span>
+                                        <span class="sigx__mslot-arrow" aria-hidden="true">&#8599;</span>
+                                    </a>
+                                </div>
+    
+                                <div class="sigx__matrix-centre">
+                                    <span class="sigx__centre-eyebrow">10 Projects</span>
+                                    <p class="sigx__centre-title">
+                                        <span class="sigx__centre-title-main">Architecture</span>
+                                        <span class="sigx__centre-title-sub">in motion</span>
+                                    </p>
+                                    <a href="#connect" class="sigx__trans-cta">
+                                        <span class="sigx__trans-cta-text">Explore Projects</span>
+                                        <span class="sigx__trans-cta-arrow">&darr;</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <ol class="sigx__indicator container" aria-hidden="true">
+                    <li class="sigx__ind sigx__ind--1"><span class="mono">01</span>Space</li>
+                    <li class="sigx__ind sigx__ind--2"><span class="mono">02</span>Structure</li>
+                    <li class="sigx__ind sigx__ind--3"><span class="mono">03</span>Experience</li>
+                    <li class="sigx__ind sigx__ind--4"><span class="mono">04</span>Memory</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Capability band — the studio's disciplines, in place of a client
+             logo wall. Duplicated for the loop in src/main.js. -->
+        <section class="capabilities env-light" aria-label="Capabilities">
+            <div class="vocab container" aria-hidden="true">
+                <span class="label">What we produce</span>
+            </div>
+            <div class="vocab__viewport" aria-hidden="true">
+                <div class="vocab__row"><span>Events</span><i class="vocab__dot"></i><span class="is-muted">Experiences</span><i class="vocab__dot"></i><span>Activations</span><i class="vocab__dot"></i><span class="is-muted">Spaces</span><i class="vocab__dot"></i><span>Production</span><i class="vocab__dot"></i><span class="is-muted">Content</span><i class="vocab__dot"></i><span>Creative</span><i class="vocab__dot"></i><span class="is-muted">Events</span><i class="vocab__dot"></i><span>Experiences</span><i class="vocab__dot"></i><span class="is-muted">Activations</span><i class="vocab__dot"></i><span>Spaces</span><i class="vocab__dot"></i><span class="is-muted">Production</span><i class="vocab__dot"></i><span>Content</span><i class="vocab__dot"></i><span class="is-muted">Creative</span><i class="vocab__dot"></i></div>
+            </div>
+            <div class="band" aria-label="Capabilities">
+                <div class="band__track">
+                    <ul class="band__group">
+                        <li>Spatial design</li>
+                        <li>Brand activation</li>
+                        <li>Atelier fabrication</li>
+                        <li>Stage &amp; lighting</li>
+                        <li>Film &amp; motion</li>
+                        <li>Structural engineering</li>
+                        <li>CNC production</li>
+                        <li>Load&#8209;out</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 05 THE CREW — dark statement ─────────────────────────────────
+             Statement, numbers, then the four in-house disciplines as an
+             editorial index. Hovering a row floats its photograph (desktop);
+             on touch the photograph sits inside the row. -->
+        <section id="crew" class="crew env-dark section" aria-labelledby="crew-title">
+            <div class="container">
+                <div class="grid crew__head">
+                    <div class="section-head section-head--row">
+                        <span class="label">The crew</span>
+                        <span class="index">[ 04 ]</span>
+                    </div>
+                    <h2 class="crew__title h1" id="crew-title">
+                        <span class="mask"><span data-line>One dedicated team.</span></span>
+                        <span class="mask"><span data-line class="is-muted">Zero subcontracting.</span></span>
+                    </h2>
+                    <div class="crew__copy" data-reveal>
+                        <p>The studio and the fabrication floor are in the same building in Dubai. Strategy, spatial
+                            design, structural engineering, and CNC production argue in the same room.</p>
+                        <p class="is-muted">What gets pitched to our clients is what our own crew builds, welds, and
+                            calibrates until the space opens. We stay on ground from the first render through final
+                            load&#8209;out.</p>
+                    </div>
+                </div>
+
+                <dl class="stats grid">
+                    <div class="stat" data-reveal>
+                        <dt class="stat__label">Years across Dubai &amp; international stages</dt>
+                        <dd class="stat__num" data-count="12">12</dd>
+                    </div>
+                    <div class="stat" data-reveal>
+                        <dt class="stat__label">Monumental builds</dt>
+                        <dd class="stat__num" data-count="140" data-suffix="+">140+</dd>
+                    </div>
+                    <div class="stat" data-reveal>
+                        <dt class="stat__label">Core disciplines, one roof</dt>
+                        <dd class="stat__num" data-count="4">4</dd>
+                    </div>
+                    <div class="stat" data-reveal>
+                        <dt class="stat__label">Outsourced builds</dt>
+                        <dd class="stat__num">0</dd>
+                    </div>
+                </dl>
+
+                <figure class="crew__pano">
+                    <div class="crew__pano-media">
+                        <img src="/images/signature-01.webp" alt="Row of illuminated red, orange and yellow columns"
+                            loading="lazy" decoding="async" />
+                    </div>
+                    <figcaption class="crew__pano-cap">
+                        <span class="index">[ Environments ]</span>
+                        <span class="meta">Spatial design &middot; Fabrication &middot; Lighting</span>
+                    </figcaption>
+                </figure>
+
+                <ol class="disciplines">
+                    <li class="discipline" data-img="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=720&h=900&q=75">
+                        <span class="discipline__num index">[ 01 ]</span>
+                        <h3 class="discipline__title">Strategy &amp; creative</h3>
+                        <p class="discipline__text">Strategy sits in the room from the very first brief. No diluted
+                            concepts, no agency disconnect.</p>
+                        <figure class="discipline__media"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=720&h=540&q=75" alt="Portrait of a Rock Castle strategist" loading="lazy" decoding="async" /></figure>
+                    </li>
+                    <li class="discipline" data-img="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=720&h=900&q=75">
+                        <span class="discipline__num index">[ 02 ]</span>
+                        <h3 class="discipline__title">Spatial architecture</h3>
+                        <p class="discipline__text">Design draws it at build scale, not slide scale. Every sightline,
+                            joint, and illumination angle mapped.</p>
+                        <figure class="discipline__media"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=720&h=540&q=75" alt="Portrait of a Rock Castle spatial designer" loading="lazy" decoding="async" /></figure>
+                    </li>
+                    <li class="discipline" data-img="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=720&h=900&q=75">
+                        <span class="discipline__num index">[ 03 ]</span>
+                        <h3 class="discipline__title">Atelier fabrication</h3>
+                        <p class="discipline__text">Fabrication welds, mills, and programs in our own Dubai workshop.
+                            Physical craft under our direct control.</p>
+                        <figure class="discipline__media"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=720&h=540&q=75" alt="Engineer working at a fabrication rig" loading="lazy" decoding="async" /></figure>
+                    </li>
+                    <li class="discipline" data-img="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=720&h=900&q=75">
+                        <span class="discipline__num index">[ 04 ]</span>
+                        <h3 class="discipline__title">Stage &amp; load&#8209;out</h3>
+                        <p class="discipline__text">Our crew stands inside the venue the morning it opens. We calibrate
+                            every element until the curtain falls.</p>
+                        <figure class="discipline__media"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=720&h=540&q=75" alt="Performer on stage with a raised hand in haze" loading="lazy" decoding="async" /></figure>
+                    </li>
+                </ol>
+            </div>
+            <figure class="disc-preview" id="disc-preview" aria-hidden="true"><img alt="" /></figure>
+        </section>
+
+        <!-- ── 06 CLIENT STORIES — light ────────────────────────────────────
+             Slow editorial ticker. The second copy of the group is cloned in
+             src/main.js so the loop is seamless. -->
+        <section id="testimonials" class="testimonials env-light section" aria-labelledby="tg-title">
+            <div class="container grid tg-head">
+                <div class="section-head section-head--row">
+                    <span class="label">Client stories</span>
+                    <span class="index">[ 05 ]</span>
+                </div>
+                <h2 class="h2 tg-title" id="tg-title" data-reveal>What they say.</h2>
+                <div class="tg-nav" data-reveal>
+                    <button class="icon-btn" id="tg-prev" type="button" aria-label="Show previous testimonial">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" /></svg>
+                    </button>
+                    <button class="icon-btn" id="tg-next" type="button" aria-label="Show next testimonial">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="tg-viewport" id="tg-viewport">
+                <div class="tg-track" id="tg-track">
+                    <div class="tg-group">
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">01</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;Rock Castle delivered our campaign in record time with insane quality.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Creative Director</b>Brand X</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">02</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;The team moved at the speed of our ambition. Exceptional motion design.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Founder</b>Tech Studio</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">03</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;They understood the idea immediately and turned it into something far bigger.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Marketing Director</b>Brand Y</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">04</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;Every detail felt intentional. The final experience exceeded the brief.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Brand Director</b>Studio Z</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">05</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;They took a rough idea and transformed it into an experience people remembered.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Executive Producer</b>Creative House</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">06</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;Fast, precise and creatively fearless. Exactly what the project needed.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Creative Lead</b>Studio North</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">07</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;The result felt considered from the first frame to the final interaction.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Creative Partner</b>Studio Seven</span>
+                            </div>
+                        </article>
+                        <article class="tg-card">
+                            <div class="tg-card__top"><span class="mono">08</span><span class="meta">Client review</span></div>
+                            <p class="tg-card__quote">&ldquo;They made the entire production feel effortless while raising the creative bar.&rdquo;</p>
+                            <div class="tg-card__client">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&h=120&q=70" alt="" loading="lazy" draggable="false" />
+                                <span><b>Managing Director</b>Creative Works</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 07 CONTACT — dark conversion + closing statement ─────────────
+             Keeps id="connect": every CTA on the page points here. -->
+        <section class="contact env-dark section" id="connect" aria-labelledby="contact-title">
+            <div class="container">
+                <div class="grid contact__grid">
+                    <div class="contact__intro">
+                        <div class="section-head section-head--row">
+                            <span class="label">Project / Event</span>
+                            <span class="index">[ 06 ]</span>
+                        </div>
+                        <h2 class="contact__headline" id="contact-title">
+                            <span class="mask"><span class="contact__headline-line">Give us</span></span>
+                            <span class="mask"><span class="contact__headline-line">the <em>signal.</em></span></span>
+                        </h2>
+                        <p class="contact__sub" data-reveal>Enough to understand the ambition. We&rsquo;ll handle the
+                            rest &mdash; the plan, the crew and the team who make it stand up.</p>
+                    </div>
+
+                    <form class="contact__form" id="contact-form" novalidate>
+                        <div class="field" data-reveal>
+                            <label for="contact-name" class="field__label">01 / Your name</label>
+                            <input id="contact-name" name="name" type="text" autocomplete="name" required
+                                placeholder="Type here" class="field__input" />
+                            <span class="field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="field" data-reveal>
+                            <label for="contact-email" class="field__label">02 / Email address</label>
+                            <input id="contact-email" name="email" type="email" autocomplete="email" required
+                                placeholder="you@company.com" class="field__input" />
+                            <span class="field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="field" data-reveal>
+                            <label for="contact-company" class="field__label">03 / Company or brand</label>
+                            <input id="contact-company" name="company" type="text" autocomplete="organization"
+                                placeholder="Optional" class="field__input" />
+                            <span class="field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="field" data-reveal>
+                            <label for="contact-brief" class="field__label">04 / Tell us what you&rsquo;re building</label>
+                            <textarea id="contact-brief" name="brief" rows="3"
+                                placeholder="A date, a city, a product that needs an audience."
+                                class="field__input field__input--area"></textarea>
+                            <span class="field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="contact__cta-row" data-reveal>
+                            <button type="submit" class="btn btn--accent" id="contact-submit">
+                                <span>Send the brief</span><span class="btn__plus" aria-hidden="true"></span>
+                            </button>
+                            <span class="meta" id="contact-note" role="status">Name + email required</span>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="grid contact__credits">
+                    <div class="contact__credits-col" data-reveal>
+                        <span class="label">Direct</span>
+                        <a href="mailto:hello@rockcastle.com" class="text-link">Email <span aria-hidden="true">&#8599;</span></a>
+                        <a href="https://wa.me/1234567890" class="text-link" target="_blank" rel="noopener noreferrer">WhatsApp <span aria-hidden="true">&#8599;</span></a>
+                    </div>
+                    <div class="contact__credits-col" data-reveal>
+                        <span class="label">Social</span>
+                        <a href="#" class="text-link" target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">&#8599;</span></a>
+                        <a href="#" class="text-link" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">&#8599;</span></a>
+                        <a href="#" class="text-link" target="_blank" rel="noopener noreferrer">Behance <span aria-hidden="true">&#8599;</span></a>
+                    </div>
+                    <div class="contact__credits-col" data-reveal>
+                        <span class="label">Location</span>
+                        <span>Dubai,<br />United Arab Emirates</span>
+                    </div>
+                </div>
+
+                <p class="contact__closing" aria-label="Rock Castle builds experiences.">
+                    <span class="mask"><span class="contact__closing-line">Rock Castle</span></span>
+                    <span class="mask"><span class="contact__closing-line is-muted">builds experiences.</span></span>
+                </p>
+            </div>
+
+            <div class="contact__flash" id="contact-flash" aria-hidden="true">
+                <span class="contact__flash-line" id="contact-flash-line"></span>
+                <div class="contact__flash-copy" id="contact-flash-copy">
+                    <p class="contact__confirm-title">
+                        <span class="mask"><span class="contact__flash-char">Brief</span></span>
+                        <span class="mask"><span class="contact__flash-char is-accent">received.</span></span>
+                    </p>
+                    <p class="contact__confirm-sub meta" id="contact-flash-sub">We have the signal.<br />We&rsquo;ll
+                        take it from here.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ── FOOTER — light, structured ───────────────────────────────────── -->
+    <footer id="footer" class="site-footer env-light">
+        <div class="container">
+            <div class="grid site-footer__grid">
+                <div class="site-footer__col">
+                    <span class="label">Office</span>
+                    <p>12 Foundry Street<br />Rock City<br />United States</p>
+                </div>
+                <div class="site-footer__col">
+                    <span class="label">Contact</span>
+                    <p><a href="tel:+15550102044" class="text-link">+1 (555) 010-2044</a><br />
+                        <a href="mailto:hello@rockcastle.studio" class="text-link">hello@rockcastle.studio</a></p>
+                </div>
+                <a href="#top" class="site-footer__logo" aria-label="Back to top">
+                    <img src="/rockcastle-logo.png" alt="Rock Castle — experiences un-ltd." width="128" height="127" loading="lazy" />
+                </a>
+                <div class="site-footer__col">
+                    <span class="label">Sitemap</span>
+                    <p><a href="#we-create-section" class="text-link">Our work</a><br /><a href="#studio" class="text-link">Culture</a><br />
+                        <a href="#crew" class="text-link">How we roll</a><br /><a href="#connect" class="text-link">Connect</a></p>
+                </div>
+                <div class="site-footer__col site-footer__col--end">
+                    <span class="label"><span class="plus" aria-hidden="true"></span>Join the movement</span>
+                    <p>Let&rsquo;s shape the future &mdash;<br />frame by frame.</p>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                <span class="meta">&copy; <span id="year"></span> Rock Castle</span>
+                <span class="meta">Experiences un&#8209;ltd.</span>
+                <a href="#" class="meta text-link">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <a class="whatsapp" href="https://wa.me/15550102044" target="_blank" rel="noopener noreferrer" aria-label="Chat with Rock Castle on WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.98L2 22l5.16-1.5A9.93 9.93 0 1 0 12.04 2Zm0 18.1c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.06.89.9-2.98-.2-.31a8.18 8.18 0 1 1 6.91 3.74Zm4.49-6.13c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.96-.14.17-.29.19-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.55-1.33-.76-1.82-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3c-.23.25-.86.84-.86 2.05 0 1.2.88 2.37 1 2.53.12.17 1.73 2.64 4.2 3.7.58.26 1.04.41 1.4.52.59.19 1.12.16 1.55.1.47-.07 1.46-.6 1.66-1.17.2-.58.2-1.07.15-1.17-.07-.1-.22-.16-.47-.28Z" /></svg>
+    </a>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
