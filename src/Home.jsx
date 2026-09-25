@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
-import About from './components/About'
-import Signature from './components/Signature'
+import WhoWeAreSignature from './components/WhoWeAreSignature'
+import Leadership from './components/Leadership'
 import Crew from './components/Crew'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
@@ -63,16 +63,16 @@ export default function Home() {
         {/* 1. HERO / FULLSCREEN VIDEO */}
         <Hero />
 
-        {/* 2. WHO WE ARE / ABOUT */}
-        <About />
+        {/* 2. WHO WE ARE & SIGNATURE (UNIFIED CINEMATIC EXPERIENCE) */}
+        <WhoWeAreSignature />
 
-        {/* 3. SIGNATURE EXPERIENCE */}
-        <Signature />
+        {/* 3. LEADERSHIP */}
+        <Leadership />
 
-        {/* 4. CREW / STACKING CARDS */}
+        {/* 5. CREW / STACKING CARDS */}
         <Crew />
 
-        {/* 7. TESTIMONIALS */}
+        {/* 6. TESTIMONIALS */}
         <Testimonials />
 
         {/* 8. CONTACT */}

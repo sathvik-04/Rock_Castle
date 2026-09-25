@@ -13,7 +13,7 @@
      luminous yellow About's closing section ends on, then .sig__consume (below)
      grows a solid velvet charcoal panel over it as the visitor scrolls through the
      pin, so the section is fully charcoal by the final manifesto line. */
-  background: var(--rc-yellow);
+  background: var(--rc-black-rich, #0a0a0a);
   perspective: 900px;
   display: flex;
   align-items: center;
@@ -38,7 +38,7 @@
       rgba(242, 239, 163, 0.25) 0%,
       rgba(245, 240, 235, 0.04) 42%,
       transparent 76%);
-  opacity: 0;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
@@ -52,38 +52,9 @@
   opacity: 0.45;
 }
 
-/* ── THE CONSUME — orange gets progressively overlaid by an expanding black
-   panel as the visitor scrolls through the pin (scroll-driven clip-path,
-   not a gradient). Sits BELOW the 3D world rig (geometry/photos/typography,
-   z-index 3) so it replaces the section's orange background while the
-   typography/photo sequence stays visible on top throughout — it was
-   previously z-index 5 (above the world), which hid the whole SPACE→
-   STRUCTURE→EXPERIENCE→MEMORY sequence and both photo frames the moment it
-   started growing. Still below the final manifesto and contact bridge
-   (z-index 7/8) so those land in the solid black left behind once .sig__world
-   itself fades near the end. Grows from the bottom edge, echoing the
-   direction scroll continues in, into the black stretch that follows. */
+/* Pre-animation consume circle removed — section is natively dark and ready */
 .sig__consume {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: var(--rc-black, #0a0a0a);
-  clip-path: circle(0% at 50% 100%);
-  pointer-events: none;
-}
-
-/* Reuses the grain filter defined inline in the SVG below (id="rc-arch-grain")
-   as a texture layer on the expanding black itself — feTurbulence is a
-   generator, not dependent on this pseudo-element having visible content,
-   so it renders a full-frame grain regardless. Clipped together with its
-   parent, so grain only ever shows inside the revealed black region. */
-.sig__consume::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  filter: url(#rc-arch-grain);
-  opacity: 0.35;
-  mix-blend-mode: overlay;
+  display: none;
 }
 
 /* ── ARCHITECTURAL TELEMETRY HUD ── */
@@ -93,7 +64,7 @@
   padding: 16px 20px;
   pointer-events: none;
   z-index: 8;
-  opacity: 0;
+  opacity: 0.7;
   font-family: var(--font-body, monospace);
   font-size: 9px;
   letter-spacing: 0.16em;

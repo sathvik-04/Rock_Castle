@@ -171,14 +171,14 @@
 html {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--rc-white);
   background: var(--rc-black);
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

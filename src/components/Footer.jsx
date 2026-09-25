@@ -2,7 +2,8 @@ import './Footer.css'
 
 export default function Footer() {
   const sitemapLinks = [
-    { label: 'Who We Are', href: '#about' },
+    { label: 'Who We Are', href: '#who-we-are' },
+    { label: 'Leadership', href: '#leadership' },
     { label: 'Works', href: '#works' },
     { label: 'Strategy', href: '#strategy' },
     { label: 'Crew', href: '#crew' },

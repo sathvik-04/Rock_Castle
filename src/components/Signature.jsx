@@ -7,60 +7,19 @@ import './Signature.css'
 
 const sigProjects = [projects[0], projects[1] || projects[0]]
 
-export default function Signature() {
+export default function Signature({ isCombined = false }) {
   const sceneRef = useRef(null)
   const transitionTo = usePageTransition()
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced || isCombined) return
 
     const ctx = gsap.context(() => {
       const scene = sceneRef.current
       if (!scene) return
 
-      // ── Roof / Arrow Reveal: incoming section opens through an expanding
-      // inverted-roof clip-path as it scrolls into place, flattening out to
-      // a full-bleed rectangle exactly as it reaches the top (where the pin
-      // below takes over). Scrubbed to real scroll position so it plays out
-      // during the approach rather than firing once on entry. ──
-      const ROOF_CLIP = 'polygon(0% 20%, 50% 0%, 100% 20%, 100% 100%, 0% 100%)'
-      const FLAT_CLIP = 'polygon(0% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)'
-
-      if (!prefersReduced) {
-        gsap.set(scene, { clipPath: ROOF_CLIP, opacity: 0.4 })
-
-        gsap.to(scene, {
-          clipPath: FLAT_CLIP,
-          opacity: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: scene,
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 0.6,
-            invalidateOnRefresh: true,
-          }
-        })
-
-        // Telemetry HUD and ambient atmosphere fade in as the section appears
-        gsap.fromTo(['.sig__hud', '.sig__glow'],
-          { opacity: 0 },
-          {
-            opacity: (i) => (i === 0 ? 0.7 : 0.6),
-            duration: 0.8,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: scene,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-              invalidateOnRefresh: true,
-            }
-          }
-        )
-      } else {
-        gsap.set(scene, { opacity: 1, clipPath: FLAT_CLIP })
-      }
-
+      // All pre-animations removed: section is natively visible and seamlessly blends in
       // GSAP Pinning: pin scene directly for 360% scroll distance with pinSpacing
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -76,7 +35,6 @@ export default function Signature() {
       })
 
       if (prefersReduced) {
-        tl.to('.sig__consume', { opacity: 1, duration: 0.15 }, 0.55)
         tl.to('.sig__phase--we-create', { opacity: 1, duration: 0.15 }, 0.05)
           .to('.sig__phase--we-create', { opacity: 0, duration: 0.1 }, 0.2)
           .to('.sig__phase--spaces', { opacity: 1, duration: 0.15 }, 0.25)
@@ -92,6 +50,15 @@ export default function Signature() {
       }
 
       // ─────────────────────────────────────────────────────────────
+      // SMOOTH SECTION ENTRANCE (0.00 → 0.06)
+      // As the phone covers the screen and video fades out, Signature seamlessly appears
+      // ─────────────────────────────────────────────────────────────
+      tl.fromTo('.sig__glow', { opacity: 0 }, { opacity: 0.6, duration: 0.05, ease: 'power1.out' }, 0.00)
+        .fromTo('.sig__hud', { opacity: 0 }, { opacity: 0.75, duration: 0.05, ease: 'power1.out' }, 0.00)
+        .fromTo('.sig__indicator', { opacity: 0 }, { opacity: 1, duration: 0.05, ease: 'power1.out' }, 0.01)
+        .fromTo('.sig__plane--grid', { opacity: 0 }, { opacity: 0.25, duration: 0.06, ease: 'power1.out' }, 0.01)
+
+      // ─────────────────────────────────────────────────────────────
       // PHASE INDICATOR TRACKING (0.00 → 1.00)
       // ─────────────────────────────────────────────────────────────
       tl.to('.sig__ind--space', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.02)
@@ -103,19 +70,6 @@ export default function Signature() {
         .to('.sig__ind--memory', { color: '#fa5a32', opacity: 1, duration: 0.01 }, 0.59)
         .to('.sig__ind--memory', { color: 'rgba(245,240,235,0.4)', duration: 0.01 }, 0.77)
         .to('.sig__indicator', { opacity: 0, duration: 0.04 }, 0.82)
-
-      // HUD & Atmosphere
-      tl.to('.sig__hud', { opacity: 0.7, duration: 0.06 }, 0.02)
-      tl.to('.sig__glow', { opacity: 0.6, duration: 0.2 }, 0.02)
-
-      // ─────────────────────────────────────────────────────────────
-      // THE CONSUME — expanding black circular mask
-      // ─────────────────────────────────────────────────────────────
-      tl.fromTo('.sig__consume',
-        { clipPath: 'circle(0% at 50% 100%)' },
-        { clipPath: 'circle(150% at 50% 100%)', ease: 'power2.inOut', duration: 0.64 },
-        0.04
-      )
 
       // ─────────────────────────────────────────────────────────────
       // SEQUENCE 1: "WE CREATE" (0.04 → 0.22)
@@ -292,7 +246,12 @@ export default function Signature() {
   }, [])
 
   return (
-    <section className="sig" id="signature" ref={sceneRef} aria-label="Rockcastle Signature Experience">
+    <section
+      className={`sig ${isCombined ? 'sig--combined' : ''}`}
+      id={isCombined ? undefined : "signature"}
+      ref={sceneRef}
+      aria-label="Rockcastle Signature Experience"
+    >
       {/* SVG Grain Filter Definition */}
       <svg className="sig__noise-svg" width="0" height="0" aria-hidden="true">
         <filter id="rc-arch-grain">

@@ -22,7 +22,7 @@ export default function Navigation() {
 
       // Detect background theme (light vs dark sections)
       const navMidY = 46
-      const lightSectionIds = ['about', 'process', 'contact', 'services', 'testimonials']
+      const lightSectionIds = ['about', 'who-we-are', 'leadership', 'process', 'contact', 'services', 'testimonials']
 
       let isLight = false
       const lightElements = document.querySelectorAll(

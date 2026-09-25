@@ -68,6 +68,8 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
       typeof children === "string" ? children : children?.toString() || "";
     const [isAnimating, setIsAnimating] = useState(false);
 
+    const [animationDone, setAnimationDone] = useState(false);
+
     const splitIntoCharacters = (text: string): string[] => {
       if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
         const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
@@ -119,7 +121,10 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
 
     useImperativeHandle(ref, () => ({
       startAnimation,
-      reset: () => setIsAnimating(false),
+      reset: () => {
+        setIsAnimating(false);
+        setAnimationDone(false);
+      },
     }));
 
     useEffect(() => {
@@ -138,6 +143,14 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
             delay + ((transition?.delay as number) || 0) + getStaggerDelay(i),
         },
       }),
+    };
+
+    const clipBoxStyle: React.CSSProperties = {
+      paddingTop: "0.14em",
+      paddingBottom: "0.04em",
+      marginTop: "-0.14em",
+      marginBottom: "-0.04em",
+      overflow: animationDone ? "visible" : "hidden",
     };
 
     return (
@@ -176,14 +189,16 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
             <span
               key={wordIndex}
               aria-hidden="true"
-              className={cn("inline-flex overflow-hidden", wordClass)}
+              style={clipBoxStyle}
+              className={cn("inline-flex", wordClass)}
             >
               {wordObj.characters.map((char, charIndex) => (
                 <span
                   className={cn(
                     charClass,
-                    "whitespace-pre-wrap relative overflow-hidden",
+                    "whitespace-pre-wrap relative",
                   )}
+                  style={clipBoxStyle}
                   key={charIndex}
                 >
                   <motion.span
@@ -194,7 +209,10 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
                     onAnimationComplete={
                       wordIndex === array.length - 1 &&
                         charIndex === wordObj.characters.length - 1
-                        ? onComplete
+                        ? () => {
+                            setAnimationDone(true);
+                            onComplete?.();
+                          }
                         : undefined
                     }
                     className="inline-block"
@@ -204,7 +222,10 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
                 </span>
               ))}
               {wordObj.needsSpace && (
-                <span className="relative overflow-hidden">
+                <span
+                  className="relative"
+                  style={clipBoxStyle}
+                >
                   <motion.span
                     custom={previousCharsCount + wordObj.characters.length}
                     initial="hidden"
