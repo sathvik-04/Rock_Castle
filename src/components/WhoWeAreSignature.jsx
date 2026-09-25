@@ -51,6 +51,9 @@ export default function WhoWeAreSignature() {
 
       // Query animated elements from WhoWeAre
       const textCol = container.querySelector('.who-we-are__text-column')
+      const textChildren = container.querySelectorAll(
+        '.who-we-are__header, .who-we-are__narrative, .who-we-are__metrics-row, .who-we-are__cta'
+      )
       const mover = container.querySelector('.who-we-are__device-mover')
       const scaler = container.querySelector('.who-we-are__device-scaler')
       const fragments = container.querySelector('.who-we-are__fragments')
@@ -61,14 +64,15 @@ export default function WhoWeAreSignature() {
       const deviceScreens = container.querySelectorAll('.rc-device-body, .rc-device-screen')
       const whoRoot = container.querySelector('.who-we-are')
 
-      // Centering delta calculation for the phone
+      // Centering delta calculation for the phone (scroll-invariant & container-relative)
       const calculateCenterDelta = () => {
         if (!mover || !container) return { x: 0, y: 0 }
+        const containerRect = container.getBoundingClientRect()
         const moverRect = mover.getBoundingClientRect()
         const currentX = gsap.getProperty(mover, 'x') || 0
         const currentY = gsap.getProperty(mover, 'y') || 0
-        const naturalCenterX = (moverRect.left - currentX) + moverRect.width / 2
-        const naturalCenterY = (moverRect.top - currentY) + moverRect.height / 2
+        const naturalCenterX = (moverRect.left - currentX - containerRect.left) + moverRect.width / 2
+        const naturalCenterY = (moverRect.top - currentY - containerRect.top) + moverRect.height / 2
         return {
           x: window.innerWidth / 2 - naturalCenterX,
           y: window.innerHeight / 2 - naturalCenterY
@@ -81,6 +85,8 @@ export default function WhoWeAreSignature() {
         video.muted = true
         video.play().catch(() => {})
       }
+
+      const isMobile = () => window.innerWidth <= 959
 
       // ── MASTER PINNED TIMELINE ──
       // Pins the single experience container at top top for 620% scroll distance.
@@ -105,13 +111,27 @@ export default function WhoWeAreSignature() {
       if (textCol) {
         tl.to(textCol, { y: -12, ease: 'none', duration: 0.10 }, 0.00)
       }
+      if (textChildren.length) {
+        tl.to(textChildren, { y: -6, ease: 'none', duration: 0.10 }, 0.00)
+      }
 
       // Phase 2 (0.10 -> 0.20): Smooth Glide to Center
+      // Fade out both textCol and textChildren so even with display:contents on mobile, text fades away smoothly!
       if (textCol) {
         tl.to(textCol, {
           opacity: 0,
-          x: 80,
+          x: () => isMobile() ? 0 : 80,
+          y: () => isMobile() ? -24 : 0,
           filter: 'blur(8px)',
+          duration: 0.08,
+          ease: 'power2.in'
+        }, 0.10)
+      }
+      if (textChildren.length) {
+        tl.to(textChildren, {
+          opacity: 0,
+          y: -24,
+          filter: 'blur(6px)',
           duration: 0.08,
           ease: 'power2.in'
         }, 0.10)
@@ -166,7 +186,7 @@ export default function WhoWeAreSignature() {
       // Phase 4 (0.33 -> 0.42): Phone zooms up to cover screen, video fades away
       if (scaler) {
         tl.to(scaler, {
-          scale: 9,
+          scale: () => isMobile() ? 10 : 9,
           duration: 0.09,
           ease: 'power1.inOut'
         }, 0.33)

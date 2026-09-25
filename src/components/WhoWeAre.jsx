@@ -249,8 +249,20 @@ export default function WhoWeAre({ isCombined = false }) {
           }
         })
 
+        const textChildren = root.querySelectorAll(
+          '.who-we-are__header, .who-we-are__narrative, .who-we-are__metrics-row, .who-we-are__cta'
+        )
         if (textCol) {
           tl.to(textCol, {
+            opacity: 0,
+            y: -24,
+            filter: 'blur(6px)',
+            duration: 0.20,
+            ease: 'power2.in'
+          }, 0.15)
+        }
+        if (textChildren.length) {
+          tl.to(textChildren, {
             opacity: 0,
             y: -24,
             filter: 'blur(6px)',
