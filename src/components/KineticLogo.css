@@ -1,0 +1,189 @@
+/* ===================================================
+   ROCKCASTLE — Kinetic Lockup & Resolve Logo
+   House of Yellow Inspired Centered Hero Emblem
+   =================================================== */
+
+.kinetic-logo-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kl-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.52);
+  transform-origin: center center;
+}
+
+@media (min-width: 1440px) {
+  .kl-stage {
+    transform: scale(0.58);
+  }
+}
+
+@media (max-width: 960px) {
+  .kinetic-logo-wrapper {
+    top: 44%;
+  }
+  .kl-stage {
+    transform: scale(0.44);
+  }
+}
+
+@media (max-width: 640px) {
+  .kinetic-logo-wrapper {
+    top: 38%;
+  }
+  .kl-stage {
+    transform: scale(0.36);
+  }
+}
+
+.kl-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 440px;
+}
+
+/* Track container for R-O-C-K */
+.kl-rock-stage {
+  position: relative;
+  width: 320px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kl-letter {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Arial Black', Impact, var(--font-display), sans-serif;
+  font-size: 52px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.5), 0 0 32px rgba(255, 255, 255, 0.2);
+  animation-duration: 4.8s;
+  animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  animation-iteration-count: infinite;
+}
+
+/* 
+  Timeline Breakdown (4.8s loop):
+  0% - 35%: Resolved readable state (R - O - C - K lined up side-by-side)
+  45%: Scatter into 2x2 grid positions
+  60%: 1st Quarter rotation
+  75%: 2nd Quarter rotation
+  90%: Pre-snap line-up
+  100%: Snap back to readable state
+*/
+
+/* R: Starts at X = -105px (far left), orbits, returns */
+@keyframes moveR {
+  0%, 35%   { transform: translate(-105px, 0px) scale(1.05); }
+  45%       { transform: translate(-45px, -35px) scale(0.95); }
+  60%       { transform: translate(45px, -35px) scale(0.95); }
+  75%       { transform: translate(45px, 35px) scale(0.95); }
+  90%       { transform: translate(-45px, 35px) scale(0.95); }
+  100%      { transform: translate(-105px, 0px) scale(1.05); }
+}
+
+/* O: Starts at X = -35px (inner left) */
+@keyframes moveO {
+  0%, 35%   { transform: translate(-35px, 0px) scale(1.05); }
+  45%       { transform: translate(45px, -35px) scale(0.95); }
+  60%       { transform: translate(45px, 35px) scale(0.95); }
+  75%       { transform: translate(-45px, 35px) scale(0.95); }
+  90%       { transform: translate(-45px, -35px) scale(0.95); }
+  100%      { transform: translate(-35px, 0px) scale(1.05); }
+}
+
+/* C: Starts at X = 35px (inner right) */
+@keyframes moveC {
+  0%, 35%   { transform: translate(35px, 0px) scale(1.05); }
+  45%       { transform: translate(45px, 35px) scale(0.95); }
+  60%       { transform: translate(-45px, 35px) scale(0.95); }
+  75%       { transform: translate(-45px, -35px) scale(0.95); }
+  90%       { transform: translate(45px, -35px) scale(0.95); }
+  100%      { transform: translate(35px, 0px) scale(1.05); }
+}
+
+/* K: Starts at X = 105px (far right) */
+@keyframes moveK {
+  0%, 35%   { transform: translate(105px, 0px) scale(1.05); }
+  45%       { transform: translate(-45px, 35px) scale(0.95); }
+  60%       { transform: translate(-45px, -35px) scale(0.95); }
+  75%       { transform: translate(45px, -35px) scale(0.95); }
+  90%       { transform: translate(45px, 35px) scale(0.95); }
+  100%      { transform: translate(105px, 0px) scale(1.05); }
+}
+
+.kl-l-r { animation-name: moveR; }
+.kl-l-o { animation-name: moveO; }
+.kl-l-c { animation-name: moveC; }
+.kl-l-k { animation-name: moveK; }
+
+/* Solid CASTLE Base */
+.kl-castle-text {
+  font-family: 'Arial Black', Impact, var(--font-display), sans-serif;
+  font-size: 50px;
+  font-weight: 900;
+  letter-spacing: 12px;
+  color: #ffffff;
+  margin-left: 12px;
+  text-transform: uppercase;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+  animation: pulseBase 4.8s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+@keyframes pulseBase {
+  0%, 35%, 100% { letter-spacing: 12px; opacity: 1; transform: scale(1); }
+  55%, 85%      { letter-spacing: 15px; opacity: 0.88; transform: scale(0.98); }
+}
+
+/* Dynamic Underline Brush & Dot */
+.kl-brush-wrap {
+  width: 380px;
+  height: 20px;
+  margin-top: 4px;
+}
+
+.kl-brush-svg {
+  width: 100%;
+  height: 100%;
+  fill: #ffffff;
+  transform-origin: left center;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+  animation: slashPulse 4.8s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+@keyframes slashPulse {
+  0%, 35%, 100% { transform: scaleX(1); opacity: 1; }
+  50%, 80%      { transform: scaleX(0.72); opacity: 0.45; }
+}
+
+.kl-tagline {
+  font-family: var(--font-mono), monospace;
+  font-size: 14px;
+  letter-spacing: 6px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 12px;
+  text-transform: lowercase;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+}

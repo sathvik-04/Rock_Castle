@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import MediaPlaceholder from './MediaPlaceholder'
 import './Services.css'
 
 const services = [
@@ -52,9 +52,12 @@ export default function Services() {
                     {s.tags.map(t => <span key={t} className="services__item-tag">{t}</span>)}
                   </div>
                 </div>
-                <div className="placeholder placeholder--16x9 services__item-placeholder">
-                  <span className="placeholder__label">[ IMAGE GOES HERE ]</span>
-                </div>
+                <MediaPlaceholder
+                  ratio="16/9"
+                  label={`${s.name.toUpperCase()} — COMING SOON`}
+                  className="services__item-placeholder"
+                  src="/images/services.webp"
+                />
               </div>
             </div>
           </div>

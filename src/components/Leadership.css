@@ -1,0 +1,450 @@
+/* ==========================================================================
+   Leadership Section
+   Signature Butter Studio Editorial Architecture
+   3D Physics FlipCard Grid with Track Badges & Studio Manifesto
+   ========================================================================== */
+
+.leadership {
+  position: relative;
+  z-index: 5;
+  background-color: var(--rc-yellow, #f2efa3);
+  color: #0c0d0c;
+  width: 100%;
+  overflow-x: hidden;
+  padding: clamp(80px, 11vh, 140px) clamp(24px, 4.5vw, 64px);
+  border-top: 1px solid rgba(12, 13, 12, 0.12);
+  border-bottom: 1px solid rgba(12, 13, 12, 0.12);
+  box-sizing: border-box;
+}
+
+.leadership__inner {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+/* ---- Top Header & Metadata ---- */
+.leadership__head {
+  margin-bottom: clamp(48px, 7vh, 76px);
+}
+
+.leadership__meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: clamp(20px, 3vh, 28px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(12, 13, 12, 0.14);
+}
+
+.leadership__tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0c0d0c;
+}
+
+.leadership__coords {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 11px;
+  color: rgba(12, 13, 12, 0.6);
+  letter-spacing: 0.1em;
+}
+
+.leadership__title {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(2.2rem, 4.6vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: #0c0d0c;
+  max-width: 24ch;
+  margin: 0;
+}
+
+.leadership__subtitle {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(1rem, 1.15vw, 1.2rem);
+  line-height: 1.62;
+  color: rgba(12, 13, 12, 0.78);
+  max-width: 68ch;
+  margin: clamp(18px, 2.5vh, 26px) 0 0 0;
+}
+
+/* ---- 3-Column Executive Grid ---- */
+.leadership__grid {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: clamp(24px, 3.2vw, 44px);
+  width: 100%;
+}
+
+.leadership__founder-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 1 350px;
+  max-width: 100%;
+}
+
+/* Track Header above each card */
+.leadership__card-header-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.leadership__track-num {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 12px;
+  font-weight: 700;
+  color: #0c0d0c;
+  opacity: 0.5;
+}
+
+.leadership__track-sep {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 11px;
+  color: #0c0d0c;
+  opacity: 0.35;
+}
+
+.leadership__track-label {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0c0d0c;
+}
+
+/* FlipCard Container Customization */
+.leadership__flipcard {
+  box-shadow: 0 24px 60px -12px rgba(12, 13, 12, 0.35);
+  border-radius: 24px;
+  transition: transform 0.3s ease;
+}
+
+/* ---- FlipCard Front Face Content ---- */
+.leadership__card-front {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #141413;
+}
+
+.leadership__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.leadership__card-front-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(12, 13, 12, 0.96) 0%,
+    rgba(12, 13, 12, 0.75) 32%,
+    rgba(12, 13, 12, 0.15) 60%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.leadership__card-credential {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  background: #0c0d0c;
+  color: var(--rc-yellow, #f2efa3);
+  border: 1px solid rgba(242, 239, 163, 0.4);
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.leadership__card-front-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 24px 22px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.leadership__card-tag {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 10.5px;
+  color: var(--rc-yellow, #f2efa3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.leadership__card-name {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 6px 0 16px;
+  line-height: 1.15;
+}
+
+.leadership__card-flip-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.65);
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.leadership__card-flip-icon {
+  font-size: 14px;
+  line-height: 1;
+  color: var(--rc-yellow, #f2efa3);
+}
+
+/* ---- FlipCard Back Face Content ---- */
+.leadership__card-back {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 32px 28px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(150deg, #1c1c1b 0%, #10100f 100%);
+  border: 1px solid rgba(242, 239, 163, 0.22);
+  border-radius: inherit;
+}
+
+.leadership__card-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leadership__card-back-tag {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 10.5px;
+  color: var(--rc-yellow, #f2efa3);
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.leadership__card-back-cred {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 10.5px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.08em;
+}
+
+.leadership__card-back-body {
+  display: flex;
+  flex-direction: column;
+  margin: auto 0;
+  padding: 16px 0;
+}
+
+.leadership__quote-mark {
+  font-family: var(--font-editorial, 'Playfair Display', serif);
+  font-size: 4rem;
+  line-height: 0.75;
+  color: var(--rc-yellow, #f2efa3);
+  opacity: 0.4;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.leadership__card-quote {
+  font-family: var(--font-editorial, 'Playfair Display', serif);
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.58;
+  color: #ffffff;
+  margin: 0;
+}
+
+.leadership__card-back-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--rc-yellow, #f2efa3);
+  margin: 22px 0 14px;
+  border-radius: 1px;
+}
+
+.leadership__card-back-name {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.leadership__card-back-role {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 5px;
+  display: block;
+}
+
+.leadership__card-back-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--rc-yellow, #f2efa3);
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* ==========================================================================
+   Kinetic Transition Ribbon from Leadership to Crew
+   ========================================================================== */
+
+.leadership__transition-wrap {
+  margin-top: clamp(64px, 10vh, 108px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.leadership__transition-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.leadership__transition-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0c0d0c;
+  flex-shrink: 0;
+}
+
+.leadership__transition-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(12, 13, 12, 0.16);
+}
+
+.leadership__transition-badge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #0c0d0c;
+  background: rgba(12, 13, 12, 0.08);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.leadership__transition-ticker-track {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 14px 0;
+  border-top: 1px solid rgba(12, 13, 12, 0.12);
+  border-bottom: 1px solid rgba(12, 13, 12, 0.12);
+  background: rgba(12, 13, 12, 0.04);
+}
+
+.leadership__transition-ticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0c0d0c;
+  will-change: transform;
+}
+
+.leadership__ticker-bullet {
+  font-size: 11px;
+  color: rgba(12, 13, 12, 0.4);
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .leadership {
+    padding: 72px 32px;
+  }
+
+  .leadership__grid {
+    gap: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .leadership {
+    padding: 60px 20px;
+  }
+
+  .leadership__head {
+    margin-bottom: 40px;
+  }
+
+  .leadership__meta-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .leadership__founder-item {
+    flex: 0 1 100%;
+    width: 100%;
+  }
+
+  .leadership__card-front-info {
+    padding: 20px 18px;
+  }
+
+  .leadership__card-back {
+    padding: 24px 20px;
+  }
+}

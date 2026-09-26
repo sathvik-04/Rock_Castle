@@ -9,13 +9,18 @@
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: var(--rc-black-rich, #050505);
+  /* Signature is the site's YELLOW → BLACK hand-off: it opens on the same
+     luminous yellow About's closing section ends on, then .sig__consume (below)
+     grows a solid velvet charcoal panel over it as the visitor scrolls through the
+     pin, so the section is fully charcoal by the final manifesto line. */
+  background: var(--rc-black-rich, #0a0a0a);
   perspective: 900px;
   display: flex;
   align-items: center;
   justify-content: center;
   contain: paint;
   user-select: none;
+  will-change: clip-path;
 }
 
 /* ── ATMOSPHERE & VIGNETTE ── */
@@ -29,13 +34,11 @@
 .sig__glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(232, 122, 46, 0.07) 0%,
-    rgba(245, 240, 235, 0.02) 40%,
-    transparent 75%
-  );
-  opacity: 0;
+  background: radial-gradient(circle at 50% 50%,
+      rgba(242, 239, 163, 0.25) 0%,
+      rgba(245, 240, 235, 0.04) 42%,
+      transparent 76%);
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
@@ -43,10 +46,15 @@
 .sig__vignette {
   position: absolute;
   inset: 0;
-  box-shadow: inset 0 0 100px 45px #050505;
+  box-shadow: inset 0 0 100px 45px var(--rc-black-rich);
   pointer-events: none;
   z-index: 6;
   opacity: 0.45;
+}
+
+/* Pre-animation consume circle removed — section is natively dark and ready */
+.sig__consume {
+  display: none;
 }
 
 /* ── ARCHITECTURAL TELEMETRY HUD ── */
@@ -56,7 +64,7 @@
   padding: 16px 20px;
   pointer-events: none;
   z-index: 8;
-  opacity: 0;
+  opacity: 0.7;
   font-family: var(--font-body, monospace);
   font-size: 9px;
   letter-spacing: 0.16em;
@@ -71,13 +79,30 @@
   gap: 2px;
 }
 
-.sig__hud-corner--tl { top: 18px; left: 20px; }
-.sig__hud-corner--tr { top: 18px; right: 20px; text-align: right; }
-.sig__hud-corner--bl { bottom: 65px; left: 20px; }
-.sig__hud-corner--br { bottom: 65px; right: 20px; text-align: right; }
+.sig__hud-corner--tl {
+  top: 18px;
+  left: 20px;
+}
+
+.sig__hud-corner--tr {
+  top: 18px;
+  right: 20px;
+  text-align: right;
+}
+
+.sig__hud-corner--bl {
+  bottom: 65px;
+  left: 20px;
+}
+
+.sig__hud-corner--br {
+  bottom: 65px;
+  right: 20px;
+  text-align: right;
+}
 
 .sig__hud-code {
-  color: var(--rc-orange, #e87a2e);
+  color: var(--rc-orange, #c2410c);
   font-weight: 600;
 }
 
@@ -116,7 +141,7 @@
 }
 
 .sig__ind-divider {
-  color: rgba(232, 122, 46, 0.4);
+  color: rgba(255, 90, 31, 0.4);
   font-size: 7px;
 }
 
@@ -190,7 +215,7 @@
   height: 5px;
   margin-top: -2.5px;
   margin-left: -2.5px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-orange, #c2410c);
   border-radius: 50%;
   opacity: 0;
   transform: scale(0);
@@ -298,24 +323,60 @@
   border: 1px dashed rgba(245, 240, 235, 0.09);
 }
 
+.sig__hud-code {
+  color: var(--rc-yellow);
+  font-weight: 600;
+}
+
+.sig__hud-sub,
+.sig__hud-coord,
+.sig__hud-elev {
+  color: rgba(245, 240, 235, 0.3);
+}
+
+/* Wireframe corners */
 .sig__wf-corner {
   position: absolute;
   width: 6px;
   height: 6px;
 }
-.sig__wf-corner--tl { top: -1px; left: -1px; border-top: 1px solid var(--rc-orange, #e87a2e); border-left: 1px solid var(--rc-orange, #e87a2e); }
-.sig__wf-corner--tr { top: -1px; right: -1px; border-top: 1px solid var(--rc-orange, #e87a2e); border-right: 1px solid var(--rc-orange, #e87a2e); }
-.sig__wf-corner--bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--rc-orange, #e87a2e); border-left: 1px solid var(--rc-orange, #e87a2e); }
-.sig__wf-corner--br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--rc-orange, #e87a2e); border-right: 1px solid var(--rc-orange, #e87a2e); }
 
-/* Orange structural tension lines */
+.sig__wf-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--rc-yellow);
+  border-left: 1px solid var(--rc-yellow);
+}
+
+.sig__wf-corner--tr {
+  top: -1px;
+  right: -1px;
+  border-top: 1px solid var(--rc-yellow);
+  border-right: 1px solid var(--rc-yellow);
+}
+
+.sig__wf-corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 1px solid var(--rc-yellow);
+  border-left: 1px solid var(--rc-yellow);
+}
+
+.sig__wf-corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid var(--rc-yellow);
+  border-right: 1px solid var(--rc-yellow);
+}
+
+/* Yellow structural tension lines */
 .sig__orange-line--1 {
   position: absolute;
   top: 26%;
   left: 20%;
   width: 60%;
   height: 1px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-yellow);
   transform: scaleX(0);
   transform-origin: left center;
   opacity: 0;
@@ -328,7 +389,7 @@
   width: 4px;
   height: 4px;
   margin: -2px 0 0 -2px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-yellow);
   border-radius: 50%;
   opacity: 0;
 }
@@ -339,7 +400,7 @@
   left: 80%;
   width: 1px;
   height: 52%;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-yellow);
   transform: scaleY(0);
   transform-origin: top center;
   opacity: 0;
@@ -352,7 +413,7 @@
   width: 4px;
   height: 4px;
   margin: -2px 0 0 -2px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-yellow);
   border-radius: 50%;
   opacity: 0;
 }
@@ -363,7 +424,7 @@
   left: 10%;
   width: 50%;
   height: 1px;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-yellow);
   transform: scaleX(0);
   transform-origin: left center;
   opacity: 0;
@@ -403,11 +464,14 @@
 }
 
 .sig__image-frame {
+  display: block;
   position: relative;
   width: 100%;
   height: 100%;
+  color: inherit;
+  text-decoration: none;
   border: 1px solid rgba(245, 240, 235, 0.16);
-  background: #0d0d0d;
+  background: var(--rc-dark);
   overflow: hidden;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
 }
@@ -422,8 +486,59 @@
   z-index: 10;
 }
 
-.sig__image-frame:has(img) .sig__ph {
+.sig__image-frame:has(img) .media-placeholder {
   display: none;
+}
+
+.sig__project-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 5;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sig__image-frame:hover .sig__project-photo {
+  transform: scale(1.05);
+}
+
+.sig__photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.2) 60%, transparent 100%);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.sig__photo-info {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.sig__photo-cat {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rc-orange);
+}
+
+.sig__photo-name {
+  font-family: var(--font-display);
+  font-size: clamp(12px, 1.2vw, 15px);
+  font-weight: 600;
+  color: var(--rc-white-pure);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 /* Architectural photo placeholder composition */
@@ -432,19 +547,17 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background: #111111;
+  background: var(--rc-dark);
   overflow: hidden;
 }
 
 .sig__ph-lighting {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(245, 240, 235, 0.1) 0%,
-    rgba(20, 20, 20, 0.1) 50%,
-    rgba(0, 0, 0, 0.75) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(245, 240, 235, 0.1) 0%,
+      rgba(20, 20, 20, 0.1) 50%,
+      rgba(0, 0, 0, 0.75) 100%);
   z-index: 1;
 }
 
@@ -464,21 +577,17 @@
   position: absolute;
   inset: 0;
   clip-path: polygon(0 40%, 65% 15%, 75% 100%, 0% 100%);
-  background: linear-gradient(
-    180deg,
-    rgba(34, 34, 34, 0.95) 0%,
-    rgba(16, 16, 16, 0.98) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(34, 34, 34, 0.95) 0%,
+      rgba(16, 16, 16, 0.98) 100%);
   z-index: 1;
 }
 
 .sig__ph-beam--alt {
   clip-path: polygon(30% 0, 100% 25%, 100% 100%, 15% 85%);
-  background: linear-gradient(
-    180deg,
-    rgba(28, 28, 28, 0.95) 0%,
-    rgba(14, 14, 14, 0.98) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(28, 28, 28, 0.95) 0%,
+      rgba(14, 14, 14, 0.98) 100%);
 }
 
 .sig__ph-grid {
@@ -509,10 +618,25 @@
   z-index: 4;
 }
 
-.sig__ph-cross--tl { top: 6px; left: 8px; }
-.sig__ph-cross--tr { top: 6px; right: 8px; }
-.sig__ph-cross--bl { bottom: 22px; left: 8px; }
-.sig__ph-cross--br { bottom: 22px; right: 8px; }
+.sig__ph-cross--tl {
+  top: 6px;
+  left: 8px;
+}
+
+.sig__ph-cross--tr {
+  top: 6px;
+  right: 8px;
+}
+
+.sig__ph-cross--bl {
+  bottom: 22px;
+  left: 8px;
+}
+
+.sig__ph-cross--br {
+  bottom: 22px;
+  right: 8px;
+}
 
 /* Placeholder understated metadata stamp */
 .sig__ph-meta {
@@ -535,7 +659,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--rc-orange, #e87a2e);
+  background: var(--rc-yellow);
   flex-shrink: 0;
 }
 
@@ -576,7 +700,7 @@
   font-family: var(--font-display, sans-serif);
   font-weight: 900;
   text-transform: uppercase;
-  color: var(--rc-white, #f5f0eb);
+  color: var(--rc-white, #e9e2d5);
   letter-spacing: -0.03em;
   line-height: 0.95;
   will-change: transform, opacity;
@@ -639,18 +763,21 @@
 
 .sig__final-line2 {
   font-family: var(--font-display, sans-serif);
-  font-size: clamp(1.75rem, 7.5vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
+  font-size: var(--fs-section, clamp(1.75rem, 7.5vw, 4.5rem));
+  font-weight: 700;
+  letter-spacing: var(--ls-section, -0.03em);
   text-transform: uppercase;
-  color: var(--rc-white, #f5f0eb);
-  line-height: 1.05;
+  color: var(--rc-white, #e9e2d5);
+  line-height: 0.94;
   position: relative;
   display: inline-block;
 }
 
 .sig__final-accent {
-  color: var(--rc-white, #f5f0eb);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: none;
+  color: var(--rc-yellow);
 }
 
 .sig__final-underline {
@@ -658,8 +785,9 @@
   left: 0;
   bottom: -6px;
   width: 100%;
-  height: 2px;
-  background: var(--rc-orange, #e87a2e);
+  height: 3px;
+  background: var(--rc-yellow);
+  border-radius: 2px;
   transform: scaleX(0);
   transform-origin: left center;
 }
@@ -685,7 +813,7 @@
   font-weight: 900;
   letter-spacing: -0.03em;
   text-transform: uppercase;
-  color: var(--rc-white, #f5f0eb);
+  color: var(--rc-white, #e9e2d5);
   margin-bottom: 24px;
   line-height: 1.05;
 }
@@ -693,35 +821,38 @@
 .sig__trans-cta {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 28px;
-  border: 1px solid var(--rc-orange, #e87a2e);
-  background: transparent;
-  color: var(--rc-white, #f5f0eb);
+  gap: 14px;
+  padding: 14px 34px;
+  border: 1px solid transparent;
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
   font-family: var(--font-body, sans-serif);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(242, 239, 163, 0.3);
   pointer-events: auto;
 }
 
 .sig__trans-cta:hover {
-  background: var(--rc-orange, #e87a2e);
-  color: #050505;
-  transform: translateY(-2px);
+  background: var(--rc-white-pure);
+  color: var(--rc-dark);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(242, 239, 163, 0.5);
 }
 
 .sig__trans-cta-arrow {
-  color: var(--rc-orange, #e87a2e);
-  transition: transform 0.3s ease, color 0.3s ease;
+  color: var(--rc-dark);
+  transition: transform 0.3s ease;
+  font-weight: 700;
 }
 
 .sig__trans-cta:hover .sig__trans-cta-arrow {
-  color: #050505;
   transform: translateX(4px);
 }
 
@@ -779,8 +910,15 @@
     font-size: 11px;
   }
 
-  .sig__hud-corner--bl { bottom: 35px; left: 48px; }
-  .sig__hud-corner--br { bottom: 35px; right: 48px; }
+  .sig__hud-corner--bl {
+    bottom: 35px;
+    left: 48px;
+  }
+
+  .sig__hud-corner--br {
+    bottom: 35px;
+    right: 48px;
+  }
 
   .sig__indicator {
     bottom: 35px;
@@ -829,10 +967,18 @@
   .sig__world {
     transform: none !important;
   }
+
   .sig__slot,
   .sig__word,
   .sig__final,
   .sig__transition {
     transform: none !important;
+  }
+
+  /* No shape/clip-path animation — the black panel is already fully open
+     and the JS instead just crossfades its opacity in (see Signature.jsx). */
+  .sig__consume {
+    clip-path: circle(150% at 50% 100%);
+    opacity: 0;
   }
 }

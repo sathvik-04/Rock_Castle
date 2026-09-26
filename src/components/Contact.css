@@ -1,195 +1,561 @@
-/* Contact — mobile-first */
+/* ==========================================================================
+   Contact — "Give us the signal" brief form
+   Mobile-First (390×844 base)
+   ========================================================================== */
+
 .contact {
+  /* Reference the shared tokens (src/index.css) rather than hardcoding a
+     near-duplicate black/orange — keeps Contact visually identical to the
+     rest of the site instead of one shade off.
+     Contact stays black, continuing straight out of the Work/Testimonials/
+     Process/Services run rather than handing off to white — near-black
+     ground, warm-white ink, orange as the accent throughout. */
+  --contact-bg: var(--rc-black);
+  --contact-ink: var(--rc-white-warm);
+  --contact-ink-soft: rgba(247, 247, 245, 0.72);
+  --contact-ink-faint: rgba(247, 247, 245, 0.5);
+  --contact-ink-mute: rgba(247, 247, 245, 0.55);
+  --contact-line: rgba(247, 247, 245, 0.14);
+  --contact-orange: var(--rc-orange);
+  --contact-mono: 'IBM Plex Mono', var(--font-body, monospace);
+
   position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  background: var(--rc-black);
-  padding-block: var(--space-2xl);
+  background: var(--contact-bg);
+  color: var(--contact-ink);
   overflow: hidden;
+  padding-block: clamp(70px, 12vh, 150px) 0;
 }
 
-.contact::before {
-  content: '';
+/* Recedes upward on scroll-in to bridge the black Services section above
+   into Contact's white ground. Default clip-path keeps it invisible when
+   JS/motion is unavailable, so the fallback is a plain (motionless) cut
+   rather than a black block stuck over the form. */
+.contact__threshold {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--rc-orange-glow) 0%, transparent 70%);
-  filter: blur(120px);
-  opacity: 0.06;
+  inset: 0 0 auto 0;
+  height: 100%;
+  background: var(--rc-black);
+  z-index: 2;
+  pointer-events: none;
+  clip-path: inset(100% 0 0 0);
+}
+
+.contact input,
+.contact textarea,
+.contact button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+.contact input::placeholder,
+.contact textarea::placeholder {
+  color: rgba(247, 247, 245, 0.35);
+}
+
+.contact textarea {
+  resize: none;
+}
+
+.contact input:focus-visible,
+.contact textarea:focus-visible,
+.contact button:focus-visible,
+.contact a:focus-visible {
+  outline: 1px solid var(--contact-orange);
+  outline-offset: 4px;
+}
+
+/* ── atmosphere — motion is GSAP-driven (ported from initAtmos()), so these
+   only set static base appearance; no CSS keyframes here to avoid fighting
+   the JS transforms. The mockup is a single-page preview so its atmos layer
+   is `position: fixed` to the viewport; here Contact is one section among
+   many that stay permanently mounted, so this is scoped `absolute` to the
+   section itself instead of bleeding the glow across the whole site. ── */
+.contact__atmos {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.contact__content {
+.contact__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(28px);
+  will-change: transform;
+}
+
+.contact__blob--1 {
+  left: 6%;
+  top: 32%;
+  width: 46vw;
+  height: 46vw;
+  background: radial-gradient(circle at 50% 50%, rgba(242, 239, 163, 0.16), rgba(242, 239, 163, 0.05) 48%, transparent 70%);
+}
+
+.contact__blob--2 {
+  right: -4%;
+  top: 8%;
+  width: 34vw;
+  height: 34vw;
+  background: radial-gradient(circle at 50% 50%, rgba(251, 249, 207, 0.14), rgba(242, 239, 163, 0.04) 50%, transparent 72%);
+}
+
+.contact__blob--3 {
+  left: 44%;
+  bottom: -14%;
+  width: 52vw;
+  height: 40vw;
+  background: radial-gradient(circle at 50% 50%, rgba(242, 239, 163, 0.1), transparent 66%);
+}
+
+.contact__sweep {
+  position: absolute;
+  top: -20%;
+  left: -30%;
+  width: 34vw;
+  height: 150%;
+  transform: rotate(14deg) translateX(0);
+  background: linear-gradient(90deg, transparent 0%, rgba(242, 239, 163, 0.06) 45%, transparent 100%);
+  will-change: transform;
+}
+
+.contact__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(242, 239, 163, 0.4) 50%, transparent 100%);
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+.contact__grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  will-change: transform;
+}
+
+.contact__progress {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 2px;
   width: 100%;
-  max-width: var(--container-max);
+  z-index: 50;
+  background: var(--contact-orange);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+/* ── layout ── */
+.contact__grid {
+  position: relative;
+  z-index: 1;
+  max-width: 1340px;
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline: var(--gutter, 20px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(40px, 6vh, 70px);
 }
 
-.contact__cta {
-  margin-bottom: var(--space-xl);
-}
-
-.contact__cta-label {
-  font-size: var(--text-xs);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--rc-orange);
-  margin-bottom: var(--space-md);
-}
-
-.contact__cta-text {
-  font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-  color: var(--rc-white);
-  line-height: 0.95;
-  max-width: 14ch;
-}
-.contact__cta-text span {
-  color: var(--rc-orange);
-}
-
-/* Buttons — full width on mobile */
-.contact__buttons {
+.contact__intro {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-xl);
+  gap: clamp(20px, 3vh, 36px);
 }
 
-.contact__btn {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
+.contact__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  font-family: var(--contact-mono);
+  font-size: 11px;
   letter-spacing: 0.2em;
+  color: var(--contact-ink-mute);
+}
+
+.contact__meta-rule {
+  width: 26px;
+  height: 1px;
+  background: rgba(247, 247, 245, 0.25);
+}
+
+.contact__meta-strong {
+  color: var(--contact-ink);
+}
+
+.contact__headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-section);
+  line-height: 0.9;
+  letter-spacing: var(--ls-section);
+}
+
+.contact__headline-mask {
+  display: block;
+  overflow: hidden;
+  padding: 0 0.12em 0.1em;
+  margin: 0 -0.12em -0.1em;
+}
+
+.contact__headline-line {
+  display: block;
+}
+
+.contact__headline-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* single-word editorial accent — the only serif in this section, reserved
+   for the closing word of the main headline */
+.contact__headline-word--italic {
+  font-family: var(--font-editorial);
+  font-style: italic;
+}
+
+.contact__char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.contact__sub {
+  margin: 0;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
+  line-height: 1.55;
+  color: var(--contact-ink-soft);
+}
+
+.contact__fields-note {
+  font-family: var(--contact-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--contact-ink-faint);
+}
+
+/* ── form ── */
+.contact__form-col {
+  min-width: 0;
+  perspective: 1400px;
+}
+
+.contact__form {
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contact__field {
+  border-top: 1px solid var(--contact-line);
+  padding-block: clamp(18px, 3vh, 28px);
+  position: relative;
+}
+
+.contact__field--textarea {
+  border-bottom: 1px solid var(--contact-line);
+}
+
+.contact__field-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px clamp(14px, 1.6vw, 26px);
+}
+
+.contact__field-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
+  color: var(--contact-ink-mute);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.contact__field-label--soft {
+  color: var(--contact-ink-faint);
+}
+
+.contact__field--textarea .contact__field-label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.contact__field-input {
+  flex: 1 1 200px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body-lg);
+  letter-spacing: var(--ls-body);
+  padding: 0 0 4px;
+}
+
+.contact__field-textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  letter-spacing: var(--ls-body);
+  line-height: 1.5;
+  padding: 0;
+}
+
+/* underline wipe — entrance choreography (buildIntro's formTl) and the
+   focus/blur interaction (bindForm) both drive this same element */
+.contact__field-underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--contact-orange);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.contact__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 26px;
+  margin-top: clamp(32px, 6vh, 60px);
+}
+
+.contact__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
+  padding: clamp(16px, 2.2vh, 20px) clamp(28px, 3.5vw, 42px);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(14px, 1.2vw, 16px);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 1.1em 2em;
+  cursor: pointer;
+  min-height: 52px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 24px rgba(242, 239, 163, 0.28);
+}
+
+.contact__submit:hover {
+  background: var(--rc-white-pure);
+  color: var(--rc-dark);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 32px rgba(242, 239, 163, 0.5);
+}
+
+.contact__cta-note {
+  font-family: var(--contact-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--contact-ink-faint);
+}
+
+/* ── flash overlay: cinematic submit hand-off + confirmation ── */
+.contact__flash {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--contact-bg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.6s var(--ease-out-expo);
-  position: relative;
-  overflow: hidden;
-  min-height: 52px;
 }
 
-.contact__btn::before {
-  content: '';
+.contact__flash-line {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--contact-orange);
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s var(--ease-out-expo);
-  z-index: 0;
 }
-.contact__btn span {
+
+.contact__flash-copy {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 clamp(20px, 5vw, 80px);
+  opacity: 0;
+}
+
+.contact__confirm-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(52px, 11vw, 190px);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+}
+
+.contact__confirm-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.contact__confirm-line {
+  display: block;
+  color: var(--contact-ink);
+}
+
+.contact__confirm-line--accent {
+  color: var(--contact-orange);
+}
+
+.contact__flash-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.contact__confirm-sub {
+  margin: clamp(26px, 4vh, 44px) 0 0;
+  font-family: var(--contact-mono);
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: 0.2em;
+  line-height: 2.1;
+  color: rgba(247, 247, 245, 0.7);
+}
+
+/* ── credits / footer strip ── */
+.contact__credits {
   position: relative;
   z-index: 1;
+  max-width: 1560px;
+  margin-inline: auto;
+  padding: clamp(70px, 12vh, 170px) var(--gutter, 20px) clamp(30px, 5vh, 60px);
 }
 
-.contact__btn--primary {
-  background: var(--rc-orange);
-  color: var(--rc-black);
-}
-.contact__btn--primary::before {
-  background: var(--rc-orange-bright);
-}
-.contact__btn--primary:hover::before { transform: scaleX(1); }
-
-.contact__btn--outline {
-  background: transparent;
-  border: 1px solid var(--rc-white);
-  color: var(--rc-white);
-}
-.contact__btn--outline::before {
-  background: var(--rc-white);
-}
-.contact__btn--outline:hover {
-  color: var(--rc-black);
-}
-.contact__btn--outline:hover::before { transform: scaleX(1); }
-
-/* Details */
-.contact__details {
+.contact__credits-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-lg);
-  padding-top: var(--space-xl);
-  border-top: 1px solid var(--rc-gray-dark);
+  gap: clamp(28px, 4vw, 60px);
+  padding-top: clamp(24px, 4vh, 40px);
+  border-top: 1px solid var(--contact-line);
+  font-family: var(--contact-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
 }
 
-.contact__detail-label {
-  font-size: var(--text-xs);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--rc-gray-light);
-  margin-bottom: var(--space-xs);
+.contact__credits-label {
+  color: var(--contact-ink-faint);
+  margin-bottom: 14px;
 }
 
-.contact__detail-value {
-  font-size: var(--text-base);
-  color: var(--rc-white);
-  transition: color 0.3s;
-}
-.contact__detail-value:hover {
-  color: var(--rc-orange);
-}
-
-/* Social */
-.contact__social {
+.contact__credits-list {
   display: flex;
-  gap: var(--space-md);
-  margin-top: var(--space-lg);
+  flex-direction: column;
+  gap: 10px;
 }
 
-.contact__social-link {
-  font-size: var(--text-xs);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--rc-gray-light);
-  position: relative;
-  padding-bottom: 2px;
-  transition: color 0.3s;
+.contact__credits-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(247, 247, 245, 0.75);
+  transition: color 0.3s ease, transform 0.3s ease;
+  width: fit-content;
 }
-.contact__social-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--rc-orange);
-  transition: width 0.6s var(--ease-out-expo);
-}
-.contact__social-link:hover { color: var(--rc-orange); }
-.contact__social-link:hover::after { width: 100%; }
 
-/* Tablet */
+.contact__credits-link:hover {
+  color: var(--contact-orange);
+  transform: translateX(3px);
+}
+
+.contact__credits-arrow {
+  display: inline-block;
+}
+
+.contact__credits-static {
+  color: rgba(247, 247, 245, 0.75);
+  line-height: 1.9;
+}
+
+.contact__closing {
+  margin-top: clamp(80px, 15vh, 200px);
+  padding-bottom: clamp(40px, 8vh, 100px);
+}
+
+.contact__closing-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(38px, 13vw, 150px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.contact__closing-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.contact__closing-line {
+  display: block;
+  color: var(--contact-ink);
+}
+
+.contact__closing-line--accent {
+  color: var(--contact-orange);
+}
+
+/* ── tablet (768px+) ── */
 @media (min-width: 768px) {
-  .contact__buttons {
-    flex-direction: row;
-    gap: var(--space-md);
+  .contact__grid {
+    grid-template-columns: 42fr 52fr;
+    column-gap: clamp(28px, 6%, 78px);
+    align-items: start;
   }
-  .contact__btn {
-    padding: 1.2em 2.5em;
+
+  .contact__field-row {
+    flex-wrap: nowrap;
   }
-  .contact__details {
+
+  .contact__credits-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Desktop */
+/* ── desktop (1200px+) ── */
 @media (min-width: 1200px) {
-  .contact::before {
-    width: 600px;
-    height: 600px;
-    opacity: 0.08;
+  .contact__intro {
+    position: sticky;
+    top: 10vh;
   }
 }

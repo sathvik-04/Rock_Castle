@@ -1,82 +1,516 @@
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: var(--space-md) var(--gutter);
-  display: flex; align-items: center; justify-content: space-between;
-  transition: transform 0.6s var(--ease-out-expo), background 0.6s var(--ease-out-expo);
-  mix-blend-mode: difference;
-}
-.nav--hidden { transform: translateY(-100%); }
-.nav--scrolled {
-  background: rgba(10,10,10,0.85);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  mix-blend-mode: normal;
-}
-.nav__logo { height: 32px; width: auto; }
-.nav__links { display: none; }
-.nav__link {
-  font-family: var(--font-body); font-size: var(--text-xs); font-weight: 500;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--rc-white);
-  position: relative; padding-block: 0.25em;
-  transition: color 0.3s;
-}
-.nav__link::after {
-  content: ''; position: absolute; bottom: 0; left: 0;
-  width: 0; height: 1px; background: var(--rc-orange);
-  transition: width 0.6s var(--ease-out-expo);
-}
-.nav__link:hover::after { width: 100%; }
-.nav__link:hover { color: var(--rc-orange); }
+/* ===================================================
+   ROCKCASTLE — House of Yellow Exact Navbar Architecture
+   Full Bleed / Edge-to-Edge:
+   Left Corner Links | Center Stacked Brand | Right Corner Socials & Pill CTA
+   =================================================== */
 
-/* Hamburger — always visible on mobile, min 44px tap target */
-.nav__toggle {
-  display: flex; position: relative; z-index: 200;
-  width: 44px; height: 44px;
-  flex-direction: column; justify-content: center; align-items: flex-end;
-  gap: 6px;
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 120;
+  padding: 22px 0;
+  color: #ffffff;
+  background: transparent;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              backdrop-filter 0.3s ease,
+              box-shadow 0.3s ease,
+              padding 0.3s ease,
+              color 0.3s ease;
+  will-change: transform;
 }
+
+.nav--scrolled {
+  padding: 14px 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+  color: #1d1d1b;
+}
+
+/* Fallback theme classes if needed */
+.nav--theme-dark:not(.nav--scrolled) {
+  color: #ffffff;
+}
+
+.nav--theme-light:not(.nav--scrolled) {
+  color: #1d1d1b;
+}
+
+/* Full-bleed inner container spanning corner-to-corner */
+.nav__inner {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 clamp(20px, 3.2vw, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* ===================================================
+   ZONE 1: Left Navigation Links (Corner to Center)
+   Exact order: Home, Made by Yellow, Culture, How we roll
+   =================================================== */
+.nav__links {
+  display: none;
+  align-items: center;
+  gap: clamp(18px, 2.2vw, 36px);
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.nav__link {
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none; /* Title Case matching reference */
+  color: currentColor;
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0 6px;
+  transition: opacity 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.nav__link:hover {
+  opacity: 1;
+}
+
+/* Underline Indicator: clean solid horizontal bar below active link */
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 1px;
+}
+
+.nav__link:hover::after,
+.nav__link--active::after {
+  width: 100%;
+}
+
+.nav__link--active {
+  opacity: 1;
+  font-weight: 600;
+}
+
+/* ===================================================
+   ZONE 2: Center Brand Logo & Stacked Text
+   Pinned dead-center horizontally and vertically
+   =================================================== */
+.nav__brand-center-anchor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: currentColor;
+  pointer-events: auto;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav__brand:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.nav__brand-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 9px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.nav__brand-wordmark {
+  height: 46px;
+  width: auto;
+  max-width: 115px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Invert black logo to crisp white when navbar is over dark hero */
+.nav:not(.nav--scrolled):not(.nav--theme-light) .nav__brand-wordmark {
+  filter: invert(1) brightness(1.8);
+}
+
+.nav--scrolled .nav__brand-wordmark,
+.nav--theme-light .nav__brand-wordmark {
+  filter: none;
+}
+
+.nav__brand-text-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 0.96;
+  gap: 3px;
+}
+
+.nav__brand-word {
+  font-family: var(--font-display, 'Poppins', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: currentColor;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .nav__brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .nav__brand-wordmark {
+    height: 35px;
+    max-width: 86px;
+  }
+}
+
+/* ===================================================
+   ZONE 3: Right Socials & Scrolling Pill CTA (Center to Right Corner)
+   =================================================== */
+.nav__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(14px, 1.8vw, 24px);
+  flex: 1;
+}
+
+.nav__socials {
+  display: none;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav__social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  opacity: 0.88;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+}
+
+.nav__social-link:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.nav__social-icon {
+  display: block;
+}
+
+/* Yellow Capsule Pill Button with Running Marquee Ticker */
+.nav__pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--rc-yellow, #f2efa3);
+  color: #1d1d1b;
+  border-radius: 9999px;
+  height: 40px;
+  width: 154px;
+  padding: 0 14px 0 16px;
+  overflow: hidden;
+  text-decoration: none;
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(29, 29, 27, 0.08);
+  box-shadow: 0 2px 10px rgba(242, 239, 163, 0.28);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+.nav__pill-btn:hover {
+  transform: scale(1.02);
+  background: #fdfbb8;
+  box-shadow: 0 4px 18px rgba(242, 239, 163, 0.45);
+}
+
+.nav__pill-track-mask {
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 6px;
+  mask-image: linear-gradient(90deg, transparent 0%, black 14%, black 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 14%, black 86%, transparent 100%);
+}
+
+.nav__pill-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  animation: pillMarquee 7s linear infinite;
+  will-change: transform;
+}
+
+.nav__pill-btn:hover .nav__pill-track {
+  animation-duration: 4.5s;
+}
+
+@keyframes pillMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.nav__pill-track span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #1d1d1b;
+  text-transform: uppercase;
+}
+
+.nav__pill-plus {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+  color: #1d1d1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================================================
+   Mobile Hamburger Toggle
+   =================================================== */
+.nav__toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 200;
+  padding: 0;
+}
+
 .nav__toggle span {
-  display: block; height: 2px; background: var(--rc-white);
-  transition: transform 0.6s var(--ease-out-expo), opacity 0.3s, width 0.3s var(--ease-out-expo);
+  display: block;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.4s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              opacity 0.3s ease,
+              width 0.3s ease;
   transform-origin: center;
 }
-.nav__toggle span:nth-child(1) { width: 24px; }
-.nav__toggle span:nth-child(2) { width: 18px; }
-.nav__toggle span:nth-child(3) { width: 24px; }
-.nav__toggle--active span:nth-child(1) { width: 24px; transform: translateY(8px) rotate(45deg); }
-.nav__toggle--active span:nth-child(2) { opacity: 0; width: 0; }
-.nav__toggle--active span:nth-child(3) { width: 24px; transform: translateY(-8px) rotate(-45deg); }
 
-/* Full-screen menu overlay */
+.nav__toggle span:nth-child(1) { width: 22px; }
+.nav__toggle span:nth-child(2) { width: 16px; }
+.nav__toggle span:nth-child(3) { width: 22px; }
+
+.nav__toggle--active span:nth-child(1) {
+  width: 22px;
+  transform: translateY(7px) rotate(45deg);
+}
+.nav__toggle--active span:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+.nav__toggle--active span:nth-child(3) {
+  width: 22px;
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===================================================
+   Full-Screen Mobile Menu Drawer
+   =================================================== */
 .menu {
-  position: fixed; inset: 0; z-index: 190;
-  background: var(--rc-black-rich);
-  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-  padding: var(--space-2xl) var(--gutter);
-  opacity: 0; visibility: hidden;
-  transition: opacity 0.8s var(--ease-out-expo), visibility 0.8s;
-}
-.menu--open { opacity: 1; visibility: visible; }
-.menu__link {
-  font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 700;
-  letter-spacing: -0.03em; text-transform: uppercase; color: var(--rc-white);
-  display: block; padding-block: 0.2em;
-  transform: translateY(40px); opacity: 0;
-  transition: transform 0.8s var(--ease-out-expo), opacity 0.8s var(--ease-out-expo), color 0.3s;
-}
-.menu--open .menu__link { transform: translateY(0); opacity: 1; }
-.menu__link:hover { color: var(--rc-orange); }
-.menu__accent {
-  position: absolute; bottom: var(--gutter); left: var(--gutter);
-  font-size: var(--text-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--rc-orange);
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: var(--rc-black-rich, #141413);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(90px, 12vh, 120px) var(--gutter, 24px) 40px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-/* Tablet+ : show inline links, hide hamburger */
-@media (min-width: 768px) {
-  .nav__logo { height: 36px; }
-  .nav__links { display: flex; gap: var(--space-md); align-items: center; }
-  .nav__toggle { display: none; }
-  .menu__link { font-size: var(--text-4xl); }
+.menu--open {
+  opacity: 1;
+  visibility: visible;
 }
-@media (min-width: 1200px) {
-  .nav__logo { height: 44px; }
+
+.menu__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 16px;
+  font-family: var(--font-mono, monospace);
+  font-size: var(--fs-meta, 12px);
+  letter-spacing: var(--ls-meta, 0.08em);
+  color: var(--rc-gray-light, #a0a09e);
+}
+
+.menu__tag {
+  color: var(--rc-yellow, #f2efa3);
+}
+
+.menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: auto 0;
+}
+
+.menu__link {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: clamp(1.75rem, 5.5vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--rc-white, #f4f3ed);
+  text-decoration: none;
+  padding-block: 4px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.5s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              opacity 0.5s ease,
+              color 0.2s ease;
+}
+
+.menu--open .menu__link {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.menu__link-index {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  color: var(--rc-yellow, #f2efa3);
+  font-weight: 500;
+}
+
+.menu__link:hover,
+.menu__link--active {
+  color: var(--rc-yellow, #f2efa3);
+}
+
+.menu__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+}
+
+.menu__socials {
+  display: flex;
+  gap: 20px;
+}
+
+.menu__social-link {
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 0.88rem;
+  color: var(--rc-white, #f4f3ed);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.menu__social-link:hover {
+  opacity: 1;
+  color: var(--rc-yellow, #f2efa3);
+}
+
+.menu__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--rc-yellow, #f2efa3);
+  color: #1d1d1b;
+  padding: 14px 24px;
+  border-radius: 9999px;
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(242, 239, 163, 0.3);
+  transition: all 0.3s ease;
+}
+
+.menu__cta:hover {
+  background: #ffffff;
+  transform: scale(1.01);
+}
+
+.menu__accent {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--rc-gray, #70706e);
+  letter-spacing: 0.06em;
+}
+
+/* ===================================================
+   Responsive Breakpoints
+   =================================================== */
+@media (min-width: 768px) {
+  .nav__socials {
+    display: flex;
+  }
+}
+
+@media (min-width: 992px) {
+  .nav__links {
+    display: flex;
+  }
+
+  .nav__toggle {
+    display: none;
+  }
 }

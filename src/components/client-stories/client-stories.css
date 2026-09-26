@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* ── Client Stories: Self-contained Styles ── */
+.rc-stories-section {
+  --rc-s-bg: var(--rc-white-warm, #f8f7f2);
+  --rc-s-fg: var(--rc-black, #0a0a0a);
+  --rc-s-fg-secondary: rgba(10, 10, 10, 0.74);
+  --rc-s-fg-muted: rgba(10, 10, 10, 0.52);
+  --rc-s-accent: var(--rc-yellow, #f2efa3);
+  --rc-s-line: rgba(10, 10, 10, 0.12);
+  --rc-s-line-strong: rgba(10, 10, 10, 0.35);
+  --rc-s-tint: rgba(242, 239, 163, 0.14);
+  --rc-font-sans: 'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rc-font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --rc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  width: 100%;
+  background-color: var(--rc-s-bg);
+  color: var(--rc-s-fg);
+  font-family: var(--rc-font-sans);
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-block: clamp(64px, 8vw, 128px);
+}
+
+/* Dark Theme Support */
+.rc-stories-section.rc-stories--dark {
+  --rc-s-bg: #0a0b0a;
+  --rc-s-fg: #f4f0e6;
+  --rc-s-fg-secondary: rgba(244, 240, 230, 0.72);
+  --rc-s-fg-muted: rgba(244, 240, 230, 0.52);
+  --rc-s-accent: var(--rc-yellow, #f2efa3);
+  --rc-s-line: rgba(244, 240, 230, 0.14);
+  --rc-s-line-strong: rgba(244, 240, 230, 0.42);
+  --rc-s-tint: rgba(244, 240, 230, 0.04);
+}
+
+.rc-stories-container {
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 1.8vw, 28px);
+  box-sizing: border-box;
+}
+
+/* ── Section Header ── */
+.rc-stories-head {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: clamp(12px, 1.4vw, 24px);
+  row-gap: 16px;
+  align-items: end;
+  margin-bottom: clamp(32px, 4vw, 64px);
+}
+
+.rc-stories-meta {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--rc-s-line);
+  padding-bottom: 12px;
+}
+
+.rc-stories-label {
+  font-family: var(--rc-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rc-s-fg-muted);
+}
+
+.rc-stories-index {
+  font-family: var(--rc-font-mono);
+  font-size: 11px;
+  color: var(--rc-s-fg-muted);
+  letter-spacing: 0.08em;
+}
+
+.rc-stories-title {
+  grid-column: 1 / span 8;
+  margin: 0;
+  margin-top: 12px;
+  font-size: clamp(2.2rem, 4.4vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--rc-s-fg);
+}
+
+.rc-stories-nav {
+  grid-column: 9 / -1;
+  justify-self: end;
+  align-self: end;
+  display: flex;
+  gap: 10px;
+}
+
+/* Navigation Circle Buttons */
+.rc-stories-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--rc-s-line);
+  background: transparent;
+  color: var(--rc-s-fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.rc-stories-btn:hover {
+  border-color: var(--rc-s-fg);
+  background-color: var(--rc-s-accent);
+  color: #0c0d0c;
+  transform: scale(1.05);
+}
+
+.rc-stories-btn:active {
+  transform: scale(0.96);
+}
+
+.rc-stories-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* ── Testimonials Ticker Viewport & Track ── */
+.rc-stories-viewport {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  user-select: none;
+  padding-inline: clamp(16px, 1.8vw, 28px);
+  box-sizing: border-box;
+}
+
+.rc-stories-viewport:active {
+  cursor: grabbing;
+}
+
+.rc-stories-track {
+  display: flex;
+  gap: clamp(16px, 1.6vw, 28px);
+  width: max-content;
+  will-change: transform;
+}
+
+.rc-stories-group {
+  display: flex;
+  gap: clamp(16px, 1.6vw, 28px);
+  flex: none;
+}
+
+/* ── Testimonial Card ── */
+.rc-story-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(20px, 2.2vw, 36px);
+  width: clamp(290px, 28vw, 440px);
+  min-height: clamp(270px, 22vw, 330px);
+  padding: clamp(22px, 2vw, 32px);
+  border: 1px solid var(--rc-s-line);
+  border-radius: 4px;
+  background-color: var(--rc-s-tint);
+  user-select: none;
+  box-sizing: border-box;
+  transition: transform 0.4s var(--rc-ease), border-color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.rc-story-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--rc-s-line-strong);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.rc-story-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.rc-story-num {
+  font-family: var(--rc-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #0c0d0c;
+  background-color: var(--rc-s-accent);
+  padding: 3px 8px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.rc-story-tag {
+  font-family: var(--rc-font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rc-s-fg-muted);
+}
+
+.rc-story-quote {
+  margin: 0;
+  font-size: clamp(1.125rem, 1.4vw, 1.45rem);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+  color: var(--rc-s-fg);
+  text-wrap: pretty;
+  flex: 1;
+}
+
+.rc-story-client {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--rc-s-fg-muted);
+}
+
+.rc-story-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 3px;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.rc-story-card:hover .rc-story-avatar {
+  filter: grayscale(0);
+  transform: scale(1.04);
+}
+
+.rc-story-author {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.rc-story-author b {
+  font-weight: 600;
+  color: var(--rc-s-fg);
+}
+
+.rc-story-author span {
+  color: var(--rc-s-fg-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 639px) {
+  .rc-stories-title {
+    grid-column: 1 / -1;
+  }
+  .rc-stories-nav {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 8px;
+  }
+  .rc-story-card {
+    width: 280px;
+    min-height: 250px;
+    padding: 18px;
+  }
+}

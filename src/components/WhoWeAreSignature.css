@@ -1,0 +1,87 @@
+/* ==========================================================================
+   ROCKCASTLE — UNIFIED ATELIER & SIGNATURE EXPERIENCE
+   Seamless pinned environment containing both Who We Are and Signature.
+   Allows the phone zoom-in to transition directly into Signature without
+   any physical upward scrolling gap.
+   ========================================================================== */
+
+.who-sig-experience {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--rc-white-warm, #f8f7f2);
+  z-index: 5;
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.who-sig-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.who-sig-layer--who {
+  z-index: 2;
+  opacity: 1;
+}
+
+.who-sig-layer--sig {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  background: var(--rc-black-rich, #0a0a0a);
+}
+
+/* Child root adjustments in combined mode */
+.who-sig-layer--who .who-we-are--combined {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+}
+
+.who-sig-layer--sig .sig--combined {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Layer 3: Projects Matrix (Architecture in Motion) */
+.who-sig-layer--matrix {
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  background: var(--rc-bg, #0a0b0a);
+}
+
+.who-sig-layer--matrix .rc-matrix-section {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding-top: clamp(96px, 12vh, 128px);
+  padding-bottom: clamp(24px, 3.5vh, 40px);
+  padding-left: clamp(20px, 2.5vw, 40px);
+  padding-right: clamp(20px, 2.5vw, 40px);
+}
+
+.who-sig-layer--matrix .rc-matrix-container {
+  height: 100%;
+  min-height: 0;
+  justify-content: center;
+}
+
+/* Ensure GSAP direct scrubbing is 100% responsive without CSS transition fight */
+.who-sig-layer--matrix .rc-mslot,
+.who-sig-layer--matrix .rc-matrix-centre {
+  transition: none !important;
+}
+

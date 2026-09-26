@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* ── What We Produce: Self-contained Styles ── */
+.rc-produce-section {
+  --rc-p-bg: var(--rc-white-warm, #f8f7f2);
+  --rc-p-fg: var(--rc-black, #0a0a0a);
+  --rc-p-fg-muted: rgba(10, 10, 10, 0.45);
+  --rc-p-accent: var(--rc-yellow, #f2efa3);
+  --rc-p-line: rgba(10, 10, 10, 0.12);
+  --rc-p-tint: rgba(242, 239, 163, 0.22);
+  --rc-font-sans: 'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rc-font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --rc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  width: 100%;
+  background-color: var(--rc-p-bg);
+  color: var(--rc-p-fg);
+  font-family: var(--rc-font-sans);
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-bottom: clamp(60px, 8vw, 120px);
+}
+
+/* Dark Theme Support */
+.rc-produce-section.rc-produce--dark {
+  --rc-p-bg: #0a0b0a;
+  --rc-p-fg: #f4f0e6;
+  --rc-p-fg-muted: rgba(244, 240, 230, 0.45);
+  --rc-p-accent: var(--rc-yellow, #f2efa3);
+  --rc-p-line: rgba(244, 240, 230, 0.14);
+  --rc-p-tint: rgba(244, 240, 230, 0.04);
+}
+
+.rc-produce-container {
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 1.8vw, 28px);
+  box-sizing: border-box;
+}
+
+/* ── Section Header / Eyebrow ── */
+.rc-produce-head {
+  padding-top: clamp(48px, 6vw, 96px);
+  margin-bottom: clamp(24px, 3vw, 48px);
+}
+
+.rc-produce-label {
+  font-family: var(--rc-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rc-p-fg-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rc-produce-label::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--rc-p-accent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Giant Vocabulary Row ── */
+.rc-vocab-viewport {
+  width: 100%;
+  overflow: hidden;
+  padding-block: clamp(20px, 3vw, 40px) clamp(40px, 5vw, 80px);
+  user-select: none;
+}
+
+.rc-vocab-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+}
+
+.rc-vocab-row {
+  display: flex;
+  align-items: center;
+  gap: 0.32em;
+  padding-left: clamp(16px, 2vw, 32px);
+  font-size: clamp(3.2rem, 9.2vw, 10.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+}
+
+.rc-vocab-item {
+  color: var(--rc-p-fg);
+  transition: color 0.3s ease;
+}
+
+.rc-vocab-item.is-muted {
+  color: var(--rc-p-fg-muted);
+}
+
+.rc-vocab-dot {
+  flex: none;
+  display: inline-block;
+  width: 0.14em;
+  height: 0.14em;
+  border-radius: 50%;
+  background-color: var(--rc-p-accent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  margin-inline: 0.25em;
+  vertical-align: middle;
+}
+
+/* ── Capabilities Band Ticker ── */
+.rc-band {
+  width: 100%;
+  border-block: 1px solid var(--rc-p-line);
+  overflow: hidden;
+  user-select: none;
+  background-color: transparent;
+}
+
+.rc-band-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.rc-band:hover .rc-band-track {
+  animation-play-state: paused;
+}
+
+.rc-band-group {
+  display: flex;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rc-band-item {
+  display: flex;
+  align-items: center;
+  padding: clamp(20px, 2.4vw, 36px) clamp(24px, 3vw, 48px);
+  border-right: 1px solid var(--rc-p-line);
+  font-size: clamp(1.125rem, 1.8vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--rc-p-fg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: default;
+}
+
+.rc-band-item:hover {
+  background-color: var(--rc-p-tint);
+  color: var(--rc-p-accent);
+}
+
+/* Continuous CSS Marquee for Capability Band */
+@keyframes rc-band-loop {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.rc-band-track.animate-marquee {
+  animation: rc-band-loop 48s linear infinite;
+}
+
+.rc-band-track.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Responsive adjustments */
+@media (max-width: 639px) {
+  .rc-produce-head {
+    padding-top: 36px;
+    margin-bottom: 20px;
+  }
+  .rc-vocab-viewport {
+    padding-block: 10px 30px;
+  }
+  .rc-band-item {
+    padding: 16px 22px;
+    font-size: 1rem;
+  }
+}

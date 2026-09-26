@@ -1,28 +1,33 @@
 /* Quote — mobile-first */
+/* Restrained by design: black-on-white statement, a single orange word,
+   and a thin rule pinned to the section's bottom edge that draws itself in
+   with scroll (see Quote.jsx) — the first seed of orange, handing off into
+   the black stretch that follows. */
 .quote {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: var(--space-xl) var(--gutter);
-  background: var(--rc-black);
+  background: var(--rc-bg-light);
+  overflow: hidden;
 }
 
 .quote__content {
-  max-width: 1200px;
-  text-align: center;
+  max-width: min(900px, 84vw);
+  text-align: left;
 }
 
 .quote__text {
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  color: var(--rc-white);
+  font-size: var(--fs-secondary);
+  font-weight: 600;
+  letter-spacing: var(--ls-secondary);
+  line-height: 1.1;
+  color: var(--rc-black);
   text-transform: uppercase;
-  text-align: center;
+  text-align: left;
 }
 
 .quote__word {
@@ -32,24 +37,28 @@
 }
 
 .quote__word--orange {
-  color: var(--rc-orange);
+  color: var(--rc-dark);
+  font-weight: 700;
+  background: var(--rc-yellow);
+  padding: 0 8px;
+  border-radius: 4px;
 }
 
 .quote__accent {
-  width: 40px;
-  height: 2px;
-  background: var(--rc-orange);
-  margin: var(--space-lg) auto 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--rc-yellow);
   transform: scaleX(0);
-  transform-origin: center;
+  transform-origin: left center;
 }
 
 /* Tablet */
 @media (min-width: 768px) {
   .quote {
     padding: var(--space-2xl) var(--gutter);
-  }
-  .quote__accent {
-    width: 60px;
   }
 }

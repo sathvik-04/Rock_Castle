@@ -3,25 +3,66 @@
    Mobile-First Design System (390×844 base)
    ======================================== */
 
-/* ---- Design Tokens ---- */
+/* ---- Design Tokens (House of Yellow Inspired System) ---- */
 :root {
-  --rc-black: #0a0a0a;
-  --rc-black-rich: #050505;
-  --rc-dark: #111111;
-  --rc-dark-mid: #1a1a1a;
-  --rc-gray-dark: #2a2a2a;
-  --rc-gray: #555555;
-  --rc-gray-light: #888888;
-  --rc-white: #f5f0eb;
-  --rc-white-pure: #ffffff;
-  --rc-cream: #e8e0d6;
-  --rc-orange: #e87a2e;
-  --rc-orange-bright: #ff8c3a;
-  --rc-orange-deep: #c96520;
-  --rc-orange-glow: rgba(232, 122, 46, 0.3);
+  /* Signature Luminous Pastel Citron / Butter Yellow Accent */
+  --rc-yellow: #f2efa3;
+  --rc-yellow-bright: #fbf9cf;
+  --rc-yellow-muted: #e5e292;
+  --rc-yellow-deep: #c9c54c;
+  --rc-yellow-glow: rgba(242, 239, 163, 0.35);
 
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* Backward compatibility alias mapped directly to the signature yellow */
+  --rc-orange: var(--rc-yellow);
+  --rc-orange-bright: var(--rc-yellow-bright);
+  --rc-orange-deep: var(--rc-yellow-deep);
+  --rc-orange-glow: var(--rc-yellow-glow);
+
+  /* Velvet Charcoal & Obsidian Ground (Tactile Dark Tones) */
+  --rc-black: #141413;
+  --rc-black-rich: #0d0d0c;
+  --rc-dark: #1d1d1b;
+  --rc-dark-mid: #242422;
+  --rc-gray-dark: #2d2d2a;
+  --rc-gray: #7d7c76;
+  --rc-gray-light: #aaa89f;
+
+  /* Porcelain & Warm Studio Light Surfaces */
+  --rc-white: #f4f3ed;
+  --rc-white-pure: #ffffff;
+  --rc-white-warm: #fcfbfa;
+  --rc-cream: #eeecdc;
+
+  /* House of Yellow Light Block Utilities */
+  --rc-bg-light: #f4f3ed;
+  --rc-bg-light-card: #e9e7df;
+  --rc-text-light: #1d1d1b;
+  --rc-border-light: rgba(29, 29, 27, 0.12);
+  --rc-border-yellow: rgba(242, 239, 163, 0.24);
+
+  /* Typography: Geometric, Modern Poppins */
+  --font-display: 'Poppins', 'Switzer', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Poppins', 'Switzer', -apple-system, 'Segoe UI', sans-serif;
+  --font-editorial: 'Poppins', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Responsive type scale (clamp-based) — one source of truth per role so
+     scale/weight/tracking decisions aren't repeated or drift per component.
+     Desktop-max figures per role; mobile floor set to stay readable without
+     overflowing narrow viewports. */
+  --fs-hero: clamp(3.5rem, 16vw, 6rem);
+  --ls-hero: -0.04em;
+  --fs-section: clamp(2.75rem, 9vw, 9rem);
+  --ls-section: -0.035em;
+  --fs-project: clamp(2.25rem, 7vw, 6rem);
+  --ls-project: -0.025em;
+  --fs-secondary: clamp(1.75rem, 5vw, 4rem);
+  --ls-secondary: -0.02em;
+  --fs-body: clamp(1rem, 0.4vw + 0.9rem, 1.1875rem);
+  --fs-body-lg: clamp(1.125rem, 0.5vw + 1rem, 1.3125rem);
+  --ls-body: -0.01em;
+  --fs-meta: clamp(0.6875rem, 0.2vw + 0.65rem, 0.75rem);
+  --ls-meta: 0.08em;
 
   /* Typography — mobile-first, scales up */
   --text-xs: 0.6875rem;     /* 11px */
@@ -94,6 +135,8 @@
     --text-6xl: 6rem;
     --text-mega: 8rem;
 
+    --fs-hero: clamp(5rem, 11vw, 12rem);
+
     --space-xs: 0.375rem;
     --space-sm: 0.75rem;
     --space-md: 1.5rem;
@@ -128,14 +171,14 @@
 html {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--rc-white);
   background: var(--rc-black);
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -147,7 +190,7 @@ ul, ol { list-style: none; }
 button { background: none; border: none; cursor: pointer; font: inherit; color: inherit; }
 h1,h2,h3,h4,h5,h6 { line-height: 1.1; text-wrap: balance; overflow-wrap: break-word; }
 p { overflow-wrap: break-word; }
-::selection { background: var(--rc-orange); color: var(--rc-black); }
+::selection { background: var(--rc-yellow); color: var(--rc-dark); }
 
 /* ---- Image Placeholder Utility ---- */
 .placeholder {
@@ -165,15 +208,15 @@ p { overflow-wrap: break-word; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(135deg, transparent 40%, rgba(232,122,46,0.03) 50%, transparent 60%),
-    linear-gradient(to bottom, rgba(255,255,255,0.01) 0%, transparent 100%);
+    linear-gradient(135deg, transparent 40%, rgba(242, 239, 163, 0.05) 50%, transparent 60%),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, transparent 100%);
   pointer-events: none;
 }
 .placeholder::after {
   content: '';
   position: absolute;
   inset: 8px;
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid rgba(242, 239, 163, 0.08);
   pointer-events: none;
 }
 .placeholder__label {
@@ -181,7 +224,7 @@ p { overflow-wrap: break-word; }
   font-size: var(--text-xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--rc-gray);
+  color: var(--rc-yellow);
   text-align: center;
   line-height: 1.6;
   z-index: 1;
@@ -194,15 +237,15 @@ p { overflow-wrap: break-word; }
 .placeholder--tall { aspect-ratio: 3 / 4; }
 .placeholder--hero { aspect-ratio: 16 / 9; min-height: 300px; }
 
-/* ---- Grain overlay ---- */
+/* ---- Tactile Grain Overlay (House of Yellow Signature) ---- */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
 }
 
@@ -217,18 +260,114 @@ body::after {
 }
 
 /* ---- Scrollbar styling ---- */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 7px; }
 ::-webkit-scrollbar-track { background: var(--rc-black); }
-::-webkit-scrollbar-thumb { background: var(--rc-gray-dark); }
-::-webkit-scrollbar-thumb:hover { background: var(--rc-orange); }
+::-webkit-scrollbar-thumb { background: var(--rc-gray-dark); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--rc-yellow); }
 
-/* ---- Section utility ---- */
+/* ---- Section Utility Tokens ---- */
 .section-label {
   font-family: var(--font-body);
   font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--rc-orange);
+  color: var(--rc-yellow);
   margin-bottom: var(--space-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--rc-yellow);
+  border-radius: 50%;
+}
+
+/* ---- House of Yellow Pill Capsule Buttons & Tags ---- */
+.hoy-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 12px 26px;
+  border-radius: 9999px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 18px rgba(242, 239, 163, 0.22);
+}
+.hoy-pill-btn:hover {
+  background: var(--rc-white-pure);
+  color: var(--rc-dark);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 26px rgba(242, 239, 163, 0.4);
+}
+.hoy-pill-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--rc-white);
+  border: 1px solid rgba(242, 239, 163, 0.3);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.hoy-pill-outline:hover {
+  border-color: var(--rc-yellow);
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
+  box-shadow: 0 0 18px var(--rc-yellow-glow);
+}
+.hoy-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rc-yellow);
+}
+
+/* ── Standard Utilities for UI Primitives (SlideUpText / Tailwind bridge) ── */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.inline-flex { display: inline-flex; }
+.inline-block { display: inline-block; }
+.overflow-hidden { overflow: hidden; }
+.relative { position: relative; }
+.whitespace-pre-wrap { white-space: pre-wrap; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+

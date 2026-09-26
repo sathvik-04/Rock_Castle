@@ -1,0 +1,838 @@
+/* ==========================================================================
+   Who We Are Section
+   Cinematic Editorial Section with Device Media, Narrative & Metrics
+   Includes Sticky Phone Scroll & Scroll-Driven Center-Rotate-Zoom Sequence
+   ========================================================================== */
+
+.who-we-are {
+  position: relative;
+  z-index: 5;
+  background: var(--rc-white-warm, #f8f7f2);
+  color: var(--rc-black, #0a0a0a);
+  width: 100%;
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.45);
+  /* Do not set overflow: hidden here so position: sticky works smoothly */
+}
+
+/* ---- Section Tag / Accent Pill ---- */
+.who-we-are__tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rc-dark, #141413);
+  background: var(--rc-yellow, #f2efa3);
+  padding: 5px 14px;
+  border-radius: 9999px;
+  margin-bottom: clamp(10px, 1.4vh, 16px);
+  box-shadow: 0 2px 8px rgba(242, 239, 163, 0.3);
+  width: fit-content;
+}
+
+/* ---- Intro Container ---- */
+.who-we-are__intro {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: max(74px, clamp(64px, 7.5vh, 88px));
+  padding-bottom: clamp(20px, 3vh, 40px);
+  padding-left: clamp(24px, 3.5vw, 64px);
+  padding-right: clamp(24px, 3.5vw, 64px);
+  position: relative;
+  background: inherit;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.who-we-are__container {
+  max-width: 1340px;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Subtle architectural accent strip on right edge */
+.who-we-are__accent-strip {
+  position: absolute;
+  right: clamp(16px, 2.5vw, 48px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: 55%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(10, 10, 10, 0.06) 15%,
+    rgba(10, 10, 10, 0.10) 50%,
+    rgba(10, 10, 10, 0.06) 85%,
+    transparent 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Orange accent node on the strip */
+.who-we-are__accent-strip::before {
+  content: '';
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--rc-yellow, #f2efa3);
+  box-shadow: 0 0 8px rgba(242, 239, 163, 0.5);
+}
+
+/* Secondary tick marks */
+.who-we-are__accent-strip::after {
+  content: '';
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.15);
+}
+
+/* Vertical text label alongside accent */
+.who-we-are__accent-label {
+  position: absolute;
+  right: clamp(24px, 3vw, 56px);
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.08);
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+}
+
+.who-we-are__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(32px, 4vw, 64px);
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .who-we-are__grid {
+    grid-template-columns: clamp(230px, 17vw, 260px) 1fr;
+    gap: clamp(48px, 5.5vw, 100px);
+    align-items: center;
+  }
+}
+
+/* ---- Device Column (Left Media Composition - Fixed via GSAP Pin) ---- */
+.who-we-are__device-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.who-we-are__device-mover {
+  position: relative;
+  z-index: 10;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.who-we-are__device-scaler {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.who-we-are__device-frame-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: clamp(230px, 17vw, 260px);
+  max-width: 100%;
+}
+
+/* Ambient warm brand glow behind device */
+.who-we-are__device-frame-wrap::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 135%;
+  height: 115%;
+  background: radial-gradient(
+    circle,
+    rgba(242, 239, 163, 0.28) 0%,
+    rgba(234, 88, 12, 0.09) 45%,
+    transparent 72%
+  );
+  filter: blur(36px);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
+.who-we-are__device-element {
+  position: relative;
+  z-index: 1;
+  width: 100% !important;
+  transition: box-shadow 0.45s ease;
+}
+
+/* Screen content and video inside Device */
+.who-we-are__screen-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000000;
+  border-radius: inherit;
+}
+
+.who-we-are__screen-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.4s ease;
+}
+
+
+
+/* ---- Fragmented Text Overlay Appearing as Phone Centers ---- */
+.who-we-are__fragments {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: max(88px, clamp(80px, 11vh, 110px));
+  padding-bottom: clamp(32px, 5vh, 60px);
+  padding-left: clamp(24px, 4vw, 64px);
+  padding-right: clamp(24px, 4vw, 64px);
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+.who-we-are__fragment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 360px;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.who-we-are__fragment--top {
+  align-self: flex-start;
+}
+
+.who-we-are__fragment--bottom {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.who-we-are__fragment-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--rc-dark, #141413);
+  background: var(--rc-yellow, #f2efa3);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  width: fit-content;
+  font-weight: 700;
+}
+
+.who-we-are__fragment--bottom .who-we-are__fragment-label {
+  margin-left: auto;
+}
+
+.who-we-are__fragment-text {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(1.2rem, 2.2vw, 1.85rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--rc-black, #0a0a0a);
+}
+
+/* ---- Text Column (Right Side - Scrolls Past the Stuck Phone) ---- */
+.who-we-are__text-column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.2vh, 26px);
+  min-width: 0;
+  will-change: transform, opacity;
+  width: 100%;
+}
+
+/* Header inside text column */
+.who-we-are__header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.who-we-are__headline {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(2.35rem, 4.3vw, 4.35rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--rc-black, #0a0a0a);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  max-width: 22ch;
+  word-break: normal;
+}
+
+.who-we-are__headline-part {
+  display: block;
+  padding-top: 0.06em;
+}
+
+/* Narrative */
+.who-we-are__narrative {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.2vh, 14px);
+  max-width: 680px;
+  width: 100%;
+}
+
+.who-we-are__p {
+  margin: 0;
+}
+
+.who-we-are__p--lead {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--rc-dark, #141413);
+}
+
+.who-we-are__p--sub {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(0.9rem, 0.98vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.58;
+  color: rgba(10, 10, 10, 0.74);
+}
+
+/* Statistics row */
+.who-we-are__metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3.5vw, 56px);
+  padding: clamp(12px, 1.8vh, 22px) 0;
+  margin: 0;
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+  border-bottom: 1px solid rgba(10, 10, 10, 0.12);
+  max-width: 680px;
+  width: 100%;
+}
+
+.who-we-are__metric {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.who-we-are__metric:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: calc(clamp(24px, 3.5vw, 56px) * -0.5);
+  top: 15%;
+  height: 70%;
+  width: 1px;
+  background: rgba(10, 10, 10, 0.12);
+}
+
+.who-we-are__metric-num {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(2.2rem, 3.2vw, 3.2rem);
+  font-weight: 700;
+  color: var(--rc-black, #0a0a0a);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.who-we-are__metric-label {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: clamp(9px, 0.75vw, 10.5px);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.65);
+  margin-top: 6px;
+  line-height: 1.35;
+}
+
+/* CTA Section */
+.who-we-are__cta {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vh, 16px);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.who-we-are__prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.who-we-are__prompt-line {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--rc-dark, #1d1d1b);
+}
+
+.who-we-are__prompt-line--bold {
+  font-weight: 700;
+  color: var(--rc-black, #141413);
+}
+
+.who-we-are__actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.4vw, 20px);
+  flex-wrap: wrap;
+}
+
+/* Capsule Pill Button Base */
+.who-we-are__pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 9999px;
+  height: 46px;
+  width: 168px;
+  padding: 0 16px 0 18px;
+  overflow: hidden;
+  text-decoration: none;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* 1. Yellow CONNECT Capsule Button */
+.who-we-are__pill-btn--connect {
+  background: var(--rc-yellow, #f2efa3);
+  color: #1d1d1b;
+  border: 1px solid rgba(29, 29, 27, 0.12);
+  box-shadow: 0 2px 10px rgba(242, 239, 163, 0.35);
+}
+
+.who-we-are__pill-btn--connect:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: #fdfbb8;
+  box-shadow: 0 6px 20px rgba(242, 239, 163, 0.55);
+}
+
+.who-we-are__pill-btn--connect .who-we-are__pill-track span {
+  color: #1d1d1b;
+}
+
+.who-we-are__pill-btn--connect .who-we-are__pill-plus {
+  color: #1d1d1b;
+}
+
+/* 2. Sleek OUR STORIES Capsule Button */
+.who-we-are__pill-btn--culture {
+  background: #141413;
+  color: #f4f3ed;
+  border: 1px solid rgba(20, 20, 19, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  width: 184px;
+}
+
+.who-we-are__pill-btn--culture:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: #242422;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+  border-color: rgba(242, 239, 163, 0.5);
+}
+
+.who-we-are__pill-btn--culture .who-we-are__pill-track span {
+  color: #f4f3ed;
+}
+
+.who-we-are__pill-btn--culture .who-we-are__pill-plus {
+  color: var(--rc-yellow, #f2efa3);
+}
+
+/* Responsive adjustments for Mobile & Tablet */
+@media (max-width: 959px) {
+  .who-we-are__accent-strip,
+  .who-we-are__accent-label {
+    display: none;
+  }
+
+  .who-we-are__intro {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: max(54px, clamp(44px, 6.5vh, 68px));
+    padding-bottom: clamp(10px, 1.5vh, 20px);
+    padding-left: clamp(14px, 3.5vw, 24px);
+    padding-right: clamp(14px, 3.5vw, 24px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .who-we-are__container {
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .who-we-are__grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 1vh, 12px);
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .who-we-are__text-column {
+    display: contents;
+  }
+
+  /* 1. Header (Centered) */
+  .who-we-are__header {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .who-we-are__tag {
+    font-size: clamp(9px, 2.2vw, 10.5px);
+    padding: 3px 10px;
+    margin-bottom: clamp(3px, 0.5vh, 6px);
+  }
+
+  .who-we-are__headline {
+    font-size: clamp(1.2rem, 4.8vw, 1.75rem);
+    line-height: 1.08;
+    text-align: center;
+    align-items: center;
+    max-width: 22ch;
+    margin: 0 auto;
+  }
+
+  /* 2. Device (Centered Phone Mockup) */
+  .who-we-are__device-column {
+    order: 2;
+    margin: clamp(4px, 0.8vh, 10px) 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .who-we-are__device-mover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .who-we-are__device-scaler {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: 50% 50%;
+  }
+
+  .who-we-are__device-frame-wrap {
+    width: clamp(140px, 34vw, 175px);
+    max-width: clamp(140px, 34vw, 175px);
+    margin: 0 auto;
+  }
+
+  .who-we-are__device-element,
+  .who-we-are__device-frame-wrap .rc-device-wrapper {
+    --device-w: clamp(140px, 34vw, 175px) !important;
+    width: clamp(140px, 34vw, 175px) !important;
+    max-width: 100% !important;
+  }
+
+  /* 3. Narrative (Concise lead text) */
+  .who-we-are__narrative {
+    order: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: clamp(280px, 86vw, 440px);
+    gap: 4px;
+    margin: 0 auto;
+  }
+
+  .who-we-are__p--lead {
+    font-size: clamp(0.76rem, 2.2vw, 0.88rem);
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .who-we-are__p--sub {
+    display: none;
+  }
+
+  /* 4. Three-Column Metrics Row (Single horizontal bar) */
+  .who-we-are__metrics-row {
+    order: 4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(8px, 2.5vw, 16px);
+    padding: clamp(6px, 0.8vh, 10px) 0;
+    max-width: clamp(280px, 86vw, 380px);
+    width: 100%;
+    margin: 0 auto;
+    border-top: 1px solid rgba(10, 10, 10, 0.1);
+    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+  }
+
+  .who-we-are__metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .who-we-are__metric-num {
+    font-size: clamp(1.15rem, 3.8vw, 1.45rem);
+    line-height: 1.05;
+  }
+
+  .who-we-are__metric-label {
+    font-size: clamp(7px, 1.8vw, 8px);
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .who-we-are__metric:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: calc(clamp(8px, 2.5vw, 16px) * -0.5);
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    background: rgba(10, 10, 10, 0.1);
+  }
+
+  /* 5. CTA Actions */
+  .who-we-are__cta {
+    order: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .who-we-are__prompt {
+    display: none;
+  }
+
+  .who-we-are__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .who-we-are__pill-btn {
+    height: 34px;
+    width: 125px;
+    padding: 0 10px 0 12px;
+    font-size: 10.5px;
+  }
+
+  .who-we-are__pill-btn--culture {
+    width: 135px;
+  }
+
+  .who-we-are__pill-track span {
+    font-size: 9.5px;
+  }
+
+  /* Floating brand fragments for mobile */
+  .who-we-are__fragments {
+    padding-top: max(68px, 8.5vh);
+    padding-bottom: clamp(18px, 3vh, 32px);
+    padding-left: clamp(14px, 3.5vw, 28px);
+    padding-right: clamp(14px, 3.5vw, 28px);
+  }
+
+  .who-we-are__fragment {
+    max-width: 260px;
+    gap: 4px;
+  }
+
+  .who-we-are__fragment-label {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .who-we-are__fragment-text {
+    font-size: clamp(0.9rem, 3.5vw, 1.25rem);
+    line-height: 1.15;
+  }
+}
+
+/* Extra safety for very short screens (e.g. height < 680px) */
+@media (max-width: 959px) and (max-height: 680px) {
+  .who-we-are__intro {
+    padding-top: max(48px, 5.5vh);
+    padding-bottom: 8px;
+  }
+
+  .who-we-are__grid {
+    gap: 4px;
+  }
+
+  .who-we-are__device-frame-wrap,
+  .who-we-are__device-element,
+  .who-we-are__device-frame-wrap .rc-device-wrapper {
+    --device-w: 115px !important;
+    width: 115px !important;
+  }
+
+  .who-we-are__headline {
+    font-size: 1.15rem;
+  }
+
+  .who-we-are__narrative {
+    display: none;
+  }
+
+  .who-we-are__metrics-row {
+    padding: 4px 0;
+  }
+}
+
+/* Common Marquee Ticker Track */
+.who-we-are__pill-track-mask {
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 6px;
+  mask-image: linear-gradient(90deg, transparent 0%, black 14%, black 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 14%, black 86%, transparent 100%);
+}
+
+.who-we-are__pill-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  animation: whoWeArePillMarquee 7s linear infinite;
+  will-change: transform;
+}
+
+.who-we-are__pill-btn:hover .who-we-are__pill-track {
+  animation-duration: 4.2s;
+}
+
+@keyframes whoWeArePillMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.who-we-are__pill-track span {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.who-we-are__pill-plus {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.who-we-are__pill-btn:hover .who-we-are__pill-plus {
+  transform: rotate(90deg) scale(1.15);
+}

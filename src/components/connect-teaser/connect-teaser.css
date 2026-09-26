@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* ── Rock Castle Connect Section ── */
+.rc-connect-teaser {
+  --rc-ct-bg: #111211;
+  --rc-ct-fg: var(--rc-yellow, #f2efa3);
+  --rc-ct-muted: rgba(242, 239, 163, 0.65);
+  --rc-ct-line: rgba(242, 239, 163, 0.18);
+  --rc-font-sans: 'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rc-font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --rc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  background-color: var(--rc-ct-bg);
+  color: var(--rc-ct-fg);
+  font-family: var(--rc-font-sans);
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-block: clamp(72px, 8vw, 120px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75);
+}
+
+.rc-connect-teaser-container {
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 1.8vw, 28px);
+  box-sizing: border-box;
+}
+
+/* ── Two-Column Layout Grid ── */
+.rc-connect-teaser-grid {
+  display: grid;
+  grid-template-columns: clamp(220px, 24vw, 320px) 1fr;
+  column-gap: clamp(36px, 6vw, 100px);
+  row-gap: 36px;
+  align-items: center;
+}
+
+/* ── Left Column: Interactive Eyes & Studio Meta ── */
+.rc-connect-teaser-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(20px, 2.5vw, 32px);
+  will-change: transform, opacity;
+}
+
+.rc-connect-teaser-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rc-connect-teaser-index {
+  font-family: var(--rc-font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--rc-ct-fg);
+  text-transform: uppercase;
+}
+
+.rc-connect-dot-live {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--rc-ct-fg);
+  box-shadow: 0 0 10px var(--rc-ct-fg);
+  animation: rcDotPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes rcDotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+/* Interactive Eye Stage (Natural, organic presence — No rigid box/block) */
+.rc-connect-eyes-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(12px, 1.5vw, 24px) 0;
+  user-select: none;
+  cursor: crosshair;
+}
+
+.rc-connect-atelier-caption {
+  font-family: var(--rc-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rc-ct-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ── Right Column: Impactful Rock Castle Narrative ── */
+.rc-connect-teaser-right {
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+}
+
+.rc-connect-teaser-label {
+  font-family: var(--rc-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rc-ct-fg);
+  margin-bottom: clamp(18px, 2.2vw, 32px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  will-change: transform, opacity;
+}
+
+.rc-connect-teaser-label::before {
+  content: '//';
+  opacity: 0.55;
+  color: var(--rc-ct-fg);
+}
+
+.rc-connect-teaser-headline {
+  margin: 0;
+  font-size: clamp(2.1rem, 3.8vw, 4.1rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  color: var(--rc-ct-fg);
+  text-wrap: balance;
+  will-change: transform, opacity;
+}
+
+.rc-connect-teaser-subtext {
+  margin: 0;
+  margin-top: clamp(22px, 2.6vw, 38px);
+  font-size: clamp(1.2rem, 1.8vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--rc-ct-muted);
+  max-width: 980px;
+  will-change: transform, opacity;
+}
+
+.rc-connect-teaser-cta {
+  margin-top: clamp(32px, 3.6vw, 54px);
+  will-change: transform, opacity;
+}
+
+/* ── Pill Capsule Button (Marquee + Plus) ── */
+.rc-connect-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 9999px;
+  height: 52px;
+  width: 196px;
+  padding: 0 18px 0 22px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: var(--rc-ct-fg);
+  color: #0c0d0c;
+  border: 1px solid rgba(242, 239, 163, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s var(--rc-ease),
+              background-color 0.25s ease,
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.rc-connect-pill-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  background-color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 8px 30px rgba(242, 239, 163, 0.55);
+}
+
+.rc-connect-pill-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  white-space: nowrap;
+  animation: rcConnectPillMarquee 7s linear infinite;
+  will-change: transform;
+}
+
+.rc-connect-pill-btn:hover .rc-connect-pill-track {
+  animation-duration: 4s;
+}
+
+@keyframes rcConnectPillMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.rc-connect-pill-track span {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0c0d0c;
+}
+
+.rc-connect-pill-plus {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  color: #0c0d0c;
+  margin-left: 14px;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.rc-connect-pill-btn:hover .rc-connect-pill-plus {
+  transform: rotate(90deg) scale(1.15);
+}
+
+/* ── Responsive Behavior ── */
+@media (max-width: 900px) {
+  .rc-connect-teaser-grid {
+    grid-template-columns: 1fr;
+    row-gap: 32px;
+  }
+
+  .rc-connect-eyes-stage {
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .rc-connect-teaser {
+    padding-block: 52px;
+  }
+
+  .rc-connect-teaser-label {
+    margin-bottom: 16px;
+  }
+
+  .rc-connect-teaser-subtext {
+    margin-top: 18px;
+  }
+
+  .rc-connect-teaser-cta {
+    margin-top: 28px;
+  }
+}

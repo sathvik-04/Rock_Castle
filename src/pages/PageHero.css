@@ -1,0 +1,123 @@
+/* ==========================================================================
+   ROCKCASTLE — Subpage Hero Banner (Cinematic Editorial Header)
+   ========================================================================== */
+
+.page-hero {
+  position: relative;
+  width: 100%;
+  background: var(--rc-black, #141413);
+  color: var(--rc-white-pure, #ffffff);
+  padding: clamp(140px, 20vh, 210px) var(--gutter, 24px) clamp(64px, 10vh, 110px);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Subtle architectural grid pattern background */
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Atmospheric warm gold/citron glow behind headline */
+.page-hero__glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50vw;
+  height: 40vh;
+  background: radial-gradient(
+    circle,
+    rgba(242, 239, 163, 0.12) 0%,
+    rgba(234, 88, 12, 0.06) 45%,
+    transparent 70%
+  );
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.page-hero__inner {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.page-hero__tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #1d1d1b;
+  background: var(--rc-yellow, #f2efa3);
+  padding: 5px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 10px rgba(242, 239, 163, 0.3);
+}
+
+.page-hero__breadcrumb {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.page-hero__breadcrumb a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.page-hero__breadcrumb a:hover {
+  color: var(--rc-yellow, #f2efa3);
+}
+
+.page-hero__title {
+  font-family: var(--font-display, 'Poppins', sans-serif);
+  font-size: clamp(3rem, 7.5vw, 6.8rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: var(--ls-section, -0.035em);
+  text-transform: uppercase;
+  color: var(--rc-white-pure, #ffffff);
+  margin: 0 0 clamp(20px, 3vh, 32px);
+  max-width: 1200px;
+}
+
+.page-hero__title-accent {
+  color: var(--rc-yellow, #f2efa3);
+}
+
+.page-hero__subtitle {
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(244, 243, 237, 0.78);
+  max-width: 780px;
+  margin: 0;
+}

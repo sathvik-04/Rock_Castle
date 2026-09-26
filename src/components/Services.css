@@ -1,7 +1,19 @@
-/* Services — mobile-first */
+/* Services — mobile-first. Dark ground with orange reserved as an accent
+   (numbers, hover state, active underline) rather than a full-bleed fill —
+   matches the restrained orange-on-dark treatment used everywhere else
+   (Hero, Process) instead of a wall-to-wall saturated block. */
 .services {
+  /* Was --rc-cream (a warm beige) — read as an orange/white mixture rather
+     than clean text. Every other black section (Work, Testimonials,
+     Process) uses --rc-white-warm for primary text on black; Services had
+     been left on the old cream token. */
+  --services-ink: var(--rc-white-warm);
+  --services-ink-soft: var(--rc-gray-light);
+  --services-line: rgba(245, 240, 235, 0.14);
+  --services-pop: var(--rc-yellow);
+
   position: relative;
-  background: var(--rc-black-rich);
+  background: var(--rc-black);
   padding-block: var(--space-2xl);
 }
 
@@ -18,22 +30,23 @@
 
 .services__title {
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: var(--fs-section);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--ls-section);
+  line-height: 0.9;
   text-transform: uppercase;
-  color: var(--rc-white);
+  color: var(--services-ink);
 }
 
 /* Service items */
 .services__item {
-  border-top: 1px solid var(--rc-gray-dark);
+  border-top: 1px solid var(--services-line);
   overflow: hidden;
   cursor: pointer;
   position: relative;
 }
 .services__item:last-child {
-  border-bottom: 1px solid var(--rc-gray-dark);
+  border-bottom: 1px solid var(--services-line);
 }
 
 .services__item-header {
@@ -55,27 +68,29 @@
 }
 
 .services__item-num {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  letter-spacing: 0.2em;
-  color: var(--rc-gray);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: var(--ls-meta);
+  color: var(--services-pop);
   flex-shrink: 0;
 }
 
 .services__item-name {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-size: var(--fs-secondary);
+  font-weight: 600;
+  letter-spacing: var(--ls-secondary);
+  line-height: 0.95;
   text-transform: uppercase;
-  color: var(--rc-white);
+  color: var(--services-ink);
   transition: color 0.3s, transform 0.6s var(--ease-out-expo);
   transform-origin: left center;
 }
 
 .services__item:hover .services__item-name,
 .services__item.is-open .services__item-name {
-  color: var(--rc-orange);
+  color: var(--services-pop);
 }
 .services__item.is-open .services__item-name {
   transform: scale(1.03);
@@ -95,7 +110,7 @@
 .services__item-toggle::after {
   content: '';
   position: absolute;
-  background: var(--rc-white);
+  background: var(--services-ink);
   transition: transform 0.6s var(--ease-out-expo), background 0.3s;
 }
 .services__item-toggle::before {
@@ -108,7 +123,7 @@
 }
 .services__item:hover .services__item-toggle::before,
 .services__item:hover .services__item-toggle::after {
-  background: var(--rc-orange);
+  background: var(--services-pop);
 }
 .services__item.is-open .services__item-toggle::after {
   transform: rotate(90deg);
@@ -141,9 +156,12 @@
 }
 
 .services__item-desc {
-  font-size: var(--text-base);
-  color: var(--rc-gray-light);
-  line-height: 1.7;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  letter-spacing: var(--ls-body);
+  color: var(--services-ink-soft);
+  line-height: 1.65;
 }
 
 .services__item-tags {
@@ -154,12 +172,22 @@
 }
 
 .services__item-tag {
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
+  font-family: var(--font-body);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: var(--ls-meta);
   text-transform: uppercase;
-  color: var(--rc-orange);
-  padding: 0.3em 0.8em;
-  border: 1px solid rgba(232,122,46,0.3);
+  color: var(--services-ink);
+  padding: 0.4em 1em;
+  border-radius: 9999px;
+  border: 1px solid rgba(242, 239, 163, 0.25);
+  transition: all 0.3s ease;
+}
+
+.services__item-tag:hover {
+  background: var(--rc-yellow);
+  color: var(--rc-dark);
+  border-color: var(--rc-yellow);
 }
 
 /* Placeholder in expanded */
@@ -167,7 +195,7 @@
   min-height: 160px;
 }
 
-/* Orange underline on open */
+/* Underline on open */
 .services__item::after {
   content: '';
   position: absolute;
@@ -175,7 +203,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--rc-orange);
+  background: var(--services-pop);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 1s var(--ease-out-expo);
@@ -187,9 +215,6 @@
 
 /* Tablet */
 @media (min-width: 768px) {
-  .services__item-name {
-    font-size: var(--text-2xl);
-  }
   .services__item-inner {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-lg);
@@ -201,9 +226,6 @@
 
 /* Desktop */
 @media (min-width: 1200px) {
-  .services__item-name {
-    font-size: var(--text-3xl);
-  }
   .services__item-inner {
     grid-template-columns: 1fr 1.2fr;
   }
