@@ -231,15 +231,8 @@ export default function Signature({ isCombined = false }) {
       // ─────────────────────────────────────────────────────────────
       // SEQUENCE 7: DISSOLVE TO BLACK & SMOOTH HAND-OFF INTO WORK (0.90 → 1.00)
       // ─────────────────────────────────────────────────────────────
-      tl.to('.sig__final', { opacity: 0, y: -25, duration: 0.05 }, 0.91)
       tl.to('.sig__world', { opacity: 0, duration: 0.04 }, 0.91)
-
-      tl.fromTo('.sig__transition', {
-        opacity: 0, y: 30
-      }, {
-        opacity: 1, y: 0, duration: 0.06, ease: 'power3.out'
-      }, 0.94)
-
+      tl.to('.sig__final', { opacity: 0, y: -25, duration: 0.05 }, 0.96)
     }, sceneRef.current)
 
     return () => ctx.revert()
@@ -394,15 +387,6 @@ export default function Signature({ isCombined = false }) {
           We create <span className="sig__final-accent">experiences.</span>
           <span className="sig__final-underline" />
         </h2>
-      </div>
-
-      {/* Smooth Transition Hand-off Into Selected Work */}
-      <div className="sig__transition">
-        <p className="sig__trans-heading">ARCHITECTURE IN MOTION</p>
-        <a href="#work" className="sig__trans-cta">
-          <span className="sig__trans-cta-text">EXPLORE PROJECTS</span>
-          <span className="sig__trans-cta-arrow">↓</span>
-        </a>
       </div>
     </section>
   )

@@ -139,12 +139,32 @@
 }
 
 .nav__brand-logo {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 9px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   flex-shrink: 0;
+}
+
+.nav__brand-wordmark {
+  height: 46px;
+  width: auto;
+  max-width: 115px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Invert black logo to crisp white when navbar is over dark hero */
+.nav:not(.nav--scrolled):not(.nav--theme-light) .nav__brand-wordmark {
+  filter: invert(1) brightness(1.8);
+}
+
+.nav--scrolled .nav__brand-wordmark,
+.nav--theme-light .nav__brand-wordmark {
+  filter: none;
 }
 
 .nav__brand-text-stack {
@@ -163,6 +183,19 @@
   text-transform: uppercase;
   color: currentColor;
   line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .nav__brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .nav__brand-wordmark {
+    height: 35px;
+    max-width: 86px;
+  }
 }
 
 /* ===================================================

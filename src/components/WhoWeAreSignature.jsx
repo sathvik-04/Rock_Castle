@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import WhoWeAre from './WhoWeAre'
 import Signature from './Signature'
+import { ProjectsMatrix } from './projects-matrix/ProjectsMatrix'
 import './WhoWeAreSignature.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -11,12 +12,14 @@ export default function WhoWeAreSignature() {
   const containerRef = useRef(null)
   const whoLayerRef = useRef(null)
   const sigLayerRef = useRef(null)
+  const matrixLayerRef = useRef(null)
 
   useEffect(() => {
     const container = containerRef.current
     const whoLayer = whoLayerRef.current
     const sigLayer = sigLayerRef.current
-    if (!container || !whoLayer || !sigLayer) return
+    const matrixLayer = matrixLayerRef.current
+    if (!container || !whoLayer || !sigLayer || !matrixLayer) return
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -44,7 +47,8 @@ export default function WhoWeAreSignature() {
       }
 
       if (reduced) {
-        gsap.set(sigLayer, { opacity: 1, pointerEvents: 'auto' })
+        gsap.set(matrixLayer, { opacity: 1, pointerEvents: 'auto' })
+        gsap.set(sigLayer, { display: 'none' })
         gsap.set(whoLayer, { display: 'none' })
         return
       }
@@ -89,13 +93,13 @@ export default function WhoWeAreSignature() {
       const isMobile = () => window.innerWidth <= 959
 
       // ── MASTER PINNED TIMELINE ──
-      // Pins the single experience container at top top for 620% scroll distance.
-      // Seamlessly transitions from WhoWeAre into Signature with ZERO upward scroll.
+      // Pins the single experience container at top top for 780% scroll distance.
+      // Seamlessly transitions from WhoWeAre into Signature into ProjectsMatrix with ZERO physical scroll down.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
           start: 'top top',
-          end: '+=620%',
+          end: '+=780%',
           pin: true,
           pinSpacing: true,
           scrub: 0.8,
@@ -325,43 +329,72 @@ export default function WhoWeAreSignature() {
 
       tl.to('.sig__word--experiences', { opacity: 0, scale: 1.2, z: 180, duration: 0.04, ease: 'power2.in' }, 0.75)
 
-      // SEQUENCE 4: "MEMORY" (0.76 → 0.87)
+      // SEQUENCE 4: "MEMORY" (0.74 → 0.81)
       tl.fromTo('.sig__word--memory', {
         opacity: 0, scale: 0.6, z: -350
       }, {
-        opacity: 1, scale: 1, z: 0, duration: 0.05, ease: 'power3.out'
-      }, 0.76)
+        opacity: 1, scale: 1, z: 0, duration: 0.04, ease: 'power3.out'
+      }, 0.74)
 
       tl.fromTo('.sig__wireframe--2', {
         opacity: 0, scale: 0.8
       }, {
-        opacity: 0.6, scale: 1, duration: 0.05
-      }, 0.77)
+        opacity: 0.6, scale: 1, duration: 0.04
+      }, 0.75)
 
-      tl.to('.sig__plane--grid', { opacity: 0.12, duration: 0.05 }, 0.77)
-      tl.to('.sig__orange-line--3', { scaleX: 1, opacity: 0.8, duration: 0.04 }, 0.79)
+      tl.to('.sig__plane--grid', { opacity: 0.12, duration: 0.04 }, 0.75)
+      tl.to('.sig__orange-line--3', { scaleX: 1, opacity: 0.8, duration: 0.03 }, 0.76)
 
-      tl.to('.sig__word--memory', { opacity: 0, scale: 1.4, z: 260, duration: 0.04, ease: 'power2.in' }, 0.85)
+      // MEMORY zooms into the camera and fades out
+      tl.to('.sig__word--memory', {
+        opacity: 0, scale: 2.2, z: 320, duration: 0.05, ease: 'power2.in'
+      }, 0.80)
 
-      // SEQUENCE 5: IMMERSIVE DRIVE FORWARD (0.83 → 0.90)
-      tl.to('.sig__world', { scale: 2.1, z: 280, duration: 0.07, ease: 'none' }, 0.83)
-      tl.to('.sig__slot--1', { x: '-35%', y: '-15%', scale: 1.45, opacity: 0.35, duration: 0.07, ease: 'none' }, 0.83)
-      tl.to('.sig__slot--2', { x: '35%', y: '20%', scale: 1.5, opacity: 0.35, duration: 0.07, ease: 'none' }, 0.83)
-      tl.to('.sig__vignette', { opacity: 0.95, duration: 0.06 }, 0.84)
+      // SEQUENCE 5: IMMERSIVE DISSOLVE & TRANSITION INTO PROJECTS MATRIX (0.80 → 1.00)
+      tl.to('.sig__world', { scale: 2.2, z: 280, opacity: 0, duration: 0.05, ease: 'power2.in' }, 0.80)
+      tl.to('.sig__slot--1', { x: '-40%', y: '-20%', scale: 1.6, opacity: 0, duration: 0.04, ease: 'none' }, 0.80)
+      tl.to('.sig__slot--2', { x: '40%', y: '25%', scale: 1.6, opacity: 0, duration: 0.04, ease: 'none' }, 0.80)
+      tl.to('.sig__hud', { opacity: 0, duration: 0.03 }, 0.81)
+      tl.to('.sig__vignette', { opacity: 0, duration: 0.03 }, 0.81)
 
-      // SEQUENCE 6: MONUMENTAL FINAL STATEMENT (0.89 → 0.96)
-      tl.to('.sig__world', { opacity: 0.06, duration: 0.05 }, 0.89)
-      tl.to('.sig__hud', { opacity: 0, duration: 0.04 }, 0.89)
+      // Cross-fade: Signature layer fades out, Projects Matrix layer fades in!
+      tl.to(sigLayer, { opacity: 0, duration: 0.04 }, 0.83)
+      tl.fromTo(matrixLayer, {
+        opacity: 0, pointerEvents: 'none'
+      }, {
+        opacity: 1, pointerEvents: 'auto', duration: 0.04, ease: 'power2.out'
+      }, 0.83)
 
-      tl.fromTo('.sig__final-line1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05, ease: 'power3.out' }, 0.90)
-      tl.fromTo('.sig__final-line2', { opacity: 0, y: 45 }, { opacity: 1, y: 0, duration: 0.05, ease: 'power3.out' }, 0.92)
-      tl.fromTo('.sig__final-underline', { scaleX: 0 }, { scaleX: 1, duration: 0.04, ease: 'power2.out' }, 0.94)
+      // Projects Matrix: 10 Cards and Centerpiece fly in from the edges
+      tl.fromTo('.rc-mslot--1, .rc-mslot--2, .rc-mslot--3', {
+        x: -140, opacity: 0, scale: 0.88
+      }, {
+        x: 0, opacity: 1, scale: 1, duration: 0.06, ease: 'power3.out', stagger: 0.015
+      }, 0.84)
 
-      // SEQUENCE 7: DISSOLVE & BRIDGE INTO WORK / LEADERSHIP (0.96 → 1.00)
-      tl.to('.sig__final', { opacity: 0, y: -25, duration: 0.03 }, 0.96)
-      tl.to('.sig__world', { opacity: 0, duration: 0.03 }, 0.96)
+      tl.fromTo('.rc-mslot--4, .rc-mslot--5', {
+        y: -110, opacity: 0, scale: 0.88
+      }, {
+        y: 0, opacity: 1, scale: 1, duration: 0.06, ease: 'power3.out', stagger: 0.015
+      }, 0.84)
 
-      tl.fromTo('.sig__transition', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.04, ease: 'power3.out' }, 0.97)
+      tl.fromTo('.rc-mslot--6, .rc-mslot--7', {
+        x: 140, opacity: 0, scale: 0.88
+      }, {
+        x: 0, opacity: 1, scale: 1, duration: 0.06, ease: 'power3.out', stagger: 0.015
+      }, 0.85)
+
+      tl.fromTo('.rc-mslot--8, .rc-mslot--9, .rc-mslot--10', {
+        y: 110, opacity: 0, scale: 0.88
+      }, {
+        y: 0, opacity: 1, scale: 1, duration: 0.06, ease: 'power3.out', stagger: 0.015
+      }, 0.85)
+
+      tl.fromTo('.rc-matrix-centre', {
+        y: 35, opacity: 0, scale: 0.95
+      }, {
+        y: 0, opacity: 1, scale: 1, duration: 0.06, ease: 'power3.out'
+      }, 0.85)
 
     }, containerRef)
 
@@ -369,10 +402,11 @@ export default function WhoWeAreSignature() {
   }, [])
 
   return (
-    <div className="who-sig-experience" id="who-we-are" ref={containerRef} aria-label="Who We Are and Signature Experience">
+    <div className="who-sig-experience" id="who-we-are" ref={containerRef} aria-label="Who We Are, Signature and Projects Experience">
       {/* Anchor targets for seamless nav */}
       <span id="about" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }} aria-hidden="true" />
-      <span id="signature" style={{ position: 'absolute', top: '50%', left: 0, pointerEvents: 'none' }} aria-hidden="true" />
+      <span id="signature" style={{ position: 'absolute', top: '40%', left: 0, pointerEvents: 'none' }} aria-hidden="true" />
+      <span id="work" style={{ position: 'absolute', top: '80%', left: 0, pointerEvents: 'none' }} aria-hidden="true" />
 
       {/* Layer 1: Who We Are (starts visible) */}
       <div className="who-sig-layer who-sig-layer--who" ref={whoLayerRef}>
@@ -382,6 +416,11 @@ export default function WhoWeAreSignature() {
       {/* Layer 2: Signature (starts hidden at top: 0, blends in after phone zoom) */}
       <div className="who-sig-layer who-sig-layer--sig" ref={sigLayerRef}>
         <Signature isCombined={true} />
+      </div>
+
+      {/* Layer 3: Projects Matrix (Architecture in Motion - transitions in when memory fades) */}
+      <div className="who-sig-layer who-sig-layer--matrix" ref={matrixLayerRef}>
+        <ProjectsMatrix id="work" />
       </div>
     </div>
   )

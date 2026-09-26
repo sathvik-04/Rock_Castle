@@ -1,104 +1,168 @@
+import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Footer.css'
 
-export default function Footer() {
+gsap.registerPlugin(ScrollTrigger)
+
+export default function Footer({ reveal = false }) {
+  const footerRef = useRef(null)
+
   const sitemapLinks = [
-    { label: 'Who We Are', href: '#who-we-are' },
-    { label: 'Leadership', href: '#leadership' },
-    { label: 'Works', href: '#works' },
-    { label: 'Strategy', href: '#strategy' },
-    { label: 'Crew', href: '#crew' },
-    { label: 'Testimonials', href: '#testimonials' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'What We Produce', href: '/#what-we-produce' },
+    { label: 'Who We Are', href: '/#who-we-are' },
+    { label: 'Leadership', href: '/#leadership' },
+    { label: 'Client Stories', href: '/stories' },
+    { label: 'Connect', href: '/connect' },
   ]
 
-  const socialLinks = [
-    { label: 'Instagram', href: 'https://instagram.com', tag: 'IG' },
-    { label: 'LinkedIn', href: 'https://linkedin.com', tag: 'LI' },
-    { label: 'Behance', href: 'https://behance.net', tag: 'BE' },
-  ]
+  useEffect(() => {
+    if (!reveal) return
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return
+
+    const footerEl = footerRef.current
+    if (!footerEl) return
+
+    const mainEl = document.querySelector('main')
+    if (!mainEl) return
+
+    let ro = null
+    let ctx = null
+
+    const initReveal = () => {
+      // Degrade gracefully on small screens if footer is taller than viewport
+      const isMobile = window.innerWidth < 768 || footerEl.offsetHeight > window.innerHeight
+      if (isMobile) {
+        footerEl.classList.remove('footer--reveal')
+        footerEl.style.visibility = 'visible'
+        footerEl.style.pointerEvents = 'auto'
+        mainEl.style.marginBottom = ''
+        return
+      }
+
+      footerEl.classList.add('footer--reveal')
+      const h = footerEl.offsetHeight
+      mainEl.style.marginBottom = `${h}px`
+
+      if (ctx) ctx.revert()
+
+      ctx = gsap.context(() => {
+        // Gated visibility: only activate when near bottom of main
+        ScrollTrigger.create({
+          trigger: mainEl,
+          start: () => `bottom bottom+=${Math.min(window.innerHeight, 700)}`,
+          onEnter: () => {
+            footerEl.style.visibility = 'visible'
+            footerEl.style.pointerEvents = 'auto'
+          },
+          onLeaveBack: () => {
+            footerEl.style.visibility = 'hidden'
+            footerEl.style.pointerEvents = 'none'
+          },
+        })
+      })
+
+      ScrollTrigger.refresh()
+    }
+
+    initReveal()
+
+    ro = new ResizeObserver(() => {
+      initReveal()
+    })
+    ro.observe(footerEl)
+
+    window.addEventListener('resize', initReveal)
+
+    return () => {
+      if (ro) ro.disconnect()
+      window.removeEventListener('resize', initReveal)
+      if (ctx) ctx.revert()
+      if (mainEl) mainEl.style.marginBottom = ''
+      footerEl.classList.remove('footer--reveal')
+      footerEl.style.visibility = ''
+      footerEl.style.pointerEvents = ''
+    }
+  }, [reveal])
 
   return (
-    <footer className="footer" id="footer" aria-label="Site Footer">
+    <footer ref={footerRef} className="footer" id="footer" aria-label="Site Footer">
       <div className="footer__inner">
-        {/* Brand Emblem Row */}
-        <div className="footer__brand-row">
-          <div className="footer__brand-id">
-            <img src="/rockcastle-logo.jpg" alt="Rockcastle" className="footer__logo" />
-            <div className="footer__brand-text">
-              <span className="footer__brand-name">ROCKCASTLE</span>
-              <span className="footer__brand-sub">SPATIAL ARCHITECTURE & PRODUCTION</span>
-            </div>
-          </div>
-          <div className="footer__brand-badge">
-            <span className="footer__badge-dot" />
-            <span>DUBAI ATELIER // WORLDWIDE</span>
-          </div>
-        </div>
-
-        {/* 3-Column Studio Grid (Inspired by Reference Architecture) */}
+        {/* Main 5-Column Studio Grid: Office (Far Left), Contact, Center Logo, Sitemap, Movement (Far Right) */}
         <div className="footer__grid">
-          {/* Column 1: Studio & Atelier */}
-          <div className="footer__col">
-            <h4 className="footer__col-heading">[ 01 // ATELIER ]</h4>
-            <p className="footer__atelier-desc">
-              Bespoke spatial environments engineered for global cultural institutions, luxury maisons, and visionary brands.
-            </p>
-            <div className="footer__atelier-meta">
-              <span className="footer__meta-line">Al Quoz Industrial Area 1</span>
-              <span className="footer__meta-line">Dubai, United Arab Emirates</span>
-              <span className="footer__meta-line footer__meta-line--muted">GST // UTC+4</span>
+          {/* Column 1: Office (Far Left) */}
+          <div className="footer__col footer__col--office">
+            <h4 className="footer__col-heading">Office</h4>
+            <div className="footer__col-content">
+              <p>Al Quoz Industrial Area 1</p>
+              <p>Dubai, United Arab Emirates</p>
             </div>
           </div>
 
-          {/* Column 2: Direct Inquiries */}
-          <div className="footer__col">
-            <h4 className="footer__col-heading">[ 02 // DIRECT INQUIRIES ]</h4>
-            <div className="footer__contact-links">
-              <a href="mailto:hello@rockcastle.com" className="footer__contact-item">
-                <span className="footer__contact-type">EMAIL</span>
-                <span className="footer__contact-val">hello@rockcastle.com</span>
-              </a>
-              <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="footer__contact-item">
-                <span className="footer__contact-type">WHATSAPP</span>
-                <span className="footer__contact-val">+971 (0)4 000 0000 ↗</span>
-              </a>
+          {/* Column 2: Contact */}
+          <div className="footer__col footer__col--contact">
+            <h4 className="footer__col-heading">Contact</h4>
+            <div className="footer__col-content">
+              <a href="tel:+97142888888" className="footer__link">+971 4 288 8888</a>
+              <a href="mailto:hello@rockcastle.com" className="footer__link">hello@rockcastle.com</a>
+              <div className="footer__indicator" aria-hidden="true" />
             </div>
+          </div>
 
-            <div className="footer__socials">
-              {socialLinks.map((s) => (
-                <a
-                  key={s.tag}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="footer__social-tag"
-                  aria-label={s.label}
-                >
-                  [{s.tag}]
-                </a>
-              ))}
-            </div>
+          {/* Center Column: Rock Castle Logo */}
+          <div className="footer__col footer__col--center">
+            <Link to="/" className="footer__logo-link" aria-label="Rock Castle Home">
+              <img
+                src="/rockcastle-logo-black.png"
+                alt="Rock Castle"
+                className="footer__logo-img"
+              />
+            </Link>
           </div>
 
           {/* Column 3: Sitemap */}
-          <div className="footer__col">
-            <h4 className="footer__col-heading">[ 03 // SITEMAP ]</h4>
-            <nav className="footer__nav" aria-label="Footer Navigation">
-              {sitemapLinks.map((l) => (
-                <a key={l.href} href={l.href} className="footer__nav-link">
-                  {l.label}
+          <div className="footer__col footer__col--sitemap">
+            <h4 className="footer__col-heading">Sitemap</h4>
+            <nav className="footer__nav" aria-label="Footer Sitemap">
+              {sitemapLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="footer__link footer__link--nav"
+                >
+                  {item.label}
                 </a>
               ))}
             </nav>
           </div>
+
+          {/* Column 4: Join the movement (Far Right) */}
+          <div className="footer__col footer__col--movement">
+            <h4 className="footer__col-heading footer__col-heading--movement">
+              <span className="footer__plus">+</span> Join the movement
+            </h4>
+            <div className="footer__col-content">
+              <p className="footer__movement-text">
+                Architects of the untold —<br />
+                monumental builds worldwide.
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Legal & Motto Bar */}
+        {/* Bottom Legal / Copyright Bar */}
         <div className="footer__bottom">
           <span className="footer__copyright">
-            © 2026 ROCKCASTLE SPATIAL ATELIER. ALL RIGHTS RESERVED.
+            © {new Date().getFullYear()} Rock Castle
           </span>
-          <span className="footer__motto">EXPERIENCES UN-LTD.</span>
+          <div className="footer__bottom-links">
+            <a href="#cookies" className="footer__bottom-link">Cookies</a>
+            <span className="footer__bottom-sep">/</span>
+            <span className="footer__bottom-motto">Experiences Un-ltd.</span>
+          </div>
         </div>
       </div>
     </footer>

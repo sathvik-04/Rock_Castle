@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
-import CastleDrawing from './CastleDrawing'
 import KineticLogo from './KineticLogo'
 import SlideUpText from './ui/slide-up-text'
 import './Hero.css'
@@ -330,11 +329,6 @@ export default function Hero() {
             { opacity: 1, duration: 1.1, ease: 'power2.out' },
             '-=0.7'
           )
-          .fromTo('.castle-drawing-container',
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-            '-=0.4'
-          )
       }
 
       // Check if loader is already done, or wait for it to lift so text reveal is seen right in time
@@ -500,12 +494,6 @@ export default function Hero() {
         <span className="hero__mobile-badge-dot" />
         <span className="hero__mobile-badge-text">{isPlaying ? 'TAP TO PAUSE' : 'TAP TO PLAY'}</span>
       </div>
-
-      {/* ====================================================
-          BOTTOM: CASTLE BEING DRAWN WITH YELLOWISH-WHITE LINE
-          IN A CONTINUOUS LOOP
-          ==================================================== */}
-      <CastleDrawing />
 
     </section>
   )

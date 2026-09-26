@@ -4,14 +4,15 @@ import gsap from 'gsap'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import WhoWeAreSignature from './components/WhoWeAreSignature'
+import WhatWeProduce from './components/what-we-produce/WhatWeProduce'
 import Leadership from './components/Leadership'
 import Crew from './components/Crew'
-import Testimonials from './components/Testimonials'
-import Contact from './components/Contact'
+import ClientStories from './components/client-stories/ClientStories'
+import ConnectTeaser from './components/connect-teaser/ConnectTeaser'
 import Footer from './components/Footer'
 
 // Sections with no internal GSAP `pin:` of their own — safe to zoom-scale
-const ZOOM_SAFE_SELECTORS = ['#testimonials', '.footer']
+const ZOOM_SAFE_SELECTORS = ['#testimonials', '#connect']
 
 export default function Home() {
   const location = useLocation()
@@ -63,24 +64,27 @@ export default function Home() {
         {/* 1. HERO / FULLSCREEN VIDEO */}
         <Hero />
 
-        {/* 2. WHO WE ARE & SIGNATURE (UNIFIED CINEMATIC EXPERIENCE) */}
+        {/* 2. WHO WE ARE & SIGNATURE & PROJECTS MATRIX (UNIFIED CINEMATIC EXPERIENCE) */}
         <WhoWeAreSignature />
 
-        {/* 3. LEADERSHIP */}
+        {/* 3. WHAT WE PRODUCE (VOCABULARY PARALLAX & DISCIPLINES) */}
+        <WhatWeProduce id="what-we-produce" theme="light" />
+
+        {/* 4. LEADERSHIP */}
         <Leadership />
 
         {/* 5. CREW / STACKING CARDS */}
         <Crew />
 
-        {/* 6. TESTIMONIALS */}
-        <Testimonials />
+        {/* 6. CLIENT STORIES / TESTIMONIALS */}
+        <ClientStories id="testimonials" theme="light" />
 
-        {/* 8. CONTACT */}
-        <Contact />
+        {/* 7. CONNECT TEASER */}
+        <ConnectTeaser id="connect" />
       </main>
 
-      {/* 9. FOOTER */}
-      <Footer />
+      {/* 9. FOOTER WITH CURTAIN REVEAL SCROLL UP ANIMATION */}
+      <Footer reveal={true} />
     </>
   )
 }

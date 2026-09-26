@@ -2,12 +2,15 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SlideUpText from './ui/slide-up-text'
+import FlipCard from './FlipCard'
 import './Leadership.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const founders = [
   {
+    num: '01',
+    track: 'STRATEGY & ARCHITECTURE',
     name: 'Founder & MD',
     tag: 'BRIEF → STRATEGY',
     credential: '12 YRS',
@@ -15,6 +18,8 @@ const founders = [
     image: '/images/founder-1.webp'
   },
   {
+    num: '02',
+    track: 'CONCEPT & SCENOGRAPHY',
     name: 'Head of Creative',
     tag: 'CONCEPT → BUILD',
     credential: '9 YRS',
@@ -22,6 +27,8 @@ const founders = [
     image: '/images/founder-2.webp'
   },
   {
+    num: '03',
+    track: 'SITE & STRUCTURAL BUILD',
     name: 'Head of Operations',
     tag: 'SITE → DELIVERY',
     credential: '10 YRS',
@@ -32,109 +39,76 @@ const founders = [
 
 export default function Leadership() {
   const ref = useRef(null)
-  const foundersGridRef = useRef(null)
 
   useEffect(() => {
     const root = ref.current
     if (!root) return
 
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const ctx = gsap.context(() => {
-      // ── 1. Founders Section Reveal — clip-path mask cards + credential pop ──
-      const cards = root.querySelectorAll('.leadership__founder')
-      const portraits = root.querySelectorAll('.leadership__portrait-wrap')
-      const credentials = root.querySelectorAll('.leadership__credential')
-      const metas = root.querySelectorAll('.leadership__meta')
+      const cards = root.querySelectorAll('.leadership__founder-item')
+      const head = root.querySelector('.leadership__head')
+      const ticker = root.querySelector('.leadership__transition-ticker')
 
+      // ── 1. Leadership Entrance Reveal ──
       if (cards.length) {
-        const fTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: root,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-          }
-        })
-
-        fTl.fromTo(cards,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' }
-        )
-          .fromTo(portraits,
-            { clipPath: 'inset(0% 0% 100% 0%)' },
-            { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, stagger: 0.12, ease: 'power4.out' },
-            '<'
-          )
-          .fromTo(metas,
-            { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' },
-            '<+0.25'
-          )
-          .fromTo(credentials,
-            { opacity: 0, scale: 0.4 },
-            { opacity: 1, scale: 1, duration: 0.45, stagger: 0.12, ease: 'back.out(2.2)' },
-            '<+0.15'
-          )
-
-        if (!reduced) {
-          portraits.forEach((pWrap) => {
-            const img = pWrap.querySelector('img')
-            if (img) {
-              gsap.fromTo(img,
-                { yPercent: -8, scale: 1.12 },
-                {
-                  yPercent: 8,
-                  scale: 1.12,
-                  ease: 'none',
-                  scrollTrigger: {
-                    trigger: pWrap,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: true
-                  }
-                }
-              )
+        gsap.fromTo(cards,
+          { opacity: 0, y: 36 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.75,
+            stagger: 0.16,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: root,
+              start: 'top 78%',
+              toggleActions: 'play none none reverse'
             }
-          })
-        }
+          }
+        )
       }
 
-      // ── 2. Mouse Parallax on Images (Desktop only) ──
-      if (finePointer && !reduced) {
-        const parallaxImages = root.querySelectorAll('.leadership__parallax-target')
-        const handlers = []
+      // ── 2. Scroll Animation from Leadership into Crew Section ──
+      if (!prefersReduced && cards.length >= 3) {
+        ScrollTrigger.create({
+          trigger: root,
+          start: 'bottom 92%',
+          end: 'bottom top',
+          scrub: 0.8,
+          onUpdate: (self) => {
+            const p = self.progress
+            // Outer cards fan out and float with 3D perspective
+            gsap.set(cards[0], {
+              y: -80 * p,
+              rotateZ: -3 * p,
+              scale: 1 - 0.04 * p,
+              opacity: 1 - 0.35 * p
+            })
+            // Middle card lifts higher
+            gsap.set(cards[1], {
+              y: -105 * p,
+              scale: 1 - 0.05 * p,
+              opacity: 1 - 0.35 * p
+            })
+            gsap.set(cards[2], {
+              y: -80 * p,
+              rotateZ: 3 * p,
+              scale: 1 - 0.04 * p,
+              opacity: 1 - 0.35 * p
+            })
 
-        parallaxImages.forEach((imgWrap) => {
-          const quickX = gsap.quickTo(imgWrap, 'x', { duration: 0.4, ease: 'power3.out' })
-          const quickY = gsap.quickTo(imgWrap, 'y', { duration: 0.4, ease: 'power3.out' })
+            if (head) {
+              gsap.set(head, { y: -45 * p, opacity: 1 - 0.45 * p })
+            }
 
-          const handleMouseMove = (e) => {
-            const rect = imgWrap.getBoundingClientRect()
-            const centerX = rect.left + rect.width / 2
-            const centerY = rect.top + rect.height / 2
-            const deltaX = (e.clientX - centerX) / (rect.width / 2)
-            const deltaY = (e.clientY - centerY) / (rect.height / 2)
-            quickX(deltaX * 12)
-            quickY(deltaY * 12)
+            // Scrub kinetic transition ribbon across screen
+            if (ticker) {
+              gsap.set(ticker, { xPercent: -22 * p })
+            }
           }
-
-          const handleMouseLeave = () => {
-            quickX(0)
-            quickY(0)
-          }
-
-          imgWrap.addEventListener('mousemove', handleMouseMove)
-          imgWrap.addEventListener('mouseleave', handleMouseLeave)
-          handlers.push({ imgWrap, handleMouseMove, handleMouseLeave })
         })
-
-        return () => {
-          handlers.forEach(({ imgWrap, handleMouseMove, handleMouseLeave }) => {
-            imgWrap.removeEventListener('mousemove', handleMouseMove)
-            imgWrap.removeEventListener('mouseleave', handleMouseLeave)
-          })
-        }
       }
     }, ref)
 
@@ -144,17 +118,13 @@ export default function Leadership() {
   return (
     <section className="leadership" id="leadership" ref={ref} aria-label="Leadership / Rockcastle">
       <div className="leadership__inner">
+        {/* Top Architectural Header */}
         <div className="leadership__head">
-          <span className="leadership__rule" aria-hidden="true" />
-          <SlideUpText
-            split="characters"
-            stagger={0.02}
-            inView={true}
-            once={true}
-            className="leadership__tag"
-          >
-            [&nbsp;LEADERSHIP&nbsp;]
-          </SlideUpText>
+          <div className="leadership__meta-bar">
+            <span className="leadership__tag">[ 04 // EXECUTIVE DIRECTION ]</span>
+            <span className="leadership__coords">[ 25.2048° N, 55.2708° E ] // DUBAI ATELIER</span>
+          </div>
+
           <h2 className="leadership__title">
             <SlideUpText
               split="words"
@@ -165,31 +135,119 @@ export default function Leadership() {
               Three leads personally sign off on every activation we build
             </SlideUpText>
           </h2>
+
+          <p className="leadership__subtitle">
+            No account managers in between. No diluted briefs. Every bespoke installation, stage, and spatial monument is steered directly by our three studio partners from concept napkin to midnight load-out.
+          </p>
         </div>
 
-        <div className="leadership__grid" ref={foundersGridRef}>
+        {/* 3 Prominent Executive FlipCards with Track Badges */}
+        <div className="leadership__grid">
           {founders.map((f) => (
-            <div className="leadership__founder" key={f.name}>
-              <div className="leadership__parallax-target">
-                <div className="leadership__portrait-wrap">
-                  <img src={f.image} alt={f.name} className="leadership__portrait-img" />
-                  <div className="leadership__portrait-overlay" />
-                  <span className="leadership__credential">{f.credential}</span>
-                  <div className="leadership__quote">
-                    <p>&ldquo;{f.quote}&rdquo;</p>
+            <div className="leadership__founder-item" key={f.name}>
+              {/* Column Track Badge */}
+              <div className="leadership__card-header-track">
+                <span className="leadership__track-num">{f.num}</span>
+                <span className="leadership__track-sep">//</span>
+                <span className="leadership__track-label">{f.track}</span>
+              </div>
+
+              {/* 3D Interactive Physics FlipCard */}
+              <FlipCard
+                axis="y"
+                flipOnClick={true}
+                draggable={true}
+                dragDistance={0}
+                tilt={true}
+                tiltMax={12}
+                glare={true}
+                glareOpacity={0.24}
+                hoverScale={1.03}
+                perspective={1100}
+                stiffness={170}
+                damping={20}
+                width={350}
+                height={500}
+                radius={24}
+                background="#141413"
+                color="#f5f5f5"
+                shadow={true}
+                shadowColor="#0c0d0c"
+                shadowOpacity={0.35}
+                ariaLabel={`${f.name} - ${f.tag}`}
+                className="leadership__flipcard"
+                front={
+                  <div className="leadership__card-front">
+                    <img src={f.image} alt={f.name} className="leadership__card-img" />
+                    <div className="leadership__card-front-overlay" />
+                    <span className="leadership__card-credential">{f.credential}</span>
+
+                    <div className="leadership__card-front-info">
+                      <span className="leadership__card-tag">[ {f.tag} ]</span>
+                      <h3 className="leadership__card-name">{f.name}</h3>
+                      <div className="leadership__card-flip-hint">
+                        <span>DRAG OR CLICK TO FLIP</span>
+                        <span className="leadership__card-flip-icon">↻</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="leadership__meta">
-                <SlideUpText split="words" stagger={0.03} inView={true} once={true} className="leadership__name">
-                  {f.name}
-                </SlideUpText>
-                <SlideUpText split="characters" stagger={0.02} inView={true} once={true} className="leadership__founder-tag">
-                  {`[ ${f.tag} ]`}
-                </SlideUpText>
-              </div>
+                }
+                back={
+                  <div className="leadership__card-back">
+                    <div className="leadership__card-back-header">
+                      <span className="leadership__card-back-tag">[ {f.tag} ]</span>
+                      <span className="leadership__card-back-cred">{f.credential}</span>
+                    </div>
+
+                    <div className="leadership__card-back-body">
+                      <span className="leadership__quote-mark">“</span>
+                      <p className="leadership__card-quote">{f.quote}</p>
+
+                      <div className="leadership__card-back-divider" />
+                      <h4 className="leadership__card-back-name">{f.name}</h4>
+                      <span className="leadership__card-back-role">EXECUTIVE LEADERSHIP // ROCKCASTLE</span>
+                    </div>
+
+                    <div className="leadership__card-back-action">
+                      <span>CLICK TO FLIP BACK</span>
+                      <span className="leadership__card-flip-icon">↺</span>
+                    </div>
+                  </div>
+                }
+              />
             </div>
           ))}
+        </div>
+
+        {/* Kinetic Transition Ribbon leading into Crew Section */}
+        <div className="leadership__transition-wrap" aria-hidden="true">
+          <div className="leadership__transition-divider">
+            <span className="leadership__transition-dot" />
+            <span className="leadership__transition-line" />
+            <span className="leadership__transition-badge">SCROLL TO ATELIER CREW ↓</span>
+            <span className="leadership__transition-line" />
+            <span className="leadership__transition-dot" />
+          </div>
+
+          <div className="leadership__transition-ticker-track">
+            <div className="leadership__transition-ticker">
+              <span>FROM EXECUTIVE SIGN-OFF</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>TO THE FABRICATION FLOOR</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>ZERO SUBCONTRACTING</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>100% IN-HOUSE ATELIER</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>FROM EXECUTIVE SIGN-OFF</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>TO THE FABRICATION FLOOR</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>ZERO SUBCONTRACTING</span>
+              <span className="leadership__ticker-bullet">✦</span>
+              <span>100% IN-HOUSE ATELIER</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

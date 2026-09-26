@@ -2,7 +2,7 @@ import Navigation from '../components/Navigation'
 import PageHero from './PageHero'
 import WhoWeAre from '../components/WhoWeAre'
 import Leadership from '../components/Leadership'
-import Testimonials from '../components/Testimonials'
+import ClientStories from '../components/client-stories/ClientStories'
 import Crew from '../components/Crew'
 import Footer from '../components/Footer'
 
@@ -20,7 +20,7 @@ export default function Stories() {
         />
         <WhoWeAre />
         <Leadership />
-        <Testimonials />
+        <ClientStories id="testimonials" theme="light" />
         <Crew />
       </main>
       <Footer />

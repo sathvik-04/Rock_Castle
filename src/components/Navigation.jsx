@@ -22,7 +22,7 @@ export default function Navigation() {
 
       // Detect background theme (light vs dark sections)
       const navMidY = 46
-      const lightSectionIds = ['about', 'who-we-are', 'leadership', 'process', 'contact', 'services', 'testimonials']
+      const lightSectionIds = ['about', 'who-we-are', 'what-we-produce', 'produce', 'leadership', 'process', 'contact', 'services', 'testimonials']
 
       let isLight = false
       const lightElements = document.querySelectorAll(
@@ -124,10 +124,11 @@ export default function Navigation() {
               onClick={(e) => handleNavClick(e, '/')}
             >
               <img src="/rockcastle-logo.jpg" alt="Rockcastle" className="nav__brand-logo" />
-              <div className="nav__brand-text-stack">
-                <span className="nav__brand-word">ROCK</span>
-                <span className="nav__brand-word">CASTLE</span>
-              </div>
+              <img
+                src="/rockcastle-logo-black.png"
+                alt="Rock Castle"
+                className="nav__brand-wordmark"
+              />
             </Link>
           </div>
 

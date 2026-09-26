@@ -51,3 +51,37 @@
   width: 100%;
   height: 100%;
 }
+
+/* Layer 3: Projects Matrix (Architecture in Motion) */
+.who-sig-layer--matrix {
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  background: var(--rc-bg, #0a0b0a);
+}
+
+.who-sig-layer--matrix .rc-matrix-section {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding-top: clamp(96px, 12vh, 128px);
+  padding-bottom: clamp(24px, 3.5vh, 40px);
+  padding-left: clamp(20px, 2.5vw, 40px);
+  padding-right: clamp(20px, 2.5vw, 40px);
+}
+
+.who-sig-layer--matrix .rc-matrix-container {
+  height: 100%;
+  min-height: 0;
+  justify-content: center;
+}
+
+/* Ensure GSAP direct scrubbing is 100% responsive without CSS transition fight */
+.who-sig-layer--matrix .rc-mslot,
+.who-sig-layer--matrix .rc-matrix-centre {
+  transition: none !important;
+}
+
