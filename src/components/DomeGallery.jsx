@@ -1,24 +1,28 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGesture } from '@use-gesture/react';
+import { projects } from '../data/projects';
+import { usePageTransition } from '../hooks/usePageTransition';
 import './DomeGallery.css';
 
-const DEFAULT_IMAGES = [
-  { src: '/images/work-01.webp', alt: 'Rock Castle Work 1' },
-  { src: '/images/work-02.webp', alt: 'Rock Castle Work 2' },
-  { src: '/images/work-03.webp', alt: 'Rock Castle Work 3' },
-  { src: '/images/founder-1.webp', alt: 'Rock Castle Founder 1' },
-  { src: '/images/founder-2.webp', alt: 'Rock Castle Founder 2' },
-  { src: '/images/signature-01.webp', alt: 'Rock Castle Signature' },
-  { src: '/images/hero-reel.webp', alt: 'Rock Castle Hero' },
-  { src: '/images/process.webp', alt: 'Rock Castle Process' },
-  { src: '/images/services.webp', alt: 'Rock Castle Services' },
-  { src: '/images/testimonial-1.webp', alt: 'Testimonial 1' },
-  { src: '/images/testimonial-2.webp', alt: 'Testimonial 2' },
-  { src: '/images/testimonial-3.webp', alt: 'Testimonial 3' },
-  { src: '/images/testimonial-4.webp', alt: 'Testimonial 4' },
-  { src: '/images/testimonial-5.webp', alt: 'Testimonial 5' },
-  { src: '/images/testimonial-6.webp', alt: 'Testimonial 6' },
-];
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const DEFAULT_IMAGES = projects.map((p) => ({
+  src: p.image,
+  alt: p.name,
+  name: p.name,
+  slug: p.slug,
+  category: p.catLabel,
+  video: p.video,
+}));
 
 const DEFAULTS = {
   maxVerticalRotationDeg: 5,
@@ -51,7 +55,7 @@ function buildItems(pool, seg) {
 
   const totalSlots = coords.length;
   if (pool.length === 0) {
-    return coords.map(c => ({ ...c, src: '', alt: '' }));
+    return coords.map(c => ({ ...c, src: '', alt: '', name: '', slug: '', category: '' }));
   }
   if (pool.length > totalSlots) {
     console.warn(
@@ -60,10 +64,14 @@ function buildItems(pool, seg) {
   }
 
   const normalizedImages = pool.map(image => {
-    if (typeof image === 'string') {
-      return { src: image, alt: '' };
-    }
-    return { src: image.src || '', alt: image.alt || '' };
+    const src = typeof image === 'string' ? image : image.src || '';
+    const match = projects.find(p => p.image === src || p.slug === (typeof image === 'object' ? image.slug : ''));
+    const name = (typeof image === 'object' && (image.name || image.alt)) || match?.name || 'Rock Castle Project';
+    const slug = (typeof image === 'object' && image.slug) || match?.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const category = (typeof image === 'object' && image.category) || match?.catLabel || 'Experience Design';
+    const alt = (typeof image === 'object' && image.alt) || name;
+
+    return { src, alt, name, slug, category };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
@@ -84,7 +92,10 @@ function buildItems(pool, seg) {
   return coords.map((c, i) => ({
     ...c,
     src: usedImages[i].src,
-    alt: usedImages[i].alt
+    alt: usedImages[i].alt,
+    name: usedImages[i].name,
+    slug: usedImages[i].slug,
+    category: usedImages[i].category
   }));
 }
 
@@ -116,6 +127,11 @@ export default function DomeGallery({
   autoRotate = false,
   autoRotateSpeed = 8
 }) {
+  const navigate = useNavigate();
+  const transitionTo = usePageTransition();
+  const closeRef = useRef(null);
+  const cursorBadgeRef = useRef(null);
+
   const rootRef = useRef(null);
   const mainRef = useRef(null);
   const sphereRef = useRef(null);
@@ -124,6 +140,36 @@ export default function DomeGallery({
   const scrimRef = useRef(null);
   const focusedElRef = useRef(null);
   const originalTilePositionRef = useRef(null);
+
+  const handlePointerMove = useCallback((e) => {
+    if (e.pointerType === 'touch') return;
+    const badge = cursorBadgeRef.current;
+    if (!badge) return;
+
+    badge.style.left = `${e.clientX}px`;
+    badge.style.top = `${e.clientY}px`;
+
+    if (draggingRef.current) {
+      badge.classList.remove('is-visible');
+      return;
+    }
+
+    const target = e.target;
+    const isOverClose = Boolean(target && target.closest('.enlarge__close-btn'));
+    const isOverProject = Boolean(
+      target && !isOverClose && (target.closest('.item__image') || target.closest('.enlarge'))
+    );
+
+    if (isOverProject) {
+      badge.classList.add('is-visible');
+    } else {
+      badge.classList.remove('is-visible');
+    }
+  }, []);
+
+  const handlePointerLeave = useCallback(() => {
+    cursorBadgeRef.current?.classList.remove('is-visible');
+  }, []);
 
   const rotationRef = useRef({ x: 0, y: 0 });
   const startRotRef = useRef({ x: 0, y: 0 });
@@ -294,6 +340,7 @@ export default function DomeGallery({
       onDragStart: ({ event }) => {
         if (focusedElRef.current) return;
         stopInertia();
+        cursorBadgeRef.current?.classList.remove('is-visible');
         const evt = event;
         draggingRef.current = true;
         movedRef.current = false;
@@ -429,6 +476,7 @@ export default function DomeGallery({
       };
       animatingOverlay.addEventListener('transitionend', cleanup, { once: true });
     };
+    closeRef.current = close;
     scrim.addEventListener('click', close);
     const onKey = e => {
       if (e.key === 'Escape') close();
@@ -486,6 +534,8 @@ export default function DomeGallery({
       el.style.zIndex = 0;
       const overlay = document.createElement('div');
       overlay.className = 'enlarge';
+      overlay.setAttribute('role', 'button');
+      overlay.setAttribute('tabindex', '0');
       overlay.style.position = 'absolute';
       overlay.style.left = frameR.left - mainR.left + 'px';
       overlay.style.top = frameR.top - mainR.top + 'px';
@@ -496,10 +546,76 @@ export default function DomeGallery({
       overlay.style.willChange = 'transform, opacity';
       overlay.style.transformOrigin = 'top left';
       overlay.style.transition = `transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease`;
+
       const rawSrc = parent.dataset.src || el.querySelector('img')?.src || '';
+      const projectName = parent.dataset.name || parent.dataset.alt || el.querySelector('img')?.alt || 'Featured Project';
+      const projectSlug = parent.dataset.slug || 'the-pavilion';
+      const projectCategory = parent.dataset.category || 'Experience Design';
+
+      overlay.setAttribute('aria-label', `View ${projectName} project details`);
+
       const img = document.createElement('img');
       img.src = rawSrc;
+      img.alt = projectName;
       overlay.appendChild(img);
+
+      // Hover card overlay: reveals project name on hover and prompts user to click
+      const hoverCard = document.createElement('div');
+      hoverCard.className = 'enlarge__card';
+      hoverCard.innerHTML = `
+        <div class="enlarge__card-content">
+          <span class="enlarge__card-badge">${escapeHtml(projectCategory)}</span>
+          <h3 class="enlarge__card-title">${escapeHtml(projectName)}</h3>
+          <div class="enlarge__card-cta">
+            <span class="enlarge__cta-text">View Project Details</span>
+            <span class="enlarge__cta-arrow">→</span>
+          </div>
+        </div>
+      `;
+      overlay.appendChild(hoverCard);
+
+      // Close button
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'enlarge__close-btn';
+      closeBtn.setAttribute('type', 'button');
+      closeBtn.setAttribute('aria-label', 'Close preview');
+      closeBtn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      `;
+      overlay.appendChild(closeBtn);
+
+      closeBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        closeRef.current?.();
+      });
+
+      const handleProjectNavigate = () => {
+        unlockScroll();
+        document.body.classList.remove('dg-scroll-lock');
+        const targetPath = `/project/${projectSlug}`;
+        if (transitionTo) {
+          transitionTo(targetPath);
+        } else {
+          navigate(targetPath);
+        }
+      };
+
+      overlay.addEventListener('click', (ev) => {
+        if (ev.target.closest('.enlarge__close-btn')) return;
+        if (performance.now() - openStartedAtRef.current < 250) return;
+        handleProjectNavigate();
+      });
+
+      overlay.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          handleProjectNavigate();
+        }
+      });
+
       viewerRef.current.appendChild(overlay);
       const tx0 = tileR.left - frameR.left;
       const ty0 = tileR.top - frameR.top;
@@ -551,7 +667,7 @@ export default function DomeGallery({
         overlay.addEventListener('transitionend', onFirstEnd);
       }
     },
-    [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll]
+    [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll, navigate, transitionTo]
   );
 
   const onTileClick = useCallback(
@@ -628,6 +744,8 @@ export default function DomeGallery({
     <div
       ref={rootRef}
       className="sphere-root"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
       style={{
         '--segments-x': segments,
         '--segments-y': segments,
@@ -637,6 +755,15 @@ export default function DomeGallery({
         '--image-filter': grayscale ? 'grayscale(1)' : 'none'
       }}
     >
+      {/* Floating interactive VIEW cursor */}
+      <div
+        ref={cursorBadgeRef}
+        className="rc-cursor-badge"
+        aria-hidden="true"
+      >
+        View
+      </div>
+
       <main ref={mainRef} className="sphere-main">
         <div className="stage">
           <div ref={sphereRef} className="sphere">
@@ -645,6 +772,9 @@ export default function DomeGallery({
                 key={`${it.x},${it.y},${i}`}
                 className="item"
                 data-src={it.src}
+                data-name={it.name}
+                data-slug={it.slug}
+                data-category={it.category}
                 data-offset-x={it.x}
                 data-offset-y={it.y}
                 data-size-x={it.sizeX}
@@ -660,11 +790,11 @@ export default function DomeGallery({
                   className="item__image"
                   role="button"
                   tabIndex={0}
-                  aria-label={it.alt || 'Open image'}
+                  aria-label={it.name || it.alt || 'Open image'}
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
                 >
-                  <img src={it.src} draggable={false} alt={it.alt} />
+                  <img src={it.src} draggable={false} alt={it.name || it.alt} />
                 </div>
               </div>
             ))}

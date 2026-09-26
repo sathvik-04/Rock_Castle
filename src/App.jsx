@@ -72,6 +72,7 @@ export default function App() {
         <Route path="/connect" element={<Connect />} />
         <Route path="/contact" element={<Connect />} />
         <Route path="/work/:slug" element={<CaseStudy />} />
+        <Route path="/project/:slug" element={<CaseStudy />} />
         <Route path="/device-demo" element={<DeviceDemo />} />
       </Routes>
     </PageTransitionProvider>

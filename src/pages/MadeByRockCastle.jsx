@@ -1,8 +1,5 @@
 import Navigation from '../components/Navigation'
-import PageHero from './PageHero'
-import Signature from '../components/Signature'
 import DomeGallery from '../components/DomeGallery'
-import Work from '../components/Work'
 import Footer from '../components/Footer'
 
 export default function MadeByRockCastle() {
