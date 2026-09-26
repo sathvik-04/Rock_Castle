@@ -37,27 +37,33 @@ export default function WhoWeAre({ isCombined = false }) {
     if (reduced || isCombined) return
 
     const ctx = gsap.context(() => {
-      // Dynamic calculation of delta to move phone to exact viewport center (scroll-invariant)
+      // Dynamic calculation of delta to move phone to exact viewport center
+      // Since section is pinned at top:top, viewport center = true visual center
       const calculateCenterDelta = () => {
         if (!mover || !root) return { x: 0, y: 0 }
-        const rootRect = root.getBoundingClientRect()
-        const moverRect = mover.getBoundingClientRect()
+        const col = root.querySelector('.who-we-are__device-column')
+        // Target: exact viewport center
+        const targetX = window.innerWidth / 2
+        const targetY = window.innerHeight / 2
 
+        if (col) {
+          const colRect = col.getBoundingClientRect()
+          const colCenterX = colRect.left + colRect.width / 2
+          const colCenterY = colRect.top + colRect.height / 2
+          return {
+            x: targetX - colCenterX,
+            y: targetY - colCenterY
+          }
+        }
+
+        const moverRect = mover.getBoundingClientRect()
         const currentX = gsap.getProperty(mover, 'x') || 0
         const currentY = gsap.getProperty(mover, 'y') || 0
-
-        // Untransformed center of mover relative to the root section:
-        const naturalCenterXInRoot = (moverRect.left - currentX - rootRect.left) + moverRect.width / 2
-        const naturalCenterYInRoot = (moverRect.top - currentY - rootRect.top) + moverRect.height / 2
-
-        // When root is pinned at 'top top', root's top-left in viewport is (0, 0).
-        // Therefore naturalCenter in root is exactly the naturalCenter in the viewport!
-        const viewportCenterX = window.innerWidth / 2
-        const viewportCenterY = window.innerHeight / 2
-
+        const naturalCenterXInRoot = (moverRect.left - currentX) + moverRect.width / 2
+        const naturalCenterYInRoot = (moverRect.top - currentY) + moverRect.height / 2
         return {
-          x: viewportCenterX - naturalCenterXInRoot,
-          y: viewportCenterY - naturalCenterYInRoot
+          x: targetX - naturalCenterXInRoot,
+          y: targetY - naturalCenterYInRoot
         }
       }
 
@@ -350,6 +356,10 @@ export default function WhoWeAre({ isCombined = false }) {
       </div>
 
       <div className="who-we-are__intro">
+        {/* Decorative right-edge accent */}
+        <div className="who-we-are__accent-strip" aria-hidden="true" />
+        <span className="who-we-are__accent-label" aria-hidden="true">EXPERIENTIAL DESIGN STUDIO</span>
+
         <div className="who-we-are__container">
           <div className="who-we-are__grid">
             {/* Left Column: Device Mockup (Media Composition) */}
@@ -358,7 +368,7 @@ export default function WhoWeAre({ isCombined = false }) {
                 <div className="who-we-are__device-scaler" ref={deviceScalerRef}>
                   <div className="who-we-are__device-frame-wrap">
                     <Device
-                      width={225}
+                      width="100%"
                       alt="Rockcastle Experiential Production"
                       className="who-we-are__device-element"
                       showDynamicIsland={true}

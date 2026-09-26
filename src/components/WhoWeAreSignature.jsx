@@ -68,18 +68,33 @@ export default function WhoWeAreSignature() {
       const deviceScreens = container.querySelectorAll('.rc-device-body, .rc-device-screen')
       const whoRoot = container.querySelector('.who-we-are')
 
-      // Centering delta calculation for the phone (scroll-invariant & container-relative)
+      // Centering delta calculation for the phone (viewport center target)
+      // Since the section is pinned at top:top, viewport center = true visual center
       const calculateCenterDelta = () => {
         if (!mover || !container) return { x: 0, y: 0 }
-        const containerRect = container.getBoundingClientRect()
+        const col = container.querySelector('.who-we-are__device-column')
+        // Target: exact viewport center
+        const targetX = window.innerWidth / 2
+        const targetY = window.innerHeight / 2
+
+        if (col) {
+          const colRect = col.getBoundingClientRect()
+          const colCenterX = colRect.left + colRect.width / 2
+          const colCenterY = colRect.top + colRect.height / 2
+          return {
+            x: targetX - colCenterX,
+            y: targetY - colCenterY
+          }
+        }
+
         const moverRect = mover.getBoundingClientRect()
         const currentX = gsap.getProperty(mover, 'x') || 0
         const currentY = gsap.getProperty(mover, 'y') || 0
-        const naturalCenterX = (moverRect.left - currentX - containerRect.left) + moverRect.width / 2
-        const naturalCenterY = (moverRect.top - currentY - containerRect.top) + moverRect.height / 2
+        const naturalCenterX = (moverRect.left - currentX) + moverRect.width / 2
+        const naturalCenterY = (moverRect.top - currentY) + moverRect.height / 2
         return {
-          x: window.innerWidth / 2 - naturalCenterX,
-          y: window.innerHeight / 2 - naturalCenterY
+          x: targetX - naturalCenterX,
+          y: targetY - naturalCenterY
         }
       }
 

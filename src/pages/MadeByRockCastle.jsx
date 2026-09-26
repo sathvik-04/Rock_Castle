@@ -1,6 +1,7 @@
 import Navigation from '../components/Navigation'
 import PageHero from './PageHero'
 import Signature from '../components/Signature'
+import DomeGallery from '../components/DomeGallery'
 import Work from '../components/Work'
 import Footer from '../components/Footer'
 
@@ -9,15 +10,21 @@ export default function MadeByRockCastle() {
     <>
       <Navigation />
       <main>
-        <PageHero
-          tag="[ MADE BY ROCK CASTLE ]"
-          currentPage="MADE BY ROCK CASTLE"
-          title="MONUMENTAL"
-          accent="EXPERIENCES."
-          subtitle="Twelve years of spatial architecture, immersive environments, and cultural pavilions fabricated and engineered from our Dubai atelier."
-        />
-        <Signature />
-        <Work />
+
+        {/* Dome Gallery - Immersive 3D image sphere */}
+        <section style={{ width: '100%', height: '100vh', position: 'relative' }}>
+          <DomeGallery
+            fit={0.8}
+            minRadius={700}
+            maxVerticalRotationDeg={4}
+            segments={28}
+            dragDampening={1.8}
+            grayscale={false}
+            autoRotate={true}
+            autoRotateSpeed={8}
+          />
+        </section>
+
       </main>
       <Footer />
     </>

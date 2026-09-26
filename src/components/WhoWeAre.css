@@ -35,15 +35,17 @@
 /* ---- Intro Container ---- */
 .who-we-are__intro {
   height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: max(74px, clamp(64px, 8.5vh, 88px));
-  padding-bottom: clamp(24px, 3.5vh, 44px);
-  padding-left: var(--gutter, 24px);
-  padding-right: var(--gutter, 24px);
+  padding-top: max(74px, clamp(64px, 7.5vh, 88px));
+  padding-bottom: clamp(20px, 3vh, 40px);
+  padding-left: clamp(24px, 3.5vw, 64px);
+  padding-right: clamp(24px, 3.5vw, 64px);
   position: relative;
   background: inherit;
   box-sizing: border-box;
@@ -51,7 +53,7 @@
 }
 
 .who-we-are__container {
-  max-width: 1400px;
+  max-width: 1340px;
   margin: 0 auto;
   width: 100%;
   height: 100%;
@@ -61,10 +63,75 @@
   justify-content: center;
 }
 
+/* Subtle architectural accent strip on right edge */
+.who-we-are__accent-strip {
+  position: absolute;
+  right: clamp(16px, 2.5vw, 48px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: 55%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(10, 10, 10, 0.06) 15%,
+    rgba(10, 10, 10, 0.10) 50%,
+    rgba(10, 10, 10, 0.06) 85%,
+    transparent 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Orange accent node on the strip */
+.who-we-are__accent-strip::before {
+  content: '';
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--rc-yellow, #f2efa3);
+  box-shadow: 0 0 8px rgba(242, 239, 163, 0.5);
+}
+
+/* Secondary tick marks */
+.who-we-are__accent-strip::after {
+  content: '';
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.15);
+}
+
+/* Vertical text label alongside accent */
+.who-we-are__accent-label {
+  position: absolute;
+  right: clamp(24px, 3vw, 56px);
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.08);
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+}
+
 .who-we-are__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(36px, 5vw, 68px);
+  gap: clamp(32px, 4vw, 64px);
   align-items: center;
   position: relative;
   width: 100%;
@@ -72,8 +139,8 @@
 
 @media (min-width: 960px) {
   .who-we-are__grid {
-    grid-template-columns: 240px 1fr;
-    gap: clamp(48px, 6vw, 92px);
+    grid-template-columns: clamp(230px, 17vw, 260px) 1fr;
+    gap: clamp(48px, 5.5vw, 100px);
     align-items: center;
   }
 }
@@ -112,7 +179,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  width: 225px;
+  width: clamp(230px, 17vw, 260px);
   max-width: 100%;
 }
 
@@ -123,15 +190,15 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 130%;
-  height: 110%;
+  width: 135%;
+  height: 115%;
   background: radial-gradient(
     circle,
-    rgba(242, 239, 163, 0.22) 0%,
-    rgba(234, 88, 12, 0.08) 45%,
+    rgba(242, 239, 163, 0.28) 0%,
+    rgba(234, 88, 12, 0.09) 45%,
     transparent 72%
   );
-  filter: blur(32px);
+  filter: blur(36px);
   pointer-events: none;
   z-index: 0;
   transition: opacity 0.4s ease;
@@ -140,6 +207,7 @@
 .who-we-are__device-element {
   position: relative;
   z-index: 1;
+  width: 100% !important;
   transition: box-shadow 0.45s ease;
 }
 
@@ -228,9 +296,10 @@
 .who-we-are__text-column {
   display: flex;
   flex-direction: column;
-  gap: clamp(10px, 1.5vh, 18px);
+  gap: clamp(14px, 2.2vh, 26px);
   min-width: 0;
   will-change: transform, opacity;
+  width: 100%;
 }
 
 /* Header inside text column */
@@ -243,16 +312,16 @@
 
 .who-we-are__headline {
   font-family: var(--font-display, 'Syne', sans-serif);
-  font-size: clamp(2rem, 4vw, 3.85rem);
+  font-size: clamp(2.35rem, 4.3vw, 4.35rem);
   font-weight: 800;
-  line-height: 1.05;
+  line-height: 0.98;
   letter-spacing: -0.03em;
   text-transform: uppercase;
   color: var(--rc-black, #0a0a0a);
   margin: 0;
   display: flex;
   flex-direction: column;
-  max-width: 18ch;
+  max-width: 22ch;
   word-break: normal;
 }
 
@@ -265,8 +334,9 @@
 .who-we-are__narrative {
   display: flex;
   flex-direction: column;
-  gap: clamp(6px, 1vh, 10px);
-  max-width: 820px;
+  gap: clamp(8px, 1.2vh, 14px);
+  max-width: 680px;
+  width: 100%;
 }
 
 .who-we-are__p {
@@ -275,30 +345,30 @@
 
 .who-we-are__p--lead {
   font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: clamp(0.98rem, 1.15vw, 1.18rem);
+  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--rc-dark, #141413);
 }
 
 .who-we-are__p--sub {
   font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: clamp(0.85rem, 0.92vw, 0.95rem);
+  font-size: clamp(0.9rem, 0.98vw, 1.0625rem);
   font-weight: 400;
-  line-height: 1.48;
-  color: rgba(10, 10, 10, 0.72);
+  line-height: 1.58;
+  color: rgba(10, 10, 10, 0.74);
 }
 
 /* Statistics row */
 .who-we-are__metrics-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2.2vw, 32px);
-  padding: clamp(10px, 1.4vh, 16px) 0;
+  gap: clamp(24px, 3.5vw, 56px);
+  padding: clamp(12px, 1.8vh, 22px) 0;
   margin: 0;
   border-top: 1px solid rgba(10, 10, 10, 0.12);
   border-bottom: 1px solid rgba(10, 10, 10, 0.12);
-  max-width: 800px;
+  max-width: 680px;
   width: 100%;
 }
 
@@ -311,7 +381,7 @@
 .who-we-are__metric:not(:last-child)::after {
   content: '';
   position: absolute;
-  right: calc(clamp(16px, 2.2vw, 32px) * -0.5);
+  right: calc(clamp(24px, 3.5vw, 56px) * -0.5);
   top: 15%;
   height: 70%;
   width: 1px;
@@ -320,7 +390,7 @@
 
 .who-we-are__metric-num {
   font-family: var(--font-display, 'Syne', sans-serif);
-  font-size: clamp(1.9rem, 2.4vw, 2.35rem);
+  font-size: clamp(2.2rem, 3.2vw, 3.2rem);
   font-weight: 700;
   color: var(--rc-black, #0a0a0a);
   line-height: 1.08;
@@ -329,12 +399,12 @@
 
 .who-we-are__metric-label {
   font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: clamp(8.5px, 0.7vw, 9.5px);
+  font-size: clamp(9px, 0.75vw, 10.5px);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(10, 10, 10, 0.65);
-  margin-top: 5px;
+  margin-top: 6px;
   line-height: 1.35;
 }
 
@@ -342,7 +412,7 @@
 .who-we-are__cta {
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 1.2vh, 14px);
+  gap: clamp(10px, 1.4vh, 16px);
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -350,14 +420,14 @@
 .who-we-are__prompt {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .who-we-are__prompt-line {
   font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: clamp(0.92rem, 1.05vw, 1.08rem);
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
   font-weight: 500;
-  line-height: 1.32;
+  line-height: 1.35;
   letter-spacing: -0.015em;
   color: var(--rc-dark, #1d1d1b);
 }
@@ -370,7 +440,7 @@
 .who-we-are__actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: clamp(12px, 1.4vw, 20px);
   flex-wrap: wrap;
 }
 
@@ -380,9 +450,9 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 9999px;
-  height: 42px;
-  width: 154px;
-  padding: 0 14px 0 16px;
+  height: 46px;
+  width: 168px;
+  padding: 0 16px 0 18px;
   overflow: hidden;
   text-decoration: none;
   font-family: var(--font-body, 'Inter', sans-serif);
@@ -426,7 +496,7 @@
   color: #f4f3ed;
   border: 1px solid rgba(20, 20, 19, 0.25);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-  width: 172px;
+  width: 184px;
 }
 
 .who-we-are__pill-btn--culture:hover {
@@ -446,6 +516,11 @@
 
 /* Responsive adjustments for Mobile & Tablet */
 @media (max-width: 959px) {
+  .who-we-are__accent-strip,
+  .who-we-are__accent-label {
+    display: none;
+  }
+
   .who-we-are__intro {
     height: 100vh;
     height: 100dvh;
@@ -537,15 +612,15 @@
   }
 
   .who-we-are__device-frame-wrap {
-    width: clamp(125px, 30vw, 150px);
-    max-width: clamp(125px, 30vw, 150px);
+    width: clamp(140px, 34vw, 175px);
+    max-width: clamp(140px, 34vw, 175px);
     margin: 0 auto;
   }
 
   .who-we-are__device-element,
   .who-we-are__device-frame-wrap .rc-device-wrapper {
-    --device-w: clamp(125px, 30vw, 150px) !important;
-    width: clamp(125px, 30vw, 150px) !important;
+    --device-w: clamp(140px, 34vw, 175px) !important;
+    width: clamp(140px, 34vw, 175px) !important;
     max-width: 100% !important;
   }
 
